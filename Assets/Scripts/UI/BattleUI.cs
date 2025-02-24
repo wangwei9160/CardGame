@@ -10,9 +10,14 @@ public class BattleUI : UIViewBase
     public Button settingBtn;
     public Button deckBtn;
     public Button cardBookBtn;
+    public Transform CardsTransform;
+
+    public List<GameObject> Cards;
+
 
     private void Start()
     {
+        Cards = new List<GameObject>();
         settingBtn.onClick.AddListener(() =>
         {
             UIManager.Instance.Show("SettingUI");

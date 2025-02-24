@@ -6,11 +6,6 @@ public class UIManager : ManagerBase<UIManager>
 {
     private Dictionary<string, UIViewBase> m_Dic = new Dictionary<string, UIViewBase>();
 
-    private void Start()
-    {
-        Show("BattleUI");
-    }
-
     public void Show(string uiName)
     {
         if (!m_Dic.ContainsKey(uiName))
