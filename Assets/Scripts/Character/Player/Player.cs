@@ -1,0 +1,29 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Player : BaseCharacter
+{
+    public override CharacterType Type => CharacterType.Player;
+    public float f = 0f;
+    public int maxHp = 100;
+    public int hp = 100;
+
+    protected override void Start()
+    {
+        base.Start();
+        EventCenter.Broadcast(EventDefine.OnHpChangeByName , 1.0f * hp / maxHp , HpUIIndex);
+    }
+
+    private void Update()
+    {
+        f += Time.deltaTime;
+        if(f > 1f)
+        {
+            EventCenter.Broadcast<float , int>(EventDefine.OnHpChangeByName, 1.0f * hp / maxHp, HpUIIndex);
+            f = 0f;
+            hp = (hp + 10) % maxHp; 
+        }
+    }
+
+}
