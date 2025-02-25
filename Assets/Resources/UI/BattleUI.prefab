@@ -790,6 +790,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eafdb8cb79daf64ca9611eabc16cfdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: 0
   settingBtn: {fileID: 1271267353711898110}
   deckBtn: {fileID: 1271267353004467834}
   cardBookBtn: {fileID: 1271267354404621652}
@@ -1066,7 +1067,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1000
   m_TargetDisplay: 0
 --- !u!114 &1271267354817382821
 MonoBehaviour:

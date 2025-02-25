@@ -15,7 +15,7 @@ public class BattleUI : UIViewBase
     public List<GameObject> Cards;
 
 
-    private void Start()
+    protected override void Start()
     {
         Cards = new List<GameObject>();
         settingBtn.onClick.AddListener(() =>

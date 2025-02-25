@@ -9,7 +9,7 @@ public class SettingUI : UIViewBase
 
     public Button CloseBtn;
 
-    private void Start()
+    protected override void Start()
     {
         CloseBtn.onClick.AddListener(() =>
         {
