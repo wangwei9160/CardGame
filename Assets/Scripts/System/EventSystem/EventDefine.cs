@@ -1,5 +1,5 @@
 public enum EventDefine 
 {
-
+    OnHpChangeByName,
 }
 
