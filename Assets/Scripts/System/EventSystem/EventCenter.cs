@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +16,7 @@ public static class EventCenter
         Delegate d = m_Event[eventType];
         if (d != null && d.GetType() != del.GetType())
         {
-            throw new Exception(string.Format("³¢ÊÔÎªÊÂ¼ş{0}[Ìí¼Ó]²»Í¬ÀàĞÍµÄÎ¯ÍĞ£¬{1}ºÍ{2}", eventType, d.GetType(), del.GetType()));
+            throw new Exception(string.Format("å°è¯•ä¸ºäº‹ä»¶{0}[æ·»åŠ ]ä¸åŒç±»å‹çš„å§”æ‰˜ï¼Œ{1}å’Œ{2}", eventType, d.GetType(), del.GetType()));
         }
     }
 
@@ -27,16 +27,16 @@ public static class EventCenter
             Delegate d = m_Event[eventType];
             if (d == null)
             {
-                throw new Exception(string.Format("ÊÂ¼ş{0}Ã»ÓĞÕıÔÚ¼àÌıµÄÎ¯ÍĞ", eventType));
+                throw new Exception(string.Format("äº‹ä»¶{0}æ²¡æœ‰æ­£åœ¨ç›‘å¬çš„å§”æ‰˜", eventType));
             }
             else if (d.GetType() != del.GetType())
             {
-                throw new Exception(string.Format("³¢ÊÔÎªÊÂ¼ş{0}[ÒÆ³ı]²»Í¬ÀàĞÍµÄÎ¯ÍĞ£¬{1}ºÍ{2}", eventType, d.GetType(), del.GetType()));
+                throw new Exception(string.Format("å°è¯•ä¸ºäº‹ä»¶{0}[ç§»é™¤]ä¸åŒç±»å‹çš„å§”æ‰˜ï¼Œ{1}å’Œ{2}", eventType, d.GetType(), del.GetType()));
             }
         }
         else
         {
-            throw new Exception(string.Format("²»´æÔÚÊÂ¼ş{0}", eventType));
+            throw new Exception(string.Format("ä¸å­˜åœ¨äº‹ä»¶{0}", eventType));
         }
     }
 
@@ -101,7 +101,7 @@ public static class EventCenter
             }
             else
             {
-                throw new Exception(string.Format("¹ã²¥ÊÂ¼ş{0}´íÎó", eventType));
+                throw new Exception(string.Format("å¹¿æ’­äº‹ä»¶{0}é”™è¯¯", eventType));
             }
         }
     }
@@ -118,7 +118,7 @@ public static class EventCenter
             }
             else
             {
-                throw new Exception(string.Format("¹ã²¥ÊÂ¼ş{0}´íÎó", eventType));
+                throw new Exception(string.Format("å¹¿æ’­äº‹ä»¶{0}é”™è¯¯", eventType));
             }
         }
     }
@@ -135,7 +135,7 @@ public static class EventCenter
             }
             else
             {
-                throw new Exception(string.Format("¹ã²¥ÊÂ¼ş{0}´íÎó", eventType));
+                throw new Exception(string.Format("å¹¿æ’­äº‹ä»¶{0}é”™è¯¯", eventType));
             }
         }
     }

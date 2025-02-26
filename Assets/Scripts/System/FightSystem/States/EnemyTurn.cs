@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class EnemyTurn : IFightState
 {
@@ -14,7 +14,7 @@ public class EnemyTurn : IFightState
     public override void OnUpdate()
     {
         base.OnUpdate();
-        // ÔÝÊ±Ê¹ÓÃÕâÖÖ·½·¨½øÐÐµÐ·½»ØºÏµÄÇÐ»»
+        // æš‚æ—¶ä½¿ç”¨è¿™ç§æ–¹æ³•è¿›è¡Œæ•Œæ–¹å›žåˆçš„åˆ‡æ¢
         time += Time.deltaTime;
         if(time > 2f)
         {

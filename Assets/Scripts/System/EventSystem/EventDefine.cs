@@ -1,10 +1,10 @@
-public enum EventDefine 
+ï»¿public enum EventDefine 
 {
     OnHpChangeByName,
 
 
 
-    // »ØºÏÇĞ»»£¬ÁÙÊ±Ê¹ÓÃ
+    // å›åˆåˆ‡æ¢ï¼Œä¸´æ—¶ä½¿ç”¨
     ChangeState
 }
 

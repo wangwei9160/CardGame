@@ -1,14 +1,14 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 using UnityEngine.UI;
 
-// ½»»¥¹¦ÄÜ£¬ÁÙÊ±Ê¹ÓÃ£¬ºóĞø¸Ä³ÉÀàµÄ¼Ì³ĞºÍ×éºÏ·½Ê½ÊµÏÖ¡£
+// äº¤äº’åŠŸèƒ½ï¼Œä¸´æ—¶ä½¿ç”¨ï¼Œåç»­æ”¹æˆç±»çš„ç»§æ‰¿å’Œç»„åˆæ–¹å¼å®ç°ã€‚
 public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler , IBeginDragHandler ,IDragHandler , IEndDragHandler
 {
-    protected virtual bool _enlarge => true;    // ·Å´óĞ§¹û
+    protected virtual bool _enlarge => true;    // æ”¾å¤§æ•ˆæœ
 
-    private Outline _outline;   // ÂÖÀª
+    private Outline _outline;   // è½®å»“
     
     private void Awake()
     {
@@ -16,7 +16,7 @@ public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         _outline.enabled = false;
     }
 
-    // Êó±ê½øÈëÊÂ¼ş
+    // é¼ æ ‡è¿›å…¥äº‹ä»¶
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
         if(!_enlarge) { return; }
@@ -25,7 +25,7 @@ public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         _outline.enabled = true;
     }
 
-    // Êó±êÒÆ¿ªÊÂ¼ş
+    // é¼ æ ‡ç§»å¼€äº‹ä»¶
     public virtual void OnPointerExit(PointerEventData eventData)
     {
         if (!_enlarge) { return; }
@@ -35,13 +35,13 @@ public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
 
     Vector2 _position;
-    // ¿ªÊ¼ÍÏ×§¼ÇÂ¼³õÊ¼×ø±ê
+    // å¼€å§‹æ‹–æ‹½è®°å½•åˆå§‹åæ ‡
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
         _position = transform.GetComponent<RectTransform>().anchoredPosition;
     }
 
-    // ÒÆµ½Êó±êÎ»ÖÃ
+    // ç§»åˆ°é¼ æ ‡ä½ç½®
     public virtual void OnDrag(PointerEventData eventData)
     {
         Vector2 _pos;
@@ -53,7 +53,7 @@ public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
     }
 
-    // »¹Ô­
+    // è¿˜åŸ
     public virtual void OnEndDrag(PointerEventData eventData)
     {
         transform.GetComponent<RectTransform>().anchoredPosition = _position;
