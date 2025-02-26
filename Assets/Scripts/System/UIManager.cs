@@ -17,7 +17,7 @@ public class UIManager : ManagerBase<UIManager>
             GameObject obj = Instantiate(prefab , transform);
             UIViewBase ui = obj.GetComponent<UIViewBase>();
             m_SingleDic[uiName] = ui;
-            m_SingleDic[uiName].Init();
+            m_SingleDic[uiName].Init(uiName);
         }
         m_SingleDic[uiName].Show();
     }

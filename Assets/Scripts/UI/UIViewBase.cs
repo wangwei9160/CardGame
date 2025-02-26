@@ -11,7 +11,9 @@ public enum UIViewType
 
 public class UIViewBase : MonoBehaviour
 {
-    public virtual string Name => "";
+    public string _name = "";
+    public virtual string Name => _name;
+
     public virtual UIViewType Type => UIViewType.Singleton;
     public int index = 0;
     public void ResetIndex(int idx)
@@ -34,6 +36,7 @@ public class UIViewBase : MonoBehaviour
     }
 
     public virtual void Init() { }
+    public virtual void Init(string str) { _name = str; }
     public virtual void Init(GameObject obj) { }
 
     public virtual void Show()

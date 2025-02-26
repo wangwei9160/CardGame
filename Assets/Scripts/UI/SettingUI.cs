@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class SettingUI : UIViewBase
 {
-    public override string Name => "SettingUI";
 
     public Button CloseBtn;
 
