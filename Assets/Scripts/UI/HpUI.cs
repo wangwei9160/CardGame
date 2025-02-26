@@ -6,8 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class HpUI : UIViewBase
-{
-    public override string Name => "HpUI";
+{ 
     public override UIViewType Type => UIViewType.Multiple;
 
     public Slider slider;
@@ -33,7 +32,9 @@ public class HpUI : UIViewBase
         base.Start();
         if (Owner != null)
         {
-            slider.transform.position = Camera.main.WorldToScreenPoint(Owner.transform.position);
+            slider.transform.position = Camera.main.WorldToScreenPoint(Owner.transform.Find("HP").transform.position);
+            BaseCharacter character = Owner.GetComponent<BaseCharacter>();
+            slider.value = 1.0f * character.hp / character.maxHp;
         }
     }
 

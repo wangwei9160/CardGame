@@ -6,8 +6,6 @@ public class Player : BaseCharacter
 {
     public override CharacterType Type => CharacterType.Player;
     public float f = 0f;
-    public int maxHp = 100;
-    public int hp = 100;
 
     protected override void Start()
     {
