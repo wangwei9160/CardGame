@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HpUIIndex: -1
+  maxHp: 100
+  hp: 100
 --- !u!1 &2706203424097649478
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,7 +101,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cf4ef48adb4bdd149a5ccd24ba5d3928, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

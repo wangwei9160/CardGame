@@ -1,5 +1,6 @@
 ﻿public enum EventDefine 
 {
+    OnStartSceneUIShow,
     OnHpChangeByName,
 
 
