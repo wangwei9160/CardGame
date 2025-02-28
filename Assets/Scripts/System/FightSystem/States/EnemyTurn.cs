@@ -9,6 +9,7 @@ public class EnemyTurn : IFightState
     {
         base.OnEnter();
         UIManager.Instance.Show("EnemyTurnTip");
+        EventCenter.Broadcast(EventDefine.OnEnemyTurn);
     }
 
     public override void OnUpdate()

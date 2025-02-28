@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+// 事件中心
 public static class EventCenter
 {
     private static Dictionary<EventDefine, Delegate> m_Event = new Dictionary<EventDefine, Delegate>();
@@ -66,7 +66,11 @@ public static class EventCenter
         OnListenerAdding(eventType, callback);
         m_Event[eventType] = (CallBack<T, U>)m_Event[eventType] + callback;
     }
-
+    public static void AddListener<T, U, V>(EventDefine eventType, CallBack<T, U, V> callback)
+    {
+        OnListenerAdding(eventType, callback);
+        m_Event[eventType] = (CallBack<T, U, V>)m_Event[eventType] + callback;
+    }
 
     public static void RemoveListener(EventDefine eventType, CallBack callback)
     {
@@ -86,6 +90,12 @@ public static class EventCenter
     {
         OnListenerRemoving(eventType, callback);
         m_Event[eventType] = (CallBack<T, U>)m_Event[eventType] - callback;
+        OnEventRemove(eventType);
+    }
+    public static void RemoveListener<T, U, V>(EventDefine eventType, CallBack<T, U,V> callback)
+    {
+        OnListenerRemoving(eventType, callback);
+        m_Event[eventType] = (CallBack<T, U, V>)m_Event[eventType] - callback;
         OnEventRemove(eventType);
     }
 
@@ -132,6 +142,23 @@ public static class EventCenter
             if (callBack != null)
             {
                 callBack(arg1, arg2);
+            }
+            else
+            {
+                throw new Exception(string.Format("广播事件{0}错误", eventType));
+            }
+        }
+    }
+
+    public static void Broadcast<T, U , V>(EventDefine eventType, T arg1, U arg2 , V arg3)
+    {
+        Delegate d;
+        if (m_Event.TryGetValue(eventType, out d))
+        {
+            CallBack<T, U, V> callBack = (CallBack<T, U,V>)d;
+            if (callBack != null)
+            {
+                callBack(arg1, arg2 , arg3);
             }
             else
             {

@@ -22,8 +22,8 @@ public class UIViewBase : MonoBehaviour
     }
     public virtual int Index => index;
 
-    public virtual void OnAddlistening() { }
-    public virtual void OnRemovelistening() { }
+    public virtual void OnAddlistening() { EventCenter.AddListener(EventDefine.AdjustPosition, AdjustPosition); }
+    public virtual void OnRemovelistening() { EventCenter.RemoveListener(EventDefine.AdjustPosition, AdjustPosition); }
 
     protected virtual void Start()
     {
@@ -56,5 +56,7 @@ public class UIViewBase : MonoBehaviour
         Destroy(gameObject);
         Debug.Log($"{Name} is Close");
     }
+
+    public virtual void AdjustPosition() { }
 }
 
