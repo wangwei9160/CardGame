@@ -17,7 +17,7 @@ public class GameManager : ManagerBase<GameManager>
         playerTurn = new PlayerTurn();
         enemyTurn = new EnemyTurn();
         UIManager.Instance.Show("BattleUI");
-        AddPlayer(2);
+        AddPlayer(1,1);
         AddEnemy(2);
         stateMachine = new FightStateMachine(playerTurn);
     }
@@ -27,12 +27,17 @@ public class GameManager : ManagerBase<GameManager>
         stateMachine.OnUpdate();    
     }
 
-    private void AddPlayer(int num)
+    private void AddPlayer(int PlayerNum , int CardNum)
     {
-        num = Math.Min(num, 5);
-        for (int i = 0; i < num; i++)
+        PlayerNum = Math.Min(PlayerNum, 1);
+        for (int i = 0; i < PlayerNum; i++)
         {
             Instantiate(player, ContainerManager.Instance.Players[i]);
+        }
+        CardNum = Math.Min(CardNum, 5 - PlayerNum);
+        for (int i = 0; i < CardNum; i++)
+        {
+            Instantiate(enemy, ContainerManager.Instance.Players[i + PlayerNum]);
         }
     }
     private void AddEnemy(int num)

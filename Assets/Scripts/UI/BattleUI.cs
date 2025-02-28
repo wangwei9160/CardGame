@@ -6,11 +6,14 @@ using UnityEngine.UI;
 
 public class BattleUI : UIViewBase
 {
-    public Button settingBtn;
-    public Button deckBtn;
-    public Button cardBookBtn;
-    public Button endTurnBtn;
-    public Transform CardsTransform;
+    public Button settingBtn;   // 设置按钮
+    public Button deckBtn;      // 牌组按钮
+    public Button cardBookBtn;  // 图鉴按钮
+    public Button endTurnBtn;   // 回合结束按钮
+    public Transform CardsTransform;    // 临时存放所有卡牌的位置
+
+    public int CurrentTurn = 0;
+    public Text turnInfo;   // 回合计数
 
     public List<GameObject> Cards;
 
@@ -57,6 +60,8 @@ public class BattleUI : UIViewBase
             endTurnBtn.GetComponent<Image>().color = Color.gray;
         }else
         {
+            CurrentTurn++;
+            turnInfo.text = string.Format("第{0}回合",CurrentTurn);
             endTurnBtn.GetComponent<Image>().color = Color.green;
         }
     }
