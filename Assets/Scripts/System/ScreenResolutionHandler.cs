@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 屏幕分辨率调整后部分ui位置的修改
 public class ScreenResolutionHandler : MonoBehaviour
 {
     private Vector2 lastScreenSize;
