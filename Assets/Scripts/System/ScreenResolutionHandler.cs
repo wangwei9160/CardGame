@@ -1,24 +1,24 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// ÆÁÄ»·Ö±æÂÊµ÷Õûºó²¿·ÖuiÎ»ÖÃµÄĞŞ¸Ä
+// å±å¹•åˆ†è¾¨ç‡è°ƒæ•´åéƒ¨åˆ†uiä½ç½®çš„ä¿®æ”¹
 public class ScreenResolutionHandler : MonoBehaviour
 {
     private Vector2 lastScreenSize;
 
     void Start()
     {
-        // ³õÊ¼»¯Ê±¼ÇÂ¼µ±Ç°µÄÆÁÄ»·Ö±æÂÊ
+        // åˆå§‹åŒ–æ—¶è®°å½•å½“å‰çš„å±å¹•åˆ†è¾¨ç‡
         lastScreenSize = new Vector2(Screen.width, Screen.height);
     }
 
     void Update()
     {
-        // ¼ì²éÆÁÄ»·Ö±æÂÊÊÇ·ñ·¢Éú±ä»¯
+        // æ£€æŸ¥å±å¹•åˆ†è¾¨ç‡æ˜¯å¦å‘ç”Ÿå˜åŒ–
         if (lastScreenSize.x != Screen.width || lastScreenSize.y != Screen.height)
         {
-            // ·Ö±æÂÊ·¢Éú±ä»¯£¬¸üĞÂÎ»ÖÃ
+            // åˆ†è¾¨ç‡å‘ç”Ÿå˜åŒ–ï¼Œæ›´æ–°ä½ç½®
             lastScreenSize = new Vector2(Screen.width, Screen.height);
             StartCoroutine(FAdjustPosition());
         }
@@ -26,7 +26,7 @@ public class ScreenResolutionHandler : MonoBehaviour
 
     IEnumerator FAdjustPosition()
     {
-        // ²¿·ÖuiĞèÒªµÈ´ıÆäËûÎïÌåÎ»ÖÃĞŞ¸Ä¸Ä±äºóÔÙÍ¬²½ĞÂµÄÎ»ÖÃ
+        // éƒ¨åˆ†uiéœ€è¦ç­‰å¾…å…¶ä»–ç‰©ä½“ä½ç½®ä¿®æ”¹æ”¹å˜åå†åŒæ­¥æ–°çš„ä½ç½®
         yield return new WaitForSeconds(0.1f);
         EventCenter.Broadcast(EventDefine.AdjustPosition);
     }

@@ -1084,10 +1084,10 @@ RectTransform:
   m_Children:
   - {fileID: 848198078}
   - {fileID: 472355952}
-  - {fileID: 4677069435435535964}
   - {fileID: 962461773486682590}
   - {fileID: 326472631762536092}
   - {fileID: 1723703530737807226}
+  - {fileID: 4677069435435535964}
   m_Father: {fileID: 172957000374135075}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2550,7 +2550,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1500
   m_TargetDisplay: 0
 --- !u!114 &7685866883120295410
 MonoBehaviour:
@@ -3091,7 +3091,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8180133313900050815}
-  - {fileID: 3468141630846796012}
+  - {fileID: 2228137003783075763}
   m_Father: {fileID: 1271267353725930537}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -3362,7 +3362,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7eeb48798f37464e95fae4e3e4eddf1, type: 3}
---- !u!224 &3468141630846796012 stripped
+--- !u!224 &2228137003783075763 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3371716988056024920, guid: c7eeb48798f37464e95fae4e3e4eddf1, type: 3}
   m_PrefabInstance: {fileID: 3468141630846796011}
