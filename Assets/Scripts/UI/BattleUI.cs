@@ -6,32 +6,39 @@ using UnityEngine.UI;
 
 public class BattleUI : UIViewBase
 {
-    public Button settingBtn;   // ÉèÖÃ°´Å¥
-    public Button deckBtn;      // ÅÆ×é°´Å¥
-    public Button cardBookBtn;  // Í¼¼ø°´Å¥
-    public Button endTurnBtn;   // »ØºÏ½áÊø°´Å¥
-    public Transform CardsTransform;    // ÁÙÊ±´æ·ÅËùÓĞ¿¨ÅÆµÄÎ»ÖÃ
+    [Header("æŒ‰é’®")]
+    [Tooltip("è®¾ç½®æŒ‰é’®")]public Button settingBtn;   // è®¾ç½®æŒ‰é’®
+    [Tooltip("ç‰Œç»„æŒ‰é’®")] public Button deckBtn;      // ç‰Œç»„æŒ‰é’®
+    [Tooltip("å›¾é‰´æŒ‰é’®")] public Button cardBookBtn;  // å›¾é‰´æŒ‰é’®
+    [Tooltip("ç»“æŸæŒ‰é’®")] public Button endTurnBtn;   // å›åˆç»“æŸæŒ‰é’®
+    public Transform CardsTransform;    // ä¸´æ—¶å­˜æ”¾æ‰€æœ‰å¡ç‰Œçš„ä½ç½®
+
+    [Header("æ–‡æœ¬")]
+    [Tooltip("è¡€é‡")] public Text hpText; // è¡€é‡
+    [Tooltip("é’±")] public Text moneyText;   
 
     public int CurrentTurn = 0;
-    public Text turnInfo;   // »ØºÏ¼ÆÊı
+    public Text turnInfo;   // å›åˆè®¡æ•°
 
     public List<GameObject> Cards;
 
     public override void OnAddlistening()
     {
         base.OnAddlistening();
-        EventCenter.AddListener<IFightState>(EventDefine.ChangeState,OnChangeState);
+        EventCenter.AddListener<IFightState>(EventDefine.ChangeState, OnChangeState);
+        EventCenter.AddListener<int,int,int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
     }
 
     public override void OnRemovelistening()
     {
         base.OnRemovelistening();
-        EventCenter.AddListener<IFightState>(EventDefine.ChangeState, OnChangeState);
+        EventCenter.RemoveListener<IFightState>(EventDefine.ChangeState, OnChangeState);
+        EventCenter.RemoveListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
     }
 
     protected override void Start()
     {
-        
+
         Cards = new List<GameObject>();
         settingBtn.onClick.AddListener(() =>
         {
@@ -39,7 +46,7 @@ public class BattleUI : UIViewBase
         });
         endTurnBtn.onClick.AddListener(() =>
         {
-            // ÇĞ»»µ½µĞ·½»ØºÏ
+            // åˆ‡æ¢åˆ°æ•Œæ–¹å›åˆ
             GameManager.Instance.stateMachine.ChangeState(GameManager.Instance.enemyTurn);
         });
         //deckBtn.onClick.AddListener(() =>
@@ -55,17 +62,24 @@ public class BattleUI : UIViewBase
 
     private void OnChangeState(IFightState state)
     {
-        if(state == GameManager.Instance.enemyTurn)
+        if (state == GameManager.Instance.enemyTurn)
         {
             endTurnBtn.GetComponent<Image>().color = Color.gray;
-        }else
+        }
+        else
         {
             CurrentTurn++;
-            turnInfo.text = string.Format("µÚ{0}»ØºÏ",CurrentTurn);
+            turnInfo.text = string.Format("ç¬¬{0}å›åˆ", CurrentTurn);
             endTurnBtn.GetComponent<Image>().color = Color.green;
         }
     }
+
+    private void OnHpChange(int hp, int maxHp, int id)
+    {
+        hpText.text = string.Format("{0}/{1}",hp,maxHp);
+    }
+
+
     
 
 }
-

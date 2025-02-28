@@ -20,13 +20,13 @@ public class HpUI : UIViewBase
     public override void OnAddlistening()
     {
         base.OnAddlistening();
-        EventCenter.AddListener<float , int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
+        EventCenter.AddListener<int,int,int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
     }
 
     public override void OnRemovelistening()
     {
         base.OnRemovelistening();
-        EventCenter.RemoveListener<float, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
+        EventCenter.RemoveListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
     }
 
     protected override void Start()
@@ -40,13 +40,14 @@ public class HpUI : UIViewBase
         }
     }
 
-    private void OnHpChange(float val , int id)
+    private void OnHpChange(int hp , int maxHp , int id)
     {
         if(id == Index)
         {
-            slider.value = val;
+            slider.value = 1.0f * hp / maxHp;
         }
     }
+
     public override void AdjustPosition()
     {
         slider.transform.position = Camera.main.WorldToScreenPoint(Owner.transform.Find("HP").transform.position);
