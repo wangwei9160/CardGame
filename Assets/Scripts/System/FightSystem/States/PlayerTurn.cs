@@ -6,6 +6,7 @@ public class PlayerTurn : IFightState
     {
         base.OnEnter();
         UIManager.Instance.Show("PlayerTurnTip");
+        UIManager.Instance.Show("");
     }
 
 }

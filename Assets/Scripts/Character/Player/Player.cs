@@ -9,8 +9,8 @@ public class Player : BaseCharacter
 
     protected override void Start()
     {
-        UIManager.Instance.Show("HpUI", gameObject, ref HpUIIndex);
-        EventCenter.Broadcast(EventDefine.OnPlayerAttributeChange, hp , maxHp , HpUIIndex);
+        base.Start();
+        EventCenter.Broadcast(EventDefine.OnHpChangeByName , 1.0f * hp / maxHp , HpUIIndex);
     }
 
     private void Update()
@@ -18,7 +18,7 @@ public class Player : BaseCharacter
         f += Time.deltaTime;
         if(f > 1f)
         {
-            EventCenter.Broadcast(EventDefine.OnPlayerAttributeChange, hp , maxHp, HpUIIndex);
+            EventCenter.Broadcast<float , int>(EventDefine.OnHpChangeByName, 1.0f * hp / maxHp, HpUIIndex);
             f = 0f;
             hp = (hp + 10) % maxHp; 
         }

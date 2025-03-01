@@ -42,7 +42,7 @@ public class UIManager : ManagerBase<UIManager>
         GameObject prefab = Resources.Load<GameObject>($"UI/{uiName}");
         GameObject obj = Instantiate(prefab, transform);
         UIViewBase ui = obj.GetComponent<UIViewBase>();
-        Index = m_MultipDicCnt[uiName]++;   // ×ÔÔö¸³Öµ£¬ÐèÒª×¢Òâ¶àÏß³Ì»·¾³
+        Index = m_MultipDicCnt[uiName]++;   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Òª×¢ï¿½ï¿½ï¿½ï¿½ß³Ì»ï¿½ï¿½ï¿½
         ui.ResetIndex(Index);
         ui.Init(val);
         m_MultipDic[uiName].Add(ui);

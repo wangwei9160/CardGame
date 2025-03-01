@@ -20,7 +20,7 @@ public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
         if(!_enlarge) { return; }
-        Debug.Log("OnPointerEnter");
+        //Debug.Log("OnPointerEnter");
         transform.DOScale(0.75f , 0.25f);
         _outline.enabled = true;
     }
@@ -29,7 +29,7 @@ public class BaseCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public virtual void OnPointerExit(PointerEventData eventData)
     {
         if (!_enlarge) { return; }
-        Debug.Log("OnPointerExit");
+        //Debug.Log("OnPointerExit");
         transform.DOScale(0.5f, 0.25f);
         _outline.enabled = false;
     }

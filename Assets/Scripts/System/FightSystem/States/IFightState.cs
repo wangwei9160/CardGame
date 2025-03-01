@@ -8,7 +8,7 @@ public class IFightState
     public string ID => name;
     public virtual void OnEnter()
     {
-        //Debug.Log("OnEnter() " + ID);
+        Debug.Log("OnEnter() " + ID);
         EventCenter.Broadcast(EventDefine.ChangeState, this);
     }
 
@@ -19,7 +19,7 @@ public class IFightState
 
     public virtual void OnExit()
     {
-        //Debug.Log("OnExit() " + ID);
+        Debug.Log("OnExit() " + ID);
     }
 
     public virtual bool TryChange(IFightState other)
