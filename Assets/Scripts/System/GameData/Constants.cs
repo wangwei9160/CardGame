@@ -1,3 +1,4 @@
+// 一些常量，游戏加载后不会修改的内容
 public class Constants
 {
     public static string[] MapName = new string[]

@@ -15,10 +15,13 @@ public class BattleUI : UIViewBase
 
     [Header("文本")]
     [Tooltip("血量")] public Text hpText; // 血量
-    [Tooltip("钱")] public Text moneyText;   
+    [Tooltip("钱")] public Text moneyText;   // 钱的数量
+    [Tooltip("回合计数")] public Text turnInfo;   // 回合计数
+    [Tooltip("关卡信息")] public Text levelInfo;   // 关卡信息
+    [Tooltip("法力值")] public Text magicPowerInfo;   // 法力值信息
 
     public int CurrentTurn = 0;
-    public Text turnInfo;   // 回合计数
+    
 
     public List<GameObject> Cards;
 
@@ -26,7 +29,8 @@ public class BattleUI : UIViewBase
     {
         base.OnAddlistening();
         EventCenter.AddListener<IFightState>(EventDefine.ChangeState, OnChangeState);
-        EventCenter.AddListener<int,int,int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
+        EventCenter.AddListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
+        EventCenter.AddListener<int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
     }
 
     public override void OnRemovelistening()
@@ -34,6 +38,7 @@ public class BattleUI : UIViewBase
         base.OnRemovelistening();
         EventCenter.RemoveListener<IFightState>(EventDefine.ChangeState, OnChangeState);
         EventCenter.RemoveListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
+        EventCenter.RemoveListener<int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
     }
 
     protected override void Start()
@@ -58,6 +63,11 @@ public class BattleUI : UIViewBase
         //    UIManager.Instance.Show("CardBookUI");
         //});
         base.Start();
+        OnMoneyChange(GameManager.Instance.Data.money);     // 从数据里拿到钱的数量
+        levelInfo.text = string.Format("之后还有{0}步走出{1}" , 
+            Constants.MapLength[GameManager.Instance.Data.CurrentLvel] - GameManager.Instance.Data.CurrentStage  ,
+            Constants.MapName[GameManager.Instance.Data.CurrentLvel]);
+        magicPowerInfo.text = GameManager.Instance.Data.MagicPower.ToString();
     }
 
     private void OnChangeState(IFightState state)
@@ -79,7 +89,14 @@ public class BattleUI : UIViewBase
         hpText.text = string.Format("{0}/{1}",hp,maxHp);
     }
 
-
+    private void OnMoneyChange(int val)
+    {
+        moneyText.text = val.ToString();
+    }
     
+    private void OnMagicPowerChange(int val)
+    {
+        magicPowerInfo.text = val.ToString();
+    }
 
 }

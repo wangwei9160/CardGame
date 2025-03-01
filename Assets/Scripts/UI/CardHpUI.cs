@@ -10,21 +10,22 @@ public class CardHpUI : UIViewBase
     public int MaxHp;
     public GameObject Owner;
 
-    public override void Init(GameObject obj)
+    public override void Init(string uiName,GameObject obj)
     {
+        Init(uiName);
         Owner = obj;
     }
 
     public override void OnAddlistening()
     {
         base.OnAddlistening();
-        EventCenter.AddListener<float, int>(EventDefine.OnHpChangeByName, OnHpChange);
+        EventCenter.AddListener<int, int>(EventDefine.OnHpChangeByName, OnHpChange);
     }
 
     public override void OnRemovelistening()
     {
         base.OnRemovelistening();   
-        EventCenter.RemoveListener<float, int>(EventDefine.OnHpChangeByName, OnHpChange);
+        EventCenter.RemoveListener<int, int>(EventDefine.OnHpChangeByName, OnHpChange);
     }
 
     protected override void Start()
@@ -39,11 +40,15 @@ public class CardHpUI : UIViewBase
         }
     }
 
-    private void OnHpChange(float val, int id)
+    private void OnHpChange(int val, int id)
     {
         if (id == Index)
         {
             HpValue.text = val.ToString();
+            if(val <= 0)
+            {
+                UIManager.Instance.Close(Name , Index);
+            }
         }
     }
 

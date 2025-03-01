@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
@@ -6,20 +6,37 @@ using UnityEngine;
 
 public class GameManager : ManagerBase<GameManager>
 {
-    [Tooltip("½ÇÉ«Ô¤ÖÆÌå")]public GameObject player;   
-    [Tooltip("µĞ·½Ô¤ÖÆÌå")]public GameObject enemy;
-    [Tooltip("ÎÒ·½»ØºÏ")] public PlayerTurn playerTurn;
-    [Tooltip("µĞ·½»ØºÏ")] public EnemyTurn enemyTurn;
-    [Tooltip("×´Ì¬»ú")] public FightStateMachine stateMachine;
+    [Tooltip("è§’è‰²é¢„åˆ¶ä½“")]public GameObject player;   
+    [Tooltip("æ•Œæ–¹é¢„åˆ¶ä½“")]public GameObject enemy;
+    [Tooltip("æˆ‘æ–¹å›åˆ")] public PlayerTurn playerTurn;
+    [Tooltip("æ•Œæ–¹å›åˆ")] public EnemyTurn enemyTurn;
+    [Tooltip("çŠ¶æ€æœº")] public FightStateMachine stateMachine;
+
+
+    private GameData gameData;
+    [Tooltip("æ•°æ®")] public GameData Data { get { return gameData; } private set { } }
+
+    #region ä¸´æ—¶ä½¿ç”¨
+    private readonly int playerNum = 1;
+    private readonly int dogNum = 0;
+    private int enemyNum = 2;
+    #endregion
 
     void Start()
     {
+        gameData = new GameData();
         playerTurn = new PlayerTurn();
         enemyTurn = new EnemyTurn();
         UIManager.Instance.Show("BattleUI");
-        AddPlayer(1,1);
-        AddEnemy(2);
-        stateMachine = new FightStateMachine(playerTurn); // ÁÙÊ±Ä¬ÈÏ¿ªÊ¼ÎªÎÒ·½»ØºÏ
+        AddPlayer(playerNum, dogNum);
+        AddEnemy(enemyNum);
+        stateMachine = new FightStateMachine(playerTurn); // ä¸´æ—¶é»˜è®¤å¼€å§‹ä¸ºæˆ‘æ–¹å›åˆ
+        EventCenter.AddListener(EventDefine.OnEnemyDeath, OnEnemyDeath);    // æ·»åŠ ä¸€ä¸ªç›‘å¬
+    }
+
+    private void OnDestroy()
+    {
+        EventCenter.RemoveListener(EventDefine.OnEnemyDeath, OnEnemyDeath);    // æ·»åŠ ä¸€ä¸ªç›‘å¬
     }
 
     private void Update()
@@ -27,7 +44,7 @@ public class GameManager : ManagerBase<GameManager>
         stateMachine.OnUpdate();    
     }
 
-    // ÁÙÊ±Ê¹ÓÃ£¬ÓÃÓÚ³õÊ¼»¯Ê±Ìí¼ÓÎÒ·½½ÇÉ«
+    // ä¸´æ—¶ä½¿ç”¨ï¼Œç”¨äºåˆå§‹åŒ–æ—¶æ·»åŠ æˆ‘æ–¹è§’è‰²
     private void AddPlayer(int PlayerNum , int CardNum)
     {
         PlayerNum = Math.Min(PlayerNum, 1);
@@ -41,13 +58,28 @@ public class GameManager : ManagerBase<GameManager>
             Instantiate(enemy, ContainerManager.Instance.Players[i + PlayerNum]);
         }
     }
-    // ÁÙÊ±Ê¹ÓÃ£¬ÓÃÓÚ³õÊ¼»¯Ê±Ìí¼ÓµĞ·½½ÇÉ«
+    // ä¸´æ—¶ä½¿ç”¨ï¼Œç”¨äºåˆå§‹åŒ–æ—¶æ·»åŠ æ•Œæ–¹è§’è‰²
     private void AddEnemy(int num)
     {
         num = Math.Min(num, 3);
         for (int i = 0; i < num; i++)
         {
             Instantiate(enemy, ContainerManager.Instance.Enemies[i]);
+        }
+    }
+
+    public void OnMagicPowerChange(int val)
+    {
+        gameData.MagicPower += val;
+        EventCenter.Broadcast(EventDefine.OnMagicPowerChange , gameData.magicPower);
+    }
+
+    public void OnEnemyDeath()
+    {
+        enemyNum--;
+        if(enemyNum == 0)
+        {
+            Debug.Log("é€šå…³!!!!!!");
         }
     }
 

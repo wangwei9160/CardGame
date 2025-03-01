@@ -6,6 +6,7 @@ public class PlayerTurn : IFightState
     {
         base.OnEnter();
         UIManager.Instance.Show("PlayerTurnTip");
+        GameManager.Instance.OnMagicPowerChange(1); // 进入玩家回合获得一点法力值
     }
 
 }

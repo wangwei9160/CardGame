@@ -10,6 +10,8 @@ public class Player : BaseCharacter
     protected override void Start()
     {
         UIManager.Instance.Show("HpUI", gameObject, ref HpUIIndex);
+        hp = GameManager.Instance.Data.hp;
+        maxHp = GameManager.Instance.Data.maxHp;
         EventCenter.Broadcast(EventDefine.OnPlayerAttributeChange, hp , maxHp , HpUIIndex);
     }
 

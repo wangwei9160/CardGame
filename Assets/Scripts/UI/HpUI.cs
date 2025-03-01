@@ -12,8 +12,9 @@ public class HpUI : UIViewBase
     public Slider slider;
     public GameObject Owner;
 
-    public override void Init(GameObject obj)
+    public override void Init(string uiName,GameObject obj)
     {
+        Init(uiName);
         Owner = obj;
     }
 

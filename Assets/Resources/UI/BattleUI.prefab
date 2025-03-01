@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: 5829327767962548175}
   - component: {fileID: 1024829203918535987}
   m_Layer: 0
-  m_Name: Text (Legacy)
+  m_Name: MagicPowerText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -486,7 +486,7 @@ GameObject:
   - component: {fileID: 25063222903057607}
   - component: {fileID: 4917867359874931001}
   m_Layer: 0
-  m_Name: Text (Legacy)
+  m_Name: LevelText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1191,8 +1191,10 @@ MonoBehaviour:
   CardsTransform: {fileID: 0}
   hpText: {fileID: 6790133671418990820}
   moneyText: {fileID: 5146421747594877473}
-  CurrentTurn: 0
   turnInfo: {fileID: 4117050733958362672}
+  levelInfo: {fileID: 4917867359874931001}
+  magicPowerInfo: {fileID: 1024829203918535987}
+  CurrentTurn: 0
   Cards: []
 --- !u!1 &1271267354404621658
 GameObject:
@@ -2815,7 +2817,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7904097270931702034}
   m_Layer: 0
-  m_Name: Turn (1)
+  m_Name: LevelInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

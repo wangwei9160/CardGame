@@ -44,7 +44,7 @@ public class UIManager : ManagerBase<UIManager>
         UIViewBase ui = obj.GetComponent<UIViewBase>();
         Index = m_MultipDicCnt[uiName]++;   // 自增赋值，需要注意多线程环境
         ui.ResetIndex(Index);
-        ui.Init(val);
+        ui.Init(uiName,val);
         m_MultipDic[uiName].Add(ui);
         
     }
@@ -78,7 +78,7 @@ public class UIManager : ManagerBase<UIManager>
         }
     }
 
-    public void Close(string uiName , ref int Index)
+    public void Close(string uiName , int Index)
     {
         for (int i = 0; i < m_MultipDic[uiName].Count; i++)
         {
