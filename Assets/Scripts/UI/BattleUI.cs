@@ -28,7 +28,8 @@ public class BattleUI : UIViewBase
     public override void OnAddlistening()
     {
         base.OnAddlistening();
-        EventCenter.AddListener<IFightState>(EventDefine.ChangeState, OnChangeState);
+        EventCenter.AddListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
+        EventCenter.AddListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
         EventCenter.AddListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
         EventCenter.AddListener<int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
     }
@@ -36,7 +37,8 @@ public class BattleUI : UIViewBase
     public override void OnRemovelistening()
     {
         base.OnRemovelistening();
-        EventCenter.RemoveListener<IFightState>(EventDefine.ChangeState, OnChangeState);
+        EventCenter.RemoveListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
+        EventCenter.RemoveListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
         EventCenter.RemoveListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
         EventCenter.RemoveListener<int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
     }
@@ -52,7 +54,8 @@ public class BattleUI : UIViewBase
         endTurnBtn.onClick.AddListener(() =>
         {
             // 切换到敌方回合
-            GameManager.Instance.stateMachine.ChangeState(GameManager.Instance.enemyTurn);
+            endTurnBtn.GetComponent<Image>().color = Color.gray;
+            GameManager.Instance.FinishTurn();
         });
         //deckBtn.onClick.AddListener(() =>
         //{
@@ -70,18 +73,16 @@ public class BattleUI : UIViewBase
         magicPowerInfo.text = GameManager.Instance.Data.MagicPower.ToString();
     }
 
-    private void OnChangeState(IFightState state)
+    private void OnBeforePlayerTurn()
     {
-        if (state == GameManager.Instance.enemyTurn)
-        {
-            endTurnBtn.GetComponent<Image>().color = Color.gray;
-        }
-        else
-        {
-            CurrentTurn++;
-            turnInfo.text = string.Format("第{0}回合", CurrentTurn);
-            endTurnBtn.GetComponent<Image>().color = Color.green;
-        }
+        CurrentTurn++;
+        turnInfo.text = string.Format("第{0}回合", CurrentTurn);
+    }
+
+    private void OnPlayerTurn()
+    {
+        // 进入到玩家可操作回合
+        endTurnBtn.GetComponent<Image>().color = Color.green;
     }
 
     private void OnHpChange(int hp, int maxHp, int id)

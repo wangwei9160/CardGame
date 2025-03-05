@@ -7,7 +7,7 @@ public enum CharacterType
 {
     Unknown = 0,
     Player,
-    Enemy
+    Card
 }
 
 public class BaseCharacter : MonoBehaviour

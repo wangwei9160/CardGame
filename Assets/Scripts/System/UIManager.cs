@@ -22,7 +22,21 @@ public class UIManager : ManagerBase<UIManager>
         m_SingleDic[uiName].Show();
     }
 
-    public void Show(string uiName , GameObject val , ref int Index)
+    public void Show(string uiName, GameObject parent)
+    {
+        if (!m_SingleDic.ContainsKey(uiName))
+        {
+            GameObject prefab = Resources.Load<GameObject>($"UI/{uiName}");
+            GameObject obj = Instantiate(prefab, transform);
+            UIViewBase ui = obj.GetComponent<UIViewBase>();
+            m_SingleDic[uiName] = ui;
+            m_SingleDic[uiName].Init(uiName , parent);
+        }
+        m_SingleDic[uiName].Show();
+
+    }
+
+    public void Show(string uiName , GameObject parent, ref int Index)
     {
         if (!m_MultipDic.ContainsKey(uiName))
         {
@@ -44,7 +58,7 @@ public class UIManager : ManagerBase<UIManager>
         UIViewBase ui = obj.GetComponent<UIViewBase>();
         Index = m_MultipDicCnt[uiName]++;   // 自增赋值，需要注意多线程环境
         ui.ResetIndex(Index);
-        ui.Init(uiName,val);
+        ui.Init(uiName, parent);
         m_MultipDic[uiName].Add(ui);
         
     }

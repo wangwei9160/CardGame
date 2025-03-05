@@ -4,14 +4,26 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using UnityEngine;
 
+public enum GameState
+{
+    Unknown,
+    Battle,
+    Reward
+}
+
 public class GameManager : ManagerBase<GameManager>
 {
     [Tooltip("角色预制体")]public GameObject player;   
     [Tooltip("敌方预制体")]public GameObject enemy;
-    [Tooltip("我方回合")] public PlayerTurn playerTurn;
-    [Tooltip("敌方回合")] public EnemyTurn enemyTurn;
-    [Tooltip("状态机")] public FightStateMachine stateMachine;
+    //[Tooltip("玩家回合")] public PlayerTurn playerTurn;
+    //[Tooltip("状态机")] public FightStateMachine stateMachine;
 
+    [Tooltip("整个游戏的状态")] private GameState gameState;
+
+    public bool IsGameState(GameState state)
+    {
+        return gameState == state;
+    }
 
     private GameData gameData;
     [Tooltip("数据")] public GameData Data { get { return gameData; } private set { } }
@@ -24,24 +36,22 @@ public class GameManager : ManagerBase<GameManager>
 
     void Start()
     {
+        EventCenter.AddListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 添加一个监听
+
         gameData = new GameData();
-        playerTurn = new PlayerTurn();
-        enemyTurn = new EnemyTurn();
+        //playerTurn = new PlayerTurn();
         UIManager.Instance.Show("BattleUI");
         AddPlayer(playerNum, dogNum);
         AddEnemy(enemyNum);
-        stateMachine = new FightStateMachine(playerTurn); // 临时默认开始为我方回合
-        EventCenter.AddListener(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 添加一个监听
+        gameState = GameState.Battle;   // 暂时初始化为战斗开始
+        BeforeTurn(); // 代替状态机的切换
+        //stateMachine = new FightStateMachine(playerTurn); // 临时默认开始为我方回合
+        
     }
 
     private void OnDestroy()
     {
-        EventCenter.RemoveListener(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 添加一个监听
-    }
-
-    private void Update()
-    {
-        stateMachine.OnUpdate();    
+        EventCenter.RemoveListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 移除监听
     }
 
     // 临时使用，用于初始化时添加我方角色
@@ -64,7 +74,8 @@ public class GameManager : ManagerBase<GameManager>
         num = Math.Min(num, 3);
         for (int i = 0; i < num; i++)
         {
-            Instantiate(enemy, ContainerManager.Instance.Enemies[i]);
+            var obj = Instantiate(enemy, ContainerManager.Instance.Enemies[i]);
+            obj.GetComponent<BaseEnemy>().Index = i;
         }
     }
 
@@ -74,13 +85,68 @@ public class GameManager : ManagerBase<GameManager>
         EventCenter.Broadcast(EventDefine.OnMagicPowerChange , gameData.magicPower);
     }
 
-    public void OnEnemyDeath()
+    public void OnEnemyDeath(int id)
     {
         enemyNum--;
         if(enemyNum == 0)
         {
-            Debug.Log("通关!!!!!!");
+            gameState = GameState.Reward;
+            Debug.Log("进入奖励结算");
+            //Debug.Log(ContainerManager.Instance.Enemies[id].position);
+            UIManager.Instance.Show("RewardPanelUI" , ContainerManager.Instance.Enemies[id].gameObject);
         }
     }
+
+    #region 回合切换
+
+    // 回合开始
+    public void BeforeTurn()
+    {
+        UIManager.Instance.Show("PlayerTurnTip");   // 新的回合
+        EventCenter.Broadcast(EventDefine.OnBeforePlayerTurn); // 进入一个新的回合
+        StartCoroutine(BeforePlayerTurn());
+    }
+
+    private IEnumerator BeforePlayerTurn()
+    {
+        // 提前预留卡牌的动画效果
+        for(int i = 0; i < 2; i++)
+        {
+            Debug.Log(string.Format("Card{0} 回合开始效果触发中..........." , i));
+            yield return new WaitForSeconds(0.2f);
+        }
+        if (IsGameState(GameState.Battle))
+        {
+            // 如果仍然是战斗回合 ， 则进入玩家回合
+            EventCenter.Broadcast(EventDefine.OnPlayerTurnStart); // 进入玩家可操作回合事件广播
+        }
+    }
+
+    // 回合结束
+    public void FinishTurn()
+    {
+        EventCenter.Broadcast(EventDefine.OnFinishPlayerTurn); // 进入一个新的回合
+        StartCoroutine(AfterPlayerTurn());
+    }
+
+    private IEnumerator AfterPlayerTurn()
+    {
+        // 提前预留卡牌的动画效果
+        for (int i = 0; i < 2; i++)
+        {
+            Debug.Log(string.Format("Card{0} 回合结束效果触发中...........", i));
+            yield return new WaitForSeconds(0.2f);
+        }
+        if (IsGameState(GameState.Battle))
+        {
+            // 如果仍然是战斗回合 ， 则进入新的回合开始效果
+            BeforeTurn();
+        }
+
+    }
+
+
+
+    #endregion
 
 }

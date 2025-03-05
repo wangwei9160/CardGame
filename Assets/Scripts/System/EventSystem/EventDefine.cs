@@ -10,8 +10,10 @@
     // 法力值修正
     OnMagicPowerChange,
 
-    // 回合切换，临时使用
-    ChangeState,
+
+    OnBeforePlayerTurn,     // 进入一个新的回合
+    OnPlayerTurnStart,      // 玩家可操作回合开始
+    OnFinishPlayerTurn,     // 玩家回合结束
 
     // 调整分辨率，修改布局
     AdjustPosition,
