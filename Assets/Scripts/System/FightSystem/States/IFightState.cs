@@ -6,10 +6,10 @@ public class IFightState
 {
     protected virtual string name { get; private set; }
     public string ID => name;
+
     public virtual void OnEnter()
     {
         //Debug.Log("OnEnter() " + ID);
-        EventCenter.Broadcast(EventDefine.ChangeState, this);
     }
 
     public virtual void OnUpdate()

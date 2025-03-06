@@ -1,0 +1,9 @@
+﻿public enum UILAYER
+{
+    M_BACKGROUND_LAYER = 0,
+    M_MODEL_LAYER,
+    M_INFO_LAYER,
+    M_POP_LAYER,
+    M_TIP_LAYER,
+    M_EFFECT_LAYER,
+}

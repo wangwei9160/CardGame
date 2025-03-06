@@ -11,6 +11,7 @@ public class BattleUI : UIViewBase
     [Tooltip("牌组按钮")] public Button deckBtn;      // 牌组按钮
     [Tooltip("图鉴按钮")] public Button cardBookBtn;  // 图鉴按钮
     [Tooltip("结束按钮")] public Button endTurnBtn;   // 回合结束按钮
+    private bool isLock = false;                    // 回合结束锁
     public Transform CardsTransform;    // 临时存放所有卡牌的位置
 
     [Header("文本")]
@@ -28,7 +29,8 @@ public class BattleUI : UIViewBase
     public override void OnAddlistening()
     {
         base.OnAddlistening();
-        EventCenter.AddListener<IFightState>(EventDefine.ChangeState, OnChangeState);
+        EventCenter.AddListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
+        EventCenter.AddListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
         EventCenter.AddListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
         EventCenter.AddListener<int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
     }
@@ -36,7 +38,8 @@ public class BattleUI : UIViewBase
     public override void OnRemovelistening()
     {
         base.OnRemovelistening();
-        EventCenter.RemoveListener<IFightState>(EventDefine.ChangeState, OnChangeState);
+        EventCenter.RemoveListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
+        EventCenter.RemoveListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
         EventCenter.RemoveListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
         EventCenter.RemoveListener<int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
     }
@@ -51,8 +54,12 @@ public class BattleUI : UIViewBase
         });
         endTurnBtn.onClick.AddListener(() =>
         {
+            if (isLock) return;
             // 切换到敌方回合
-            GameManager.Instance.stateMachine.ChangeState(GameManager.Instance.enemyTurn);
+            isLock = true;      // 防止连点异常
+            StartCoroutine(WaitTimeUnLock());   // 定时解锁
+            endTurnBtn.GetComponent<Image>().color = Color.gray;
+            GameManager.Instance.FinishTurn();
         });
         //deckBtn.onClick.AddListener(() =>
         //{
@@ -70,18 +77,22 @@ public class BattleUI : UIViewBase
         magicPowerInfo.text = GameManager.Instance.Data.MagicPower.ToString();
     }
 
-    private void OnChangeState(IFightState state)
+    IEnumerator WaitTimeUnLock()
     {
-        if (state == GameManager.Instance.enemyTurn)
-        {
-            endTurnBtn.GetComponent<Image>().color = Color.gray;
-        }
-        else
-        {
-            CurrentTurn++;
-            turnInfo.text = string.Format("第{0}回合", CurrentTurn);
-            endTurnBtn.GetComponent<Image>().color = Color.green;
-        }
+        yield return new WaitForSeconds(0.5f);
+        isLock = false;
+    }
+
+    private void OnBeforePlayerTurn()
+    {
+        CurrentTurn++;
+        turnInfo.text = string.Format("第{0}回合", CurrentTurn);
+    }
+
+    private void OnPlayerTurn()
+    {
+        // 进入到玩家可操作回合
+        endTurnBtn.GetComponent<Image>().color = Color.green;
     }
 
     private void OnHpChange(int hp, int maxHp, int id)

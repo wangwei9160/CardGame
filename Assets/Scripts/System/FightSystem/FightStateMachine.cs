@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,13 +10,9 @@ public class FightStateMachine
     {
         CurrentState = currentState;
         currentState.OnEnter();
-        EventCenter.AddListener<IFightState>(EventDefine.ChangeState, ChangeState);
     }
 
-    ~FightStateMachine()
-    {
-        EventCenter.RemoveListener<IFightState>(EventDefine.ChangeState, ChangeState);
-    }
+    ~FightStateMachine() { }
 
     public bool IsState(IFightState state)
     {
@@ -28,7 +24,8 @@ public class FightStateMachine
         CurrentState.OnUpdate();
     }
 
-    public void ChangeState(IFightState state)
+
+    public void ChangeTurn(IFightState state)
     {
         if (!CurrentState.TryChange(state)) return;
         CurrentState.OnExit();

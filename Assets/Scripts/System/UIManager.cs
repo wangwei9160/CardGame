@@ -1,28 +1,104 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-
 
 public class UIManager : ManagerBase<UIManager>
 {
+    private Dictionary<int , Transform> m_LayerTransform = new Dictionary<int , Transform>();               // Layer -> Transform
+    private Dictionary<int , Stack<UIViewBase>> m_LayerUIViews = new Dictionary<int, Stack<UIViewBase>>();    // 每一层持有的ui
+
     private Dictionary<string, UIViewBase> m_SingleDic = new Dictionary<string, UIViewBase>();
 
     private Dictionary<string, List<UIViewBase>> m_MultipDic = new Dictionary<string, List<UIViewBase>>();
     private Dictionary<string ,int > m_MultipDicCnt = new Dictionary<string ,int>();
 
+    protected override void Awake()
+    {
+        base.Awake();
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            m_LayerTransform[i] = transform.GetChild(i);
+        }
+    }
+
+    #region layer 相关操作
+    // model层特有的遮挡关系
+    private void Push(UIViewBase ui)
+    {
+        if (ui.Layer != UILAYER.M_MODEL_LAYER) return;
+        int layerID = (int)ui.Layer;
+        if(!m_LayerUIViews.ContainsKey(layerID)) m_LayerUIViews[(int)UILAYER.M_MODEL_LAYER] = new Stack<UIViewBase>();   // model层
+        if (m_LayerUIViews[layerID].Count > 0)
+        {
+            UIViewBase top = m_LayerUIViews[layerID].Peek();
+            if (top.Type == UIViewType.Singleton)
+            {
+                Hide(top.Name);
+            }else if(top.Type == UIViewType.Multiple)
+            {
+                Hide(top.Name ,top.Index);
+            }
+        }
+        m_LayerUIViews[layerID].Push(ui);
+    }
+
+    private void Pop(UIViewBase ui)
+    {
+        if (ui.Layer != UILAYER.M_MODEL_LAYER) return;
+        int layerID = (int)ui.Layer;
+        m_LayerUIViews[layerID].Pop();
+        if (m_LayerUIViews[layerID].Count > 0)
+        {
+            UIViewBase top = m_LayerUIViews[layerID].Peek();
+            if (top.Type == UIViewType.Singleton)
+            {
+                ReShow(top.Name);
+            }
+            else if (top.Type == UIViewType.Multiple)
+            {
+                ReShow(top.Name, top.Index);
+            }
+        }
+    }
+
+    #endregion
+
+
+    #region ui相关操作
+    // 通用的通过uiName 创建UIViewBase
+    private UIViewBase CreatePrefabByName(string uiName)
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/{uiName}");
+        GameObject obj = Instantiate(prefab);
+        UIViewBase ui = obj.GetComponent<UIViewBase>(); Push(ui);
+        obj.transform.SetParent(m_LayerTransform[(int)ui.Layer]);
+        return ui;
+    }
+    
     public void Show(string uiName)
     {
         if (!m_SingleDic.ContainsKey(uiName))
         {
-            GameObject prefab = Resources.Load<GameObject>($"UI/{uiName}");
-            GameObject obj = Instantiate(prefab , transform);
-            UIViewBase ui = obj.GetComponent<UIViewBase>();
+            var ui = CreatePrefabByName(uiName);
             m_SingleDic[uiName] = ui;
             m_SingleDic[uiName].Init(uiName);
+            
         }
         m_SingleDic[uiName].Show();
     }
 
-    public void Show(string uiName , GameObject val , ref int Index)
+    public void Show(string uiName, GameObject parent)
+    {
+        if (!m_SingleDic.ContainsKey(uiName))
+        {
+            var ui = CreatePrefabByName(uiName);
+            m_SingleDic[uiName] = ui;
+            m_SingleDic[uiName].Init(uiName , parent);
+        }
+        m_SingleDic[uiName].Show();
+
+    }
+
+    public void Show(string uiName , GameObject parent, ref int Index)
     {
         if (!m_MultipDic.ContainsKey(uiName))
         {
@@ -38,15 +114,30 @@ public class UIManager : ManagerBase<UIManager>
                 return;
             }
         }
-        
-        GameObject prefab = Resources.Load<GameObject>($"UI/{uiName}");
-        GameObject obj = Instantiate(prefab, transform);
-        UIViewBase ui = obj.GetComponent<UIViewBase>();
-        Index = m_MultipDicCnt[uiName]++;   // ������ֵ����Ҫע����̻߳���
+
+        var ui = CreatePrefabByName(uiName);
+        Index = m_MultipDicCnt[uiName]++;   // 自增赋值，需要注意多线程环境
         ui.ResetIndex(Index);
-        ui.Init(uiName,val);
+        ui.Init(uiName, parent);
         m_MultipDic[uiName].Add(ui);
         
+    }
+
+    private void ReShow(string uiName)
+    {
+        m_SingleDic[uiName].Show();
+    }
+
+    private void ReShow(string uiName, int Index)
+    {
+        for (int i = 0; i < m_MultipDic[uiName].Count; i++)
+        {
+            if (m_MultipDic[uiName][i].index == Index)
+            {
+                m_MultipDic[uiName][i].Show();
+                return;
+            }
+        }
     }
 
     public void Hide(string uiName)
@@ -57,7 +148,7 @@ public class UIManager : ManagerBase<UIManager>
         }
     }
 
-    public void Hide(string uiName , ref int Index)
+    public void Hide(string uiName , int Index)
     {
         for (int i = 0; i < m_MultipDic[uiName].Count; i++)
         {
@@ -73,6 +164,7 @@ public class UIManager : ManagerBase<UIManager>
     {
         if(m_SingleDic.ContainsKey(uiName))
         {
+            Pop(m_SingleDic[uiName]);
             m_SingleDic[uiName].Close();
             m_SingleDic.Remove(uiName);
         }
@@ -84,6 +176,7 @@ public class UIManager : ManagerBase<UIManager>
         {
             if (m_MultipDic[uiName][i].index == Index)
             {
+                Pop(m_MultipDic[uiName][i]);
                 m_MultipDic[uiName][i].Close();
             }
         }
@@ -94,6 +187,7 @@ public class UIManager : ManagerBase<UIManager>
             m_MultipDicCnt.Remove(uiName);
         }
     }
+    #endregion
 
 }
 

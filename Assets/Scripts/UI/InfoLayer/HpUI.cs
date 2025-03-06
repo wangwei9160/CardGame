@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class HpUI : UIViewBase
 { 
     public override UIViewType Type => UIViewType.Multiple;
+    public override UILAYER Layer => UILAYER.M_INFO_LAYER;
 
     public Slider slider;
     public GameObject Owner;
