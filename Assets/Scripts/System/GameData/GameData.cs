@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Mathematics;
 
 public class GameData 
@@ -11,6 +12,8 @@ public class GameData
     public int maxHp;           // 最大生命值
     public int money;           // 当前持有金币数量
     public int magicPower;      // 法力值
+
+    public List<Reward> rewards = new List<Reward>();
 
     public int MagicPower
     {

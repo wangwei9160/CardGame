@@ -1,4 +1,7 @@
 // 一些常量，游戏加载后不会修改的内容
+
+using System.Collections.Generic;
+
 public class Constants
 {
     public static string[] MapName = new string[]
@@ -17,5 +20,6 @@ public class Constants
         5,
         5
     };
-    
+    public static string MERGEUI = "MergePanel";
 }
+

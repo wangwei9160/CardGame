@@ -11,6 +11,7 @@ public class RewardOpen : MonoBehaviour
         transform.DOLocalMove(new Vector2(0,0), 1f).SetEase(Ease.OutQuad).OnComplete(() =>
         {
             Destroy(gameObject);
+            EventCenter.Broadcast(EventDefine.AfterEffectShowReward);
         });
         transform.DOScale(new Vector3(2, 2, 2), 1f).SetEase(Ease.OutQuad);
     }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Linq;
 using UnityEngine;
 
 public enum GameState
@@ -34,10 +32,15 @@ public class GameManager : ManagerBase<GameManager>
     private int enemyNum = 2;
     #endregion
 
+    protected override void Awake()
+    {
+        base.Awake();
+        EventCenter.AddListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 添加一个监听
+        EventCenter.AddListener(EventDefine.OnMergePanelShow, OnMergePanelShow);
+    }
+
     void Start()
     {
-        EventCenter.AddListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 添加一个监听
-
         gameData = new GameData();
         //playerTurn = new PlayerTurn();
         UIManager.Instance.Show("BattleUI");
@@ -46,12 +49,12 @@ public class GameManager : ManagerBase<GameManager>
         gameState = GameState.Battle;   // 暂时初始化为战斗开始
         BeforeTurn(); // 代替状态机的切换
         //stateMachine = new FightStateMachine(playerTurn); // 临时默认开始为我方回合
-        
     }
 
     private void OnDestroy()
     {
         EventCenter.RemoveListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 移除监听
+        EventCenter.RemoveListener(EventDefine.OnMergePanelShow, OnMergePanelShow);
     }
 
     // 临时使用，用于初始化时添加我方角色
@@ -92,6 +95,10 @@ public class GameManager : ManagerBase<GameManager>
         {
             gameState = GameState.Reward;
             Debug.Log("进入奖励结算");
+            gameData.rewards.Add(new Reward(1,1));
+            System.Random rd = new System.Random();
+            gameData.rewards.Add(new Reward(2, rd.Next(50, 100)));
+            gameData.rewards.Add(new Reward(2, rd.Next(50, 100)));
             //Debug.Log(ContainerManager.Instance.Enemies[id].position);
             UIManager.Instance.Show("RewardPanelUI" , ContainerManager.Instance.Enemies[id].gameObject);
         }
@@ -145,7 +152,10 @@ public class GameManager : ManagerBase<GameManager>
 
     }
 
-
+    private void OnMergePanelShow()
+    {
+        UIManager.Instance.Show(Constants.MERGEUI);
+    }
 
     #endregion
 
