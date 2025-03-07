@@ -11,6 +11,8 @@
     OnMagicPowerChange,
 
     AfterEffectShowReward,  // 奖励界面动画结束后提供奖励
+    SelectMoneyReward,      // 是否拿取钱的奖励，提前点前往将放弃奖励
+    SelectCardReward,       // 是否拿取卡牌的奖励，提前点前往将放弃奖励
 
     // 游戏进程相关
     OnBeforePlayerTurn,     // 进入一个新的回合

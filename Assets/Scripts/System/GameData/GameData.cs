@@ -13,7 +13,9 @@ public class GameData
     public int money;           // 当前持有金币数量
     public int magicPower;      // 法力值
 
-    public List<Reward> rewards = new List<Reward>();
+    // 关卡通关奖励，在没有或者选择后应该为空; 暂时使用这种方式实现，后续看是否由策划表统一
+    public int MoneyReward;             // 金币奖励
+    public List<int> CardReward;        // 卡牌奖励
 
     public int MagicPower
     {
@@ -29,6 +31,7 @@ public class GameData
         maxHp = 100;
         hp = maxHp;
         magicPower = 0;
+        CardReward = new List<int>();
     }
     
 }

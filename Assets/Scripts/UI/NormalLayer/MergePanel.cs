@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MergePanel : UIViewBase
 {
     public override UIViewType Type => UIViewType.Singleton;
-    public override UILAYER Layer => UILAYER.M_MODEL_LAYER;
+    public override UILAYER Layer => UILAYER.M_NORMAL_LAYER;
 
     public Button GoBtn;
 

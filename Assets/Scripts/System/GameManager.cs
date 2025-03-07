@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum GameState
@@ -37,6 +38,7 @@ public class GameManager : ManagerBase<GameManager>
         base.Awake();
         EventCenter.AddListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 添加一个监听
         EventCenter.AddListener(EventDefine.OnMergePanelShow, OnMergePanelShow);
+        EventCenter.AddListener<int>(EventDefine.SelectMoneyReward, SelectMoneyReward);    // 添加一个监听
     }
 
     void Start()
@@ -82,6 +84,15 @@ public class GameManager : ManagerBase<GameManager>
         }
     }
 
+    // 增加钱的数量的方法
+    public void OnMoneyChange(int val)
+    {
+        gameData.money += val;
+    }
+
+   
+
+    // 法力值更新方法
     public void OnMagicPowerChange(int val)
     {
         gameData.MagicPower += val;
@@ -95,13 +106,45 @@ public class GameManager : ManagerBase<GameManager>
         {
             gameState = GameState.Reward;
             Debug.Log("进入奖励结算");
-            gameData.rewards.Add(new Reward(1,1));
+
             System.Random rd = new System.Random();
-            gameData.rewards.Add(new Reward(2, rd.Next(50, 100)));
-            gameData.rewards.Add(new Reward(2, rd.Next(50, 100)));
+            gameData.MoneyReward = rd.Next(50, 100);
+            gameData.CardReward.Add(1);
+            gameData.CardReward.Add(2);
+            gameData.CardReward.Add(3);
             //Debug.Log(ContainerManager.Instance.Enemies[id].position);
+            UIManager.Instance.Hide(GameString.BATTLEUI);
             UIManager.Instance.Show("RewardPanelUI" , ContainerManager.Instance.Enemies[id].gameObject);
         }
+    }
+
+    // 临时暴露奖励接口
+    public int MoneyReward()
+    {
+        return gameData.MoneyReward;
+    }
+    // 临时暴露奖励接口
+    public List<int> CardReward()
+    {
+        return gameData.CardReward;
+    }
+
+    // 是否拿取金币奖励
+    private void SelectMoneyReward(int isGet)
+    {
+        bool isG = isGet == 1;
+        if (isG) OnMoneyChange(gameData.MoneyReward);
+        gameData.MoneyReward = 0;
+    }
+
+    // 是否拿取金币奖励
+    private void SelectCardReward(int _select)
+    {
+        if(0 <= _select && _select < gameData.CardReward.Count)
+        {
+            // 获得对应的卡牌
+        }
+        gameData.CardReward.Clear();    // 清空
     }
 
     #region 回合切换
@@ -154,7 +197,7 @@ public class GameManager : ManagerBase<GameManager>
 
     private void OnMergePanelShow()
     {
-        UIManager.Instance.Show(Constants.MERGEUI);
+        UIManager.Instance.Show(GameString.MERGEUI);    // 合成界面
     }
 
     #endregion
