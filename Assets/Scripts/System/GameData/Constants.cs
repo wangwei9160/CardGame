@@ -20,6 +20,6 @@ public class Constants
         5,
         5
     };
-    public static string MERGEUI = "MergePanel";
+    
 }
 

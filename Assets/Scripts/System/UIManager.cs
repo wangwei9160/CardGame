@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UIManager : ManagerBase<UIManager>
@@ -14,19 +15,29 @@ public class UIManager : ManagerBase<UIManager>
     protected override void Awake()
     {
         base.Awake();
-        for (int i = 0; i < transform.childCount; i++)
+        foreach (UILAYER layer in Enum.GetValues(typeof(UILAYER)))
         {
-            m_LayerTransform[i] = transform.GetChild(i);
+            int _layer = (int)layer;
+            m_LayerUIViews[_layer] = new Stack<UIViewBase>();
+            GameObject obj = new GameObject(layer.ToString());
+            obj.transform.SetParent(gameObject.transform);
+            m_LayerTransform[_layer] = obj.transform;
         }
+
     }
 
     #region layer 相关操作
-    // model层特有的遮挡关系
+    // 特有的遮挡关系
+    private bool isNeed(int _layer)
+    {
+        return (_layer & (int)UILAYER.M_NORMAL_LAYER) != 0 || (_layer & (int)UILAYER.M_POP_LAYER) != 0;
+    }
+
     private void Push(UIViewBase ui)
     {
-        if (ui.Layer != UILAYER.M_MODEL_LAYER) return;
+        if (!isNeed((int)ui.Layer)) return;
         int layerID = (int)ui.Layer;
-        if(!m_LayerUIViews.ContainsKey(layerID)) m_LayerUIViews[(int)UILAYER.M_MODEL_LAYER] = new Stack<UIViewBase>();   // model层
+        if(!m_LayerUIViews.ContainsKey(layerID)) m_LayerUIViews[(int)UILAYER.M_NORMAL_LAYER] = new Stack<UIViewBase>();   // model层
         if (m_LayerUIViews[layerID].Count > 0)
         {
             UIViewBase top = m_LayerUIViews[layerID].Peek();
@@ -43,7 +54,7 @@ public class UIManager : ManagerBase<UIManager>
 
     private void Pop(UIViewBase ui)
     {
-        if (ui.Layer != UILAYER.M_MODEL_LAYER) return;
+        if (!isNeed((int)ui.Layer)) return;
         int layerID = (int)ui.Layer;
         m_LayerUIViews[layerID].Pop();
         if (m_LayerUIViews[layerID].Count > 0)
