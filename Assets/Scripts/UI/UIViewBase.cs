@@ -15,7 +15,7 @@ public class UIViewBase : MonoBehaviour
     public virtual string Name => _name;
 
     public virtual UIViewType Type => UIViewType.Singleton; // 唯一还是复用
-    public virtual UILAYER Layer => UILAYER.M_MODEL_LAYER;  // 默认模型层
+    public virtual UILAYER Layer => UILAYER.M_NORMAL_LAYER;  // 默认模型层
     public int index = 0;
     public void ResetIndex(int idx)
     {

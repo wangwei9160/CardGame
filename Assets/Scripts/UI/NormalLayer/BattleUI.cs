@@ -52,6 +52,8 @@ public class BattleUI : UIViewBase
         {
             UIManager.Instance.Show("SettingUI");
         });
+        endTurnBtn.GetComponent<Image>().color = Color.gray;
+        isLock = true;
         endTurnBtn.onClick.AddListener(() =>
         {
             if (isLock) return;
@@ -92,6 +94,7 @@ public class BattleUI : UIViewBase
     private void OnPlayerTurn()
     {
         // 进入到玩家可操作回合
+        isLock = false;
         endTurnBtn.GetComponent<Image>().color = Color.green;
     }
 

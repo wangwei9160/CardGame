@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class CardHpUI : UIViewBase
 {
     public override UIViewType Type => UIViewType.Multiple;
-    public override UILAYER Layer => UILAYER.M_INFO_LAYER;
+    public override UILAYER Layer => UILAYER.M_BATTLE_LAYER;
     public GameObject pos;
     public Image bg;
     public Text HpValue;

@@ -27,7 +27,7 @@ public class BaseEnemy : BaseCharacter
         // 临时用来扣血的
         var rd = Random.Range(10, 30);
         hp -= rd;
-        if(hp < 0)
+        if(hp <= 0)
         {
             hp = 0;
             Destroy(gameObject , 0.3f); // 延迟死亡 可以用于创建协程触发死亡动画
