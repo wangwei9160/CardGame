@@ -23,12 +23,12 @@ public class SelectCardRewardUI : UIViewBase
         });
         CloseBtn.onClick.AddListener(() =>
         {
-            UIManager.Instance.Hide(Name);
+            UIManager.Instance.Close(Name); // 需要删除才能实现stack的层次显示
         });
         for(int i = 0; i < Cards.childCount; i++)
         {
             int idx = i + 1;
-            Cards.Find("ConfirmBtn").GetComponent<Button>().onClick.AddListener(() =>
+            Cards.GetChild(i).Find("ConfirmBtn").GetComponent<Button>().onClick.AddListener(() =>
             {
                 EventCenter.Broadcast(EventDefine.SelectCardReward , idx);
             });

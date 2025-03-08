@@ -14,8 +14,6 @@ public class GameManager : ManagerBase<GameManager>
 {
     [Tooltip("角色预制体")]public GameObject player;   
     [Tooltip("敌方预制体")]public GameObject enemy;
-    //[Tooltip("玩家回合")] public PlayerTurn playerTurn;
-    //[Tooltip("状态机")] public FightStateMachine stateMachine;
 
     [Tooltip("整个游戏的状态")] private GameState gameState;
 
@@ -36,27 +34,25 @@ public class GameManager : ManagerBase<GameManager>
     protected override void Awake()
     {
         base.Awake();
+        gameData = new GameData();
+        EventCenter.AddListener(EventDefine.OnBattleStart, OnBattleStart);    // 战斗开始
         EventCenter.AddListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 添加一个监听
         EventCenter.AddListener(EventDefine.OnMergePanelShow, OnMergePanelShow);
         EventCenter.AddListener<int>(EventDefine.SelectMoneyReward, SelectMoneyReward);    // 添加一个监听
-    }
-
-    void Start()
-    {
-        gameData = new GameData();
-        //playerTurn = new PlayerTurn();
-        UIManager.Instance.Show("BattleUI");
-        AddPlayer(playerNum, dogNum);
-        AddEnemy(enemyNum);
-        gameState = GameState.Battle;   // 暂时初始化为战斗开始
-        BeforeTurn(); // 代替状态机的切换
-        //stateMachine = new FightStateMachine(playerTurn); // 临时默认开始为我方回合
+        
     }
 
     private void OnDestroy()
     {
+        EventCenter.RemoveListener(EventDefine.OnBattleStart, OnBattleStart);    // 移除
         EventCenter.RemoveListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 移除监听
         EventCenter.RemoveListener(EventDefine.OnMergePanelShow, OnMergePanelShow);
+        EventCenter.RemoveListener<int>(EventDefine.SelectMoneyReward, SelectMoneyReward);    // 上个版本遗忘的更新
+    }
+
+    private void Start()
+    {
+        EventCenter.Broadcast(EventDefine.OnBattleStart);   // 临时使用用于默认进入战斗
     }
 
     // 临时使用，用于初始化时添加我方角色
@@ -65,6 +61,7 @@ public class GameManager : ManagerBase<GameManager>
         PlayerNum = Math.Min(PlayerNum, 1);
         for (int i = 0; i < PlayerNum; i++)
         {
+            if (ContainerManager.Instance.Players[i].childCount > 0) continue;  // 防止重复添加Player
             Instantiate(player, ContainerManager.Instance.Players[i]);
         }
         CardNum = Math.Min(CardNum, 5 - PlayerNum);
@@ -104,18 +101,22 @@ public class GameManager : ManagerBase<GameManager>
         enemyNum--;
         if(enemyNum == 0)
         {
-            gameState = GameState.Reward;
-            Debug.Log("进入奖励结算");
-
-            System.Random rd = new System.Random();
-            gameData.MoneyReward = rd.Next(50, 100);
-            gameData.CardReward.Add(1);
-            gameData.CardReward.Add(2);
-            gameData.CardReward.Add(3);
-            //Debug.Log(ContainerManager.Instance.Enemies[id].position);
-            UIManager.Instance.Hide(GameString.BATTLEUI);
-            UIManager.Instance.Show("RewardPanelUI" , ContainerManager.Instance.Enemies[id].gameObject);
+            BettleWin(id);
         }
+    }
+
+    private void BettleWin(int id)
+    {
+        gameState = GameState.Reward;
+        Debug.Log("进入奖励结算");
+        System.Random rd = new System.Random();
+        gameData.MoneyReward = rd.Next(50, 100);
+        gameData.CardReward.Add(1);
+        gameData.CardReward.Add(2);
+        gameData.CardReward.Add(3);
+        gameData.CurrentStage++;    // 当前地图阶段自增 
+        UIManager.Instance.Close(GameString.BATTLEUI);
+        UIManager.Instance.Show("RewardPanelUI", ContainerManager.Instance.Enemies[id].gameObject);
     }
 
     // 临时暴露奖励接口
@@ -147,7 +148,17 @@ public class GameManager : ManagerBase<GameManager>
         gameData.CardReward.Clear();    // 清空
     }
 
-    #region 回合切换
+    #region 战斗内相关、涉及回合切换
+
+    private void OnBattleStart()
+    {
+        UIManager.Instance.Show("BattleUI");
+        AddPlayer(playerNum, dogNum);
+        enemyNum = 2;
+        AddEnemy(enemyNum);
+        gameState = GameState.Battle;   // 暂时初始化为战斗开始
+        BeforeTurn(); // 代替状态机的切换
+    }
 
     // 回合开始
     public void BeforeTurn()

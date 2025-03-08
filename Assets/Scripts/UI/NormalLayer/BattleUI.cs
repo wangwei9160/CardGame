@@ -46,14 +46,13 @@ public class BattleUI : UIViewBase
 
     protected override void Start()
     {
-
+        base.Start();
         Cards = new List<GameObject>();
         settingBtn.onClick.AddListener(() =>
         {
             UIManager.Instance.Show("SettingUI");
         });
         endTurnBtn.GetComponent<Image>().color = Color.gray;
-        isLock = true;
         endTurnBtn.onClick.AddListener(() =>
         {
             if (isLock) return;
@@ -71,10 +70,16 @@ public class BattleUI : UIViewBase
         //{
         //    UIManager.Instance.Show("CardBookUI");
         //});
-        base.Start();
+    }
+
+    public override void Show()
+    {
+        base.Show();
+        isLock = true;
         OnMoneyChange(GameManager.Instance.Data.money);     // 从数据里拿到钱的数量
-        levelInfo.text = string.Format("之后还有{0}步走出{1}" , 
-            Constants.MapLength[GameManager.Instance.Data.CurrentLvel] - GameManager.Instance.Data.CurrentStage  ,
+        // 显示信息的更新
+        levelInfo.text = string.Format("之后还有{0}步走出{1}",
+            Constants.MapLength[GameManager.Instance.Data.CurrentLvel] - GameManager.Instance.Data.CurrentStage,
             Constants.MapName[GameManager.Instance.Data.CurrentLvel]);
         magicPowerInfo.text = GameManager.Instance.Data.MagicPower.ToString();
     }

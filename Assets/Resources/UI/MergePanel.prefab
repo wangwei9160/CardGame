@@ -201,6 +201,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: 
   index: 0
+  GoBtn: {fileID: 909041837388771615}
 --- !u!1 &5136383440237389599
 GameObject:
   m_ObjectHideFlags: 0
