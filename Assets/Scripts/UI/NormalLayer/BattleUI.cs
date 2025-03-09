@@ -50,14 +50,14 @@ public class BattleUI : UIViewBase
         {
             UIManager.Instance.Show("SettingUI");
         });
-        endTurnBtn.GetComponentInChildren<Text>().color = GameString.UNUSECOLOR;
+        endTurnBtn.GetComponent<EndTurnBtnHover>().OnChange(0.6f);
         endTurnBtn.onClick.AddListener(() =>
         {
             if (isLock) return;
             // 切换到敌方回合
             isLock = true;      // 防止连点异常
             StartCoroutine(WaitTimeUnLock());   // 定时解锁
-            endTurnBtn.GetComponentInChildren<Text>().color = GameString.UNUSECOLOR;
+            endTurnBtn.GetComponent<EndTurnBtnHover>().OnChange(0.6f);
             GameManager.Instance.FinishTurn();
         });
         //deckBtn.onClick.AddListener(() =>
@@ -99,7 +99,7 @@ public class BattleUI : UIViewBase
     {
         // 进入到玩家可操作回合
         isLock = false;
-        endTurnBtn.GetComponentInChildren<Text>().color = Color.white;
+        endTurnBtn.GetComponent<EndTurnBtnHover>().OnChange(1f);
         GameManager.Instance.OnMagicPowerChange(1,1);
         //endTurnBtn.GetComponent<Image>().color = Color.green;
     }

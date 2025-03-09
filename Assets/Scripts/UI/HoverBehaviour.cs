@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 
-public class HoverBehaviour : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class HoverBehaviour : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler , IPointerDownHandler , IPointerUpHandler
 {
 
     public virtual void OnPointerEnter(PointerEventData eventData)
@@ -13,5 +13,14 @@ public class HoverBehaviour : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public virtual void OnPointerExit(PointerEventData eventData)
     {
         Debug.Log("OnPointerExit");
+    }
+
+    public virtual void OnPointerDown(PointerEventData eventData)
+    {
+        Debug.Log("OnPointerDown");
+    }
+    public virtual void OnPointerUp(PointerEventData eventData)
+    {
+        Debug.Log("OnPointUp");
     }
 }
