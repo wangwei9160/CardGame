@@ -88,12 +88,13 @@ public class GameManager : ManagerBase<GameManager>
     }
 
    
-
     // 法力值更新方法
-    public void OnMagicPowerChange(int val)
+    public void OnMagicPowerChange(int val , int val2)
     {
+        gameData.MaxMagicPower += val2; // 先增加最大的
         gameData.MagicPower += val;
-        EventCenter.Broadcast(EventDefine.OnMagicPowerChange , gameData.magicPower);
+        
+        EventCenter.Broadcast(EventDefine.OnMagicPowerChange , gameData.MagicPower , gameData.MaxMagicPower);
     }
 
     public void OnEnemyDeath(int id)
@@ -138,7 +139,7 @@ public class GameManager : ManagerBase<GameManager>
         gameData.MoneyReward = 0;
     }
 
-    // 是否拿取金币奖励
+    // 是否拿取卡牌奖励
     private void SelectCardReward(int _select)
     {
         if(0 <= _select && _select < gameData.CardReward.Count)
@@ -152,7 +153,7 @@ public class GameManager : ManagerBase<GameManager>
 
     private void OnBattleStart()
     {
-        UIManager.Instance.Show("BattleUI");
+        UIManager.Instance.Show(GameString.BATTLEUI);   //打开战斗UI
         AddPlayer(playerNum, dogNum);
         enemyNum = 2;
         AddEnemy(enemyNum);
@@ -209,6 +210,9 @@ public class GameManager : ManagerBase<GameManager>
     private void OnMergePanelShow()
     {
         UIManager.Instance.Show(GameString.MERGEUI);    // 合成界面
+        gameData.CurrentTurn = 0;
+        gameData.MaxMagicPower = 0; // 先增加最大的
+        gameData.MagicPower = 0;
     }
 
     #endregion

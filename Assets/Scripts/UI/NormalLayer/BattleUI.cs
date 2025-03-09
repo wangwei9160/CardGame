@@ -16,13 +16,11 @@ public class BattleUI : UIViewBase
 
     [Header("文本")]
     [Tooltip("血量")] public Text hpText; // 血量
+    [Tooltip("血条")] public Slider hpSlider; //  血条
     [Tooltip("钱")] public Text moneyText;   // 钱的数量
     [Tooltip("回合计数")] public Text turnInfo;   // 回合计数
     [Tooltip("关卡信息")] public Text levelInfo;   // 关卡信息
     [Tooltip("法力值")] public Text magicPowerInfo;   // 法力值信息
-
-    public int CurrentTurn = 0;
-    
 
     public List<GameObject> Cards;
 
@@ -32,7 +30,7 @@ public class BattleUI : UIViewBase
         EventCenter.AddListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
         EventCenter.AddListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
         EventCenter.AddListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
-        EventCenter.AddListener<int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
+        EventCenter.AddListener<int , int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
     }
 
     public override void OnRemovelistening()
@@ -41,7 +39,7 @@ public class BattleUI : UIViewBase
         EventCenter.RemoveListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
         EventCenter.RemoveListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
         EventCenter.RemoveListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
-        EventCenter.RemoveListener<int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
+        EventCenter.RemoveListener<int , int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
     }
 
     protected override void Start()
@@ -52,14 +50,14 @@ public class BattleUI : UIViewBase
         {
             UIManager.Instance.Show("SettingUI");
         });
-        endTurnBtn.GetComponent<Image>().color = Color.gray;
+        endTurnBtn.GetComponentInChildren<Text>().color = GameString.UNUSECOLOR;
         endTurnBtn.onClick.AddListener(() =>
         {
             if (isLock) return;
             // 切换到敌方回合
             isLock = true;      // 防止连点异常
             StartCoroutine(WaitTimeUnLock());   // 定时解锁
-            endTurnBtn.GetComponent<Image>().color = Color.gray;
+            endTurnBtn.GetComponentInChildren<Text>().color = GameString.UNUSECOLOR;
             GameManager.Instance.FinishTurn();
         });
         //deckBtn.onClick.AddListener(() =>
@@ -78,10 +76,10 @@ public class BattleUI : UIViewBase
         isLock = true;
         OnMoneyChange(GameManager.Instance.Data.money);     // 从数据里拿到钱的数量
         // 显示信息的更新
-        levelInfo.text = string.Format("之后还有{0}步走出{1}",
+        levelInfo.text = string.Format(GameString.STAGEINFO,
             Constants.MapLength[GameManager.Instance.Data.CurrentLvel] - GameManager.Instance.Data.CurrentStage,
             Constants.MapName[GameManager.Instance.Data.CurrentLvel]);
-        magicPowerInfo.text = GameManager.Instance.Data.MagicPower.ToString();
+        magicPowerInfo.text = string.Format(GameString.MAGICEINFO, GameManager.Instance.Data.MagicPower , GameManager.Instance.Data.MaxMagicPower);
     }
 
     IEnumerator WaitTimeUnLock()
@@ -90,22 +88,26 @@ public class BattleUI : UIViewBase
         isLock = false;
     }
 
+    // 修正当前回合数
     private void OnBeforePlayerTurn()
     {
-        CurrentTurn++;
-        turnInfo.text = string.Format("第{0}回合", CurrentTurn);
+        GameManager.Instance.Data.CurrentTurn++;
+        turnInfo.text = GameManager.Instance.Data.CurrentTurn.ToString();
     }
 
     private void OnPlayerTurn()
     {
         // 进入到玩家可操作回合
         isLock = false;
-        endTurnBtn.GetComponent<Image>().color = Color.green;
+        endTurnBtn.GetComponentInChildren<Text>().color = Color.white;
+        GameManager.Instance.OnMagicPowerChange(1,1);
+        //endTurnBtn.GetComponent<Image>().color = Color.green;
     }
 
     private void OnHpChange(int hp, int maxHp, int id)
     {
         hpText.text = string.Format("{0}/{1}",hp,maxHp);
+        hpSlider.value = 1.0f * hp / maxHp;
     }
 
     private void OnMoneyChange(int val)
@@ -113,9 +115,9 @@ public class BattleUI : UIViewBase
         moneyText.text = val.ToString();
     }
     
-    private void OnMagicPowerChange(int val)
+    private void OnMagicPowerChange(int val , int maxVal)
     {
-        magicPowerInfo.text = val.ToString();
+        magicPowerInfo.text = string.Format(GameString.MAGICEINFO, GameManager.Instance.Data.MagicPower, GameManager.Instance.Data.MaxMagicPower);
     }
 
 }
