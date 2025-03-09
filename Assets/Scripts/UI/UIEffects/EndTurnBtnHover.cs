@@ -14,6 +14,10 @@ public class EndTurnBtnHover : HoverBehaviour
     public Text b;      // 数字
     public bool isLock;
 
+    public Sprite cantUse;
+    public Sprite canUse;
+    public Sprite pressed;
+
     public Color aNormalColor = Color.white;                    // 正常白色
     public Color bNormalColor = GameString.NUNUMBERCOLOR;       // 正常使用颜色
     public Color aClickColor = GameString.ONCLICKTEXTCOLOR;     // 文本
@@ -27,8 +31,17 @@ public class EndTurnBtnHover : HoverBehaviour
     // val 的范围 [ 0 , 1f]
     public void OnChange(float val)
     {
-        if (val == 1f) isLock = false;
-        else isLock = true;
+        if (val == 1f)
+        {
+            // 可以点击
+            isLock = false;
+            BG.GetComponent<Image>().sprite = canUse;
+        }
+        else
+        {
+            isLock = true;
+            BG.GetComponent<Image>().sprite = cantUse;
+        }
         Color newColor = BG.color;
         newColor.a = val;
         BG.color = newColor;    // 背景的透明度
@@ -58,6 +71,7 @@ public class EndTurnBtnHover : HoverBehaviour
     public override void OnPointerDown(PointerEventData eventData)
     {
         if (isLock) return;
+        BG.GetComponent<Image>().sprite = pressed;
         base.OnPointerDown(eventData);
         a.color = aClickColor;
         b.color = bClickColor;
@@ -66,6 +80,7 @@ public class EndTurnBtnHover : HoverBehaviour
     public override void OnPointerUp(PointerEventData eventData)
     {
         if (isLock) return;
+        BG.GetComponent<Image>().sprite = canUse;
         base.OnPointerDown(eventData);
         a.color = aNormalColor;
         b.color = bNormalColor;

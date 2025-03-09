@@ -16,4 +16,5 @@ public class RewardOpen : MonoBehaviour
         });
         transform.DOScale(new Vector3(2, 2, 2), 1f).SetEase(Ease.OutQuad);
     }
+
 }

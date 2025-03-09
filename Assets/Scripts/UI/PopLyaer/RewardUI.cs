@@ -14,7 +14,6 @@ public class RewardUI : UIViewBase
     public Transform Rewards;
     public Button GoMergeBtn;
 
-    public GameObject RewardPrefab;   // 预制体
     protected override void Start()
     {
         base.Start();
@@ -23,7 +22,7 @@ public class RewardUI : UIViewBase
         {
             // 打开合成界面
             EventCenter.Broadcast(EventDefine.OnMergePanelShow);
-            UIManager.Instance.Hide(Name);
+            UIManager.Instance.Close(Name);
             EventCenter.Broadcast(EventDefine.SelectMoneyReward, 0);    // 不拿
             EventCenter.Broadcast(EventDefine.SelectCardReward, 0);
         });

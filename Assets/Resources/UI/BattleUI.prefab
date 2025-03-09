@@ -3082,6 +3082,14 @@ MonoBehaviour:
   BG: {fileID: 4443981179521201194}
   a: {fileID: 4426278232084312483}
   b: {fileID: 1024829203918535987}
+  isLock: 0
+  cantUse: {fileID: 21300000, guid: 2b9e6f175a50a6f4a9b0eacc2faa7ae5, type: 3}
+  canUse: {fileID: 21300000, guid: d0412216a0601dc409f0681d5f1e88f6, type: 3}
+  pressed: {fileID: 21300000, guid: 6e11ab2f7bd12fd4aaddb45c720ceef9, type: 3}
+  aNormalColor: {r: 1, g: 1, b: 1, a: 1}
+  bNormalColor: {r: 0.25490198, g: 0.21568628, b: 0.5058824, a: 1}
+  aClickColor: {r: 0.03137255, g: 0.11372549, b: 0.2509804, a: 1}
+  bClickColor: {r: 0.3254902, g: 0.02745098, b: 0.30588236, a: 1}
 --- !u!1 &6840100664668776779
 GameObject:
   m_ObjectHideFlags: 0
