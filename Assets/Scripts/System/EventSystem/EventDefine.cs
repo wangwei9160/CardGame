@@ -9,6 +9,7 @@
     OnEnemyDeath,   // 敌方随从死亡
     // 法力值修正
     OnMagicPowerChange,
+    OnMoneyChange,          // 金币数量修正
 
     AfterEffectShowReward,  // 奖励界面动画结束后提供奖励
     SelectMoneyReward,      // 是否拿取钱的奖励，提前点前往将放弃奖励

@@ -39,7 +39,7 @@ public class GameManager : ManagerBase<GameManager>
         EventCenter.AddListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 添加一个监听
         EventCenter.AddListener(EventDefine.OnMergePanelShow, OnMergePanelShow);
         EventCenter.AddListener<int>(EventDefine.SelectMoneyReward, SelectMoneyReward);    // 添加一个监听
-        
+        EventCenter.AddListener<int>(EventDefine.SelectCardReward, SelectCardReward);    // 添加一个监听
     }
 
     private void OnDestroy()
@@ -48,11 +48,13 @@ public class GameManager : ManagerBase<GameManager>
         EventCenter.RemoveListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 移除监听
         EventCenter.RemoveListener(EventDefine.OnMergePanelShow, OnMergePanelShow);
         EventCenter.RemoveListener<int>(EventDefine.SelectMoneyReward, SelectMoneyReward);    // 上个版本遗忘的更新
+        EventCenter.RemoveListener<int>(EventDefine.SelectCardReward, SelectCardReward);    // 添加一个监听
     }
 
     private void Start()
     {
         EventCenter.Broadcast(EventDefine.OnBattleStart);   // 临时使用用于默认进入战斗
+        UIManager.Instance.Show("TopInfo");
     }
 
     // 临时使用，用于初始化时添加我方角色
@@ -116,7 +118,7 @@ public class GameManager : ManagerBase<GameManager>
         gameData.CardReward.Add(2);
         gameData.CardReward.Add(3);
         gameData.CurrentStage++;    // 当前地图阶段自增 
-        UIManager.Instance.Close(GameString.BATTLEUI);
+        UIManager.Instance.Hide(GameString.BATTLEUI);   // 隐藏战斗ui
         UIManager.Instance.Show("RewardPanelUI", ContainerManager.Instance.Enemies[id].gameObject);
     }
 
@@ -142,9 +144,12 @@ public class GameManager : ManagerBase<GameManager>
     // 是否拿取卡牌奖励
     private void SelectCardReward(int _select)
     {
-        if(0 <= _select && _select < gameData.CardReward.Count)
+        if(0 < _select && _select < gameData.CardReward.Count)
         {
             // 获得对应的卡牌
+        }else
+        {
+            OnMoneyChange(_select);
         }
         gameData.CardReward.Clear();    // 清空
     }

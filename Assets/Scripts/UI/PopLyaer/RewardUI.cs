@@ -9,14 +9,32 @@ public class RewardUI : UIViewBase
     public override UIViewType Type => UIViewType.Singleton;
     public override UILAYER Layer => UILAYER.M_POP_LAYER;
 
+    // Obj
+    public Transform[] Panels;
+    public GameObject MASK; // 遮罩
+
     public Image reward;
     public GameObject WaitForShow;      // 等待被打开
     public Transform Rewards;
     public Button GoMergeBtn;
 
+    // SelectCardPanel
+
+    public Button BreakBtn;
+    public Button CloseBtn;
+    private int _money;
+
+    public Transform Cards;
+
+
     protected override void Start()
     {
         base.Start();
+        Panels = new Transform[2];
+        Panels[0] = transform.Find("RewardPanel");
+        Panels[1] = transform.Find("SelectCardRewardPanel");
+        ShowPanel(0);
+
         WaitForShow.gameObject.SetActive(false);
         GoMergeBtn.onClick.AddListener(() =>
         {
@@ -33,8 +51,28 @@ public class RewardUI : UIViewBase
         });
         Rewards.GetChild(1).GetComponent<Button>().onClick.AddListener(() =>
         {
-            UIManager.Instance.Show(GameString.SELECTCARDREWARD);   // 打开选择卡牌界面
+            ShowPanel(1);
         });
+
+        // SelectCardPanel
+        _money = 100;
+        BreakBtn.onClick.AddListener(() =>
+        {
+            EventCenter.Broadcast(EventDefine.SelectCardReward, _money);
+            ShowPanel(0);
+        });
+        CloseBtn.onClick.AddListener(() =>
+        {
+            ShowPanel(0);
+        });
+        for (int i = 0; i < Cards.childCount; i++)
+        {
+            int idx = i + 1;
+            Cards.GetChild(i).Find("ConfirmBtn").GetComponent<Button>().onClick.AddListener(() =>
+            {
+                EventCenter.Broadcast(EventDefine.SelectCardReward, idx);
+            });
+        }
     }
 
     public override void OnAddlistening()
@@ -55,16 +93,31 @@ public class RewardUI : UIViewBase
         Debug.Log(reward.transform.position);
     }
 
+    private void ShowPanel(int id)
+    {
+        for(int i = 0; i < Panels.Length; i++)
+        {
+            Panels[i].gameObject.SetActive(i == id);
+        }
+        if (id == 0) Refresh(); // 回到开始界面 强制刷新
+    }
+
     private void ShowReward()
     {
+        MASK.gameObject.SetActive(true);
         WaitForShow.gameObject.SetActive(true);
     }
 
     public override void Show()
     {
         base.Show();
+        Refresh();
+    }
+
+    public void Refresh()
+    {
         int _money = GameManager.Instance.MoneyReward();
-        Rewards.GetChild(0).GetComponentInChildren<Text>().text = string.Format("获得{0}金币" , _money);
+        Rewards.GetChild(0).GetComponentInChildren<Text>().text = string.Format("获得{0}金币", _money);
         Rewards.GetChild(0).gameObject.SetActive(_money > 0);
         int _cnt = GameManager.Instance.CardReward().Count;
         Rewards.GetChild(1).GetComponentInChildren<Text>().text = "选择卡牌奖励";

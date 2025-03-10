@@ -12,6 +12,13 @@ public class GameData
     public int hp;              // 当前生命值
     public int maxHp;           // 最大生命值
     public int money;           // 当前持有金币数量
+
+    public int Money
+    {
+        get { return money; } 
+        set { money = value; EventCenter.Broadcast(EventDefine.OnMoneyChange , money); }
+    }
+    
     public int magicPower;      // 法力值
     public int maxMagicPower;   // 最大法力值
 
