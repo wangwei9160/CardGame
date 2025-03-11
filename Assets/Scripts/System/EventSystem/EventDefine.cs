@@ -24,5 +24,10 @@
 
     // 调整分辨率，修改布局
     AdjustPosition,
+
+    // ui事件
+    ON_CARD_DRAG_START,     // 通知DragCard开始拖拽了
+    ON_CARD_DRAG,           // 拖拽卡牌
+    ON_CARD_DRAG_STOP,      // 结束拖拽
 }
 
