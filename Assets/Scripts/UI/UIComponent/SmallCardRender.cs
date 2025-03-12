@@ -72,6 +72,7 @@ public class SmallCardRender : MonoBehaviour , IDragHandler , IBeginDragHandler,
     {
         if (canDrag || isLock) return;
         GetComponent<Image>().color = oldColor;
+        EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_HOVER, -1);    // 离开后重置悬停的卡牌
     }
 
     public void OnDragMove(PointerEventData eventData)
