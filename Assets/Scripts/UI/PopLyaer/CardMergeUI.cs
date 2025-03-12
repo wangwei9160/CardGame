@@ -65,6 +65,7 @@ public class CardMergeUI : UIViewBase
         base.OnAddlistening();
         EventCenter.AddListener(EventDefine.ON_CARD_DRAG_START, OnCardDragStart);
         EventCenter.AddListener(EventDefine.ON_CARD_DRAG_STOP, OnCardDragStop);
+        EventCenter.AddListener<int>(EventDefine.ON_CARD_DRAG_HOVER, OnCardDragHover);
     }
 
     public override void OnRemovelistening()
@@ -72,8 +73,11 @@ public class CardMergeUI : UIViewBase
         base.OnRemovelistening();
         EventCenter.RemoveListener(EventDefine.ON_CARD_DRAG_START, OnCardDragStart);
         EventCenter.RemoveListener(EventDefine.ON_CARD_DRAG_STOP, OnCardDragStop);
+        EventCenter.RemoveListener<int>(EventDefine.ON_CARD_DRAG_HOVER, OnCardDragHover);
     }
 
+
+    #region 卡牌拖拽时触发效果
     public void OnCardDragStart()
     {
         smallDragCard.gameObject.SetActive(true);
@@ -86,8 +90,21 @@ public class CardMergeUI : UIViewBase
         smallDragCard.gameObject.SetActive(false);
         smallDragCard.GetComponent<Image>().raycastTarget = true;
         EventCenter.RemoveListener<PointerEventData>(EventDefine.ON_CARD_DRAG, smallDragCard.GetComponent<SmallCardRender>().OnDragMove);
+        if(currentHover != -1)
+        {
+            SmallCards[currentHover].GetComponent<SmallCardRender>().SetData();
+        }
+
+        currentHover = -1;  // 强制重置
     }
 
+    private int currentHover = -1;
+    public void OnCardDragHover(int pIndex)
+    {
+        currentHover = pIndex;
+    }
+
+    #endregion
     public void InitUIView()
     {
         
