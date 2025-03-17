@@ -11,9 +11,13 @@ public class EchoEventRender : MonoBehaviour
     public Text  text;
     public int Index;
 
+    private void Awake()
+    {
+        text = transform.Find("Text").GetComponent<Text>(); // 需要提前获取
+    }
+
     void Start()
     {
-        text = transform.Find("Text").GetComponent<Text>();
         isChose = false;
         GetComponent<Outline>().enabled = isChose;
         canClick = true;
@@ -21,7 +25,7 @@ public class EchoEventRender : MonoBehaviour
             if (!canClick) return;
             isChose = !isChose; // 选中或者不选中
             SetClick(isChose);
-            EventCenter.Broadcast(EventDefine.ON_ECHOEVENT_SELECT , isChose , Index, echoEventType);
+            EventCenter.Broadcast(EventDefine.ON_ECHOEVENT_SELECT, isChose, Index, echoEventType);
         });
     }
 
@@ -39,6 +43,7 @@ public class EchoEventRender : MonoBehaviour
             canClick = false;
         }
         echoEventType = id;
+        Debug.Log(echoEventType + " " + EchoEvent.EchoEventManager.GetEchoEventConfigByType(echoEventType).name);
         text.text = EchoEvent.EchoEventManager.GetEchoEventConfigByType(echoEventType).name;
     }
 }
