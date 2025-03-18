@@ -159,6 +159,9 @@ public class GameManager : ManagerBase<GameManager>
     private void OnBattleStart()
     {
         UIManager.Instance.Show(GameString.BATTLEUI);   //打开战斗UI
+        gameData.CurrentTurn = 0;
+        gameData.MaxMagicPower = 0; // 先增加最大的
+        gameData.MagicPower = 0;
         AddPlayer(playerNum, dogNum);
         enemyNum = 2;
         AddEnemy(enemyNum);
@@ -215,9 +218,6 @@ public class GameManager : ManagerBase<GameManager>
     private void OnMergePanelShow()
     {
         UIManager.Instance.Show(GameString.MERGEUI);    // 合成界面
-        gameData.CurrentTurn = 0;
-        gameData.MaxMagicPower = 0; // 先增加最大的
-        gameData.MagicPower = 0;
     }
 
     #endregion

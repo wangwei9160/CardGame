@@ -14,19 +14,22 @@ public class EchoEventRender : MonoBehaviour
     private void Awake()
     {
         text = transform.Find("Text").GetComponent<Text>(); // 需要提前获取
+        isChose = false;
+        canClick = true;
     }
 
     void Start()
     {
-        isChose = false;
         GetComponent<Outline>().enabled = isChose;
-        canClick = true;
-        GetComponent<Button>().onClick.AddListener(() => {
-            if (!canClick) return;
-            isChose = !isChose; // 选中或者不选中
-            SetClick(isChose);
-            EventCenter.Broadcast(EventDefine.ON_ECHOEVENT_SELECT, isChose, Index, echoEventType);
-        });
+        GetComponent<Button>().onClick.AddListener(OnClick);
+    }
+
+    private void OnClick()
+    {
+        if (!canClick) return;
+        isChose = !isChose; // 选中或者不选中
+        SetClick(isChose);
+        EventCenter.Broadcast(EventDefine.ON_ECHOEVENT_SELECT, isChose, Index, echoEventType);
     }
 
     public void SetClick(bool isClick)
@@ -37,13 +40,21 @@ public class EchoEventRender : MonoBehaviour
 
     public void SetData(EchoEvent.EchoEventType id , int pos)
     {
+        Debug.Log(EchoEvent.EchoEventManager.GetEchoEventConfigByType(id).name + " " + pos.ToString());
         Index = pos;
-        if (id == EchoEvent.EchoEventType.UnKnow)
+        if (id == EchoEvent.EchoEventType.UnKnow || pos == -1)
         {
             canClick = false;
+            DisableRaycastTarget();
         }
         echoEventType = id;
-        Debug.Log(echoEventType + " " + EchoEvent.EchoEventManager.GetEchoEventConfigByType(echoEventType).name);
+        //Debug.Log(echoEventType + " " + EchoEvent.EchoEventManager.GetEchoEventConfigByType(echoEventType).name);
         text.text = EchoEvent.EchoEventManager.GetEchoEventConfigByType(echoEventType).name;
+    }
+
+    // 屏蔽点击
+    public void DisableRaycastTarget()
+    {
+        GetComponent<Image>().raycastTarget = false;
     }
 }

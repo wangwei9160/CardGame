@@ -19,6 +19,8 @@ public class TopInfoPanel : UIViewBase
     [Tooltip("钱")] public Text moneyText;   // 钱的数量
     [Tooltip("关卡信息")] public Text levelInfo;   // 关卡信息
 
+    
+
     protected override void Start()
     {
         base.Start();
@@ -41,6 +43,7 @@ public class TopInfoPanel : UIViewBase
         base.OnAddlistening();
         EventCenter.AddListener<int>(EventDefine.OnMoneyChange , OnMoneyChange);
         EventCenter.AddListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
+        EventCenter.AddListener(EventDefine.OnBattleStart , Refresh);
     }
 
     public override void OnRemovelistening()
@@ -48,12 +51,18 @@ public class TopInfoPanel : UIViewBase
         base.OnRemovelistening();
         EventCenter.RemoveListener<int>(EventDefine.OnMoneyChange, OnMoneyChange);
         EventCenter.RemoveListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
+        EventCenter.RemoveListener(EventDefine.OnBattleStart, Refresh);
     }
 
     public override void Show()
     {
         base.Show();
         OnMoneyChange(GameManager.Instance.Data.money);     // 从数据里拿到钱的数量
+        Refresh();
+    }
+
+    public void Refresh()
+    {
         // 显示信息的更新
         levelInfo.text = string.Format(GameString.STAGEINFO,
             Constants.MapLength[GameManager.Instance.Data.CurrentLvel] - GameManager.Instance.Data.CurrentStage,

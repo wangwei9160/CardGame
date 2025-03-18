@@ -40,6 +40,7 @@ public class MergePanel : UIViewBase
             // 根据合成结果选择不同分支，具体分支由GameManager操控
         });
         MergeEventInit();
+        ChoseRoadInit();
     }
 
     #region MergeEvent
@@ -63,7 +64,7 @@ public class MergePanel : UIViewBase
             EchoEvent.EchoEventType typeId = RandomUtil.GetRandomValueInList(EchoEvent.EchoEventManager.eventBaseTypeList, i == 0 ? 2 : 4); // 限制前2个
             Events[i].SetData(typeId , i);
         }
-        echoEventType = EchoEventType.UnKnow;
+        echoEventType = EchoEventType.UnKnow;   // 初始化为空
         echoEvent = mergeEvent.transform.Find("EchoEvent/Event").GetComponent<EchoEventRender>();
         echoEventMessage = mergeEvent.transform.Find("EchoEvent/Message/Text").GetComponent<Text>();
         SetEchoEvent();
@@ -75,6 +76,7 @@ public class MergePanel : UIViewBase
             {
                 mergeEvent.SetActive(false);
                 choseRoad.SetActive(true);
+                RefreshChoseRoad();
             }
         });
     }
@@ -93,13 +95,47 @@ public class MergePanel : UIViewBase
         if(_echoCnt > 2)
         {
             _echoCnt -= op;
-            Debug.Log("无法选择更多");
+            //Debug.Log("无法选择更多");
             Events[pos].SetClick(false);
             return;
         }
         echoEventType += (op * (int)tp);
         SetEchoEvent();
-        Debug.Log(echoEventType.GetType());
+        //Debug.Log(echoEventType.GetType());
+    }
+
+    #endregion
+
+    #region ChoseRoad
+
+    public Button rightEventBtn;
+    public Button leftEventBtn;
+
+    public EchoEventRender rightEventRender;
+    public EchoEventRender leftEventRender;
+
+    public void ChoseRoadInit()
+    {
+        rightEventBtn = transform.Find("Canvas/ChoseRoad/RightEvent").GetComponent<Button>();
+        rightEventBtn.onClick.AddListener(() => {GoNext(1); });
+        rightEventRender = transform.Find("Canvas/ChoseRoad/RightEvent/EventRender").GetComponent<EchoEventRender>();
+
+        leftEventBtn = transform.Find("Canvas/ChoseRoad/LeftEvent").GetComponent<Button>();
+        leftEventBtn.onClick.AddListener(() => { GoNext(0); });
+        leftEventRender = transform.Find("Canvas/ChoseRoad/LeftEvent/EventRender").GetComponent<EchoEventRender>();
+    }
+
+    public void RefreshChoseRoad()
+    {
+        rightEventRender.SetData(EchoEventType.FightEvent, -1);
+        leftEventRender.SetData(echoEventType, -1);
+    }
+
+    public void GoNext(int turn)
+    {
+        Debug.Log("选择" + (turn == 1 ? "既定的道路" : "自我的探索"));
+        UIManager.Instance.Close(Name);
+        EventCenter.Broadcast(EventDefine.OnBattleStart);   // 临时使用用于默认进入战斗
     }
 
     #endregion
