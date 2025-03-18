@@ -54,8 +54,7 @@ public class BattleUI : UIViewBase
     {
         base.Show();
         isLock = true;
-        // 显示信息的更新
-        magicPowerInfo.text = string.Format(GameString.MAGICEINFO, GameManager.Instance.Data.MagicPower , GameManager.Instance.Data.MaxMagicPower);
+        OnMagicPowerChange(GameManager.Instance.Data.MagicPower , GameManager.Instance.Data.MaxMagicPower);// 法力值信息的更新
     }
 
     IEnumerator WaitTimeUnLock()
@@ -82,7 +81,7 @@ public class BattleUI : UIViewBase
     
     private void OnMagicPowerChange(int val , int maxVal)
     {
-        magicPowerInfo.text = string.Format(GameString.MAGICEINFO, GameManager.Instance.Data.MagicPower, GameManager.Instance.Data.MaxMagicPower);
+        magicPowerInfo.text = string.Format(GameString.MAGICEINFO, val, maxVal);
     }
 
 }

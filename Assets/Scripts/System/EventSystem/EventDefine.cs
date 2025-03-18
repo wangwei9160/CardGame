@@ -29,5 +29,10 @@
     ON_CARD_DRAG_START,     // 通知DragCard开始拖拽了
     ON_CARD_DRAG,           // 拖拽卡牌
     ON_CARD_DRAG_STOP,      // 结束拖拽
+    ON_CARD_DRAG_HOVER,     // 拖拽时停在哪个card上
+
+
+    // 启示事件
+    ON_ECHOEVENT_SELECT,    // 启示事件被点击
 }
 
