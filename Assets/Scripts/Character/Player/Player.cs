@@ -15,6 +15,11 @@ public class Player : BaseCharacter
         EventCenter.Broadcast(EventDefine.OnPlayerAttributeChange, hp , maxHp , HpUIIndex);
     }
 
+    private void OnDestroy()
+    {
+        UIManager.Instance.Close("HpUI" , HpUIIndex);
+    }
+
     private void Update()
     {
         f += Time.deltaTime;
