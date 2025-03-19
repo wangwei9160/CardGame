@@ -97,6 +97,18 @@ public class UIManager : ManagerBase<UIManager>
         m_SingleDic[uiName].Show();
     }
 
+    public void Show(string uiName , string data)
+    {
+        if (!m_SingleDic.ContainsKey(uiName))
+        {
+            var ui = CreatePrefabByName(uiName);
+            m_SingleDic[uiName] = ui;
+            m_SingleDic[uiName].Init(uiName , data);
+
+        }
+        m_SingleDic[uiName].Show();
+    }
+
     public void Show(string uiName, GameObject parent)
     {
         if (!m_SingleDic.ContainsKey(uiName))

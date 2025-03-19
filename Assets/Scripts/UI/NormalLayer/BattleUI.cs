@@ -1,3 +1,4 @@
+using EchoEvent;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -16,6 +17,13 @@ public class BattleUI : UIViewBase
     [Tooltip("法力值")] public Text magicPowerInfo;   // 法力值信息
 
     public List<GameObject> Cards;
+    private EchoEventConfig cfg;
+
+    public override void Init(string str, string data)
+    {
+        base.Init(str, data);
+        cfg = JsonUtility.FromJson<EchoEventConfig>(data);
+    }
 
     public override void OnAddlistening()
     {
@@ -54,7 +62,18 @@ public class BattleUI : UIViewBase
     {
         base.Show();
         isLock = true;
+        EventCenter.Broadcast(EventDefine.OnBattleStart);   // 进入战斗准备
         OnMagicPowerChange(GameManager.Instance.Data.MagicPower , GameManager.Instance.Data.MaxMagicPower);// 法力值信息的更新
+    }
+
+    public override void Close()
+    {
+        base.Close();
+        if(cfg.prefabName != null)
+        {
+            var go = GameObject.Find(cfg.prefabName);
+            Destroy(go);
+        }
     }
 
     IEnumerator WaitTimeUnLock()

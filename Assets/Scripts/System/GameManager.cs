@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EchoEvent;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,6 +41,7 @@ public class GameManager : ManagerBase<GameManager>
         EventCenter.AddListener(EventDefine.OnMergePanelShow, OnMergePanelShow);
         EventCenter.AddListener<int>(EventDefine.SelectMoneyReward, SelectMoneyReward);    // 添加一个监听
         EventCenter.AddListener<int>(EventDefine.SelectCardReward, SelectCardReward);    // 添加一个监听
+        EventCenter.AddListener<EchoEvent.EchoEventType>(EventDefine.ON_ENTER_ECHOEVENT, OnEnterEchoEvent);
     }
 
     private void OnDestroy()
@@ -49,38 +51,13 @@ public class GameManager : ManagerBase<GameManager>
         EventCenter.RemoveListener(EventDefine.OnMergePanelShow, OnMergePanelShow);
         EventCenter.RemoveListener<int>(EventDefine.SelectMoneyReward, SelectMoneyReward);    // 上个版本遗忘的更新
         EventCenter.RemoveListener<int>(EventDefine.SelectCardReward, SelectCardReward);    // 添加一个监听
+        EventCenter.RemoveListener<EchoEvent.EchoEventType>(EventDefine.ON_ENTER_ECHOEVENT, OnEnterEchoEvent);
     }
 
     private void Start()
     {
-        EventCenter.Broadcast(EventDefine.OnBattleStart);   // 临时使用用于默认进入战斗
+        EventCenter.Broadcast(EventDefine.ON_ENTER_ECHOEVENT, Data.EchoEventType);// 临时使用用于默认进入战斗
         UIManager.Instance.Show("TopInfo");
-    }
-
-    // 临时使用，用于初始化时添加我方角色
-    private void AddPlayer(int PlayerNum , int CardNum)
-    {
-        PlayerNum = Math.Min(PlayerNum, 1);
-        for (int i = 0; i < PlayerNum; i++)
-        {
-            if (ContainerManager.Instance.Players[i].childCount > 0) continue;  // 防止重复添加Player
-            Instantiate(player, ContainerManager.Instance.Players[i]);
-        }
-        CardNum = Math.Min(CardNum, 5 - PlayerNum);
-        for (int i = 0; i < CardNum; i++)
-        {
-            Instantiate(enemy, ContainerManager.Instance.Players[i + PlayerNum]);
-        }
-    }
-    // 临时使用，用于初始化时添加敌方角色
-    private void AddEnemy(int num)
-    {
-        num = Math.Min(num, 3);
-        for (int i = 0; i < num; i++)
-        {
-            var obj = Instantiate(enemy, ContainerManager.Instance.Enemies[i]);
-            obj.GetComponent<BaseEnemy>().Index = i;
-        }
     }
 
     // 增加钱的数量的方法
@@ -118,8 +95,8 @@ public class GameManager : ManagerBase<GameManager>
         gameData.CardReward.Add(2);
         gameData.CardReward.Add(3);
         gameData.CurrentStage++;    // 当前地图阶段自增 
-        UIManager.Instance.Hide(GameString.BATTLEUI);   // 隐藏战斗ui
         UIManager.Instance.Show("RewardPanelUI", ContainerManager.Instance.Enemies[id].gameObject);
+        UIManager.Instance.Close(GameString.BATTLEUI);   // 隐藏战斗ui
     }
 
     // 临时暴露奖励接口
@@ -156,9 +133,55 @@ public class GameManager : ManagerBase<GameManager>
 
     #region 战斗内相关、涉及回合切换
 
+    // 进入启示事件
+    public static void OnEnterEchoEvent(EchoEventType type)
+    {
+        EchoEventConfig cfg = EchoEvent.EchoEventManager.GetEchoEventConfigByType(type);
+        string path = "Prefabs/EchoEvent/";
+        if (cfg != null)
+        {
+            if (cfg.prefabName != null)
+            {
+                path += cfg.prefabName;
+                GameObject go = Instantiate(Resources.Load<GameObject>(path));
+                go.name = cfg.prefabName;
+            }
+            if(cfg.uiName != null)
+            {
+                UIManager.Instance.Show(cfg.uiName , JsonUtility.ToJson(cfg));
+            }
+        }
+    }
+
+    // 临时使用，用于初始化时添加我方角色
+    private void AddPlayer(int PlayerNum, int CardNum)
+    {
+        PlayerNum = Math.Min(PlayerNum, 1);
+        for (int i = 0; i < PlayerNum; i++)
+        {
+            if (ContainerManager.Instance.Players[i].childCount > 0) continue;  // 防止重复添加Player
+            Instantiate(player, ContainerManager.Instance.Players[i]);
+        }
+        CardNum = Math.Min(CardNum, 5 - PlayerNum);
+        for (int i = 0; i < CardNum; i++)
+        {
+            Instantiate(enemy, ContainerManager.Instance.Players[i + PlayerNum]);
+        }
+    }
+    // 临时使用，用于初始化时添加敌方角色
+    private void AddEnemy(int num)
+    {
+        num = Math.Min(num, 3);
+        for (int i = 0; i < num; i++)
+        {
+            var obj = Instantiate(enemy, ContainerManager.Instance.Enemies[i]);
+            obj.GetComponent<BaseEnemy>().Index = i;
+        }
+    }
+
     private void OnBattleStart()
     {
-        UIManager.Instance.Show(GameString.BATTLEUI);   //打开战斗UI
+        //UIManager.Instance.Show(GameString.BATTLEUI);   //打开战斗UI
         gameData.CurrentTurn = 0;
         gameData.MaxMagicPower = 0; // 先增加最大的
         gameData.MagicPower = 0;
@@ -212,7 +235,6 @@ public class GameManager : ManagerBase<GameManager>
             // 如果仍然是战斗回合 ， 则进入新的回合开始效果
             BeforeTurn();
         }
-
     }
 
     private void OnMergePanelShow()

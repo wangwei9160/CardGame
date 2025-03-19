@@ -34,5 +34,6 @@
 
     // 启示事件
     ON_ECHOEVENT_SELECT,    // 启示事件被点击
+    ON_ENTER_ECHOEVENT,     // 进入启示选择的事件
 }
 

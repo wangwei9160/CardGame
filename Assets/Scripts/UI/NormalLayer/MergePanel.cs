@@ -61,7 +61,7 @@ public class MergePanel : UIViewBase
         for (int i = 0; i < EventsTransform.childCount; i++)
         {
             Events[i] = EventsTransform.GetChild(i).GetComponent<EchoEventRender>();
-            EchoEvent.EchoEventType typeId = RandomUtil.GetRandomValueInList(EchoEvent.EchoEventManager.eventBaseTypeList, i == 0 ? 2 : 4); // 限制前2个
+            EchoEventType typeId = RandomUtil.GetRandomValueInList(EchoEventManager.eventBaseTypeList, i == 0 ? 2 : 4); // 限制前2个
             Events[i].SetData(typeId , i);
         }
         echoEventType = EchoEventType.UnKnow;   // 初始化为空
@@ -135,7 +135,9 @@ public class MergePanel : UIViewBase
     {
         Debug.Log("选择" + (turn == 1 ? "既定的道路" : "自我的探索"));
         UIManager.Instance.Close(Name);
-        EventCenter.Broadcast(EventDefine.OnBattleStart);   // 临时使用用于默认进入战斗
+        echoEventType = EchoEventType.FightEvent;
+        GameManager.OnEnterEchoEvent(echoEventType);
+        //EventCenter.Broadcast(EventDefine.OnBattleStart);   // 临时使用用于默认进入战斗
     }
 
     #endregion
