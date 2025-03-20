@@ -42,6 +42,6 @@ namespace EchoEvent
             return m_Dic[type];
         }
 
-        
+
     }
 }
