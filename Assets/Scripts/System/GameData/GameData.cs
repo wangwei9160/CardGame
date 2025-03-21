@@ -6,7 +6,7 @@ public class GameData
     public int CurrentLvel;                         // 当前为CurrentLvel关卡
     public int CurrentStage;                        // 当前关卡的第CurrentStage阶段
     public int CurrentTurn;                         // 当前阶段的CurrentTurn回合
-    public EchoEvent.EchoEventType EchoEventType;   // 下一个关卡的类型
+    public EchoEventType EchoEventType;   // 下一个关卡的类型
 
 
     // 玩家属性 后续可以存到playerattribute类内
@@ -48,7 +48,7 @@ public class GameData
         hp = maxHp;
         magicPower = 0;
         CardReward = new List<int>();
-        EchoEventType = EchoEvent.EchoEventType.FightEvent;
+        EchoEventType = EchoEventType.FightEvent;
     }
     
 }

@@ -155,7 +155,8 @@ public class ExcelToClassGenerator
 
         sb.AppendLine($"    public static {className} Get{className}ByKey({fieldTypes[0]} key)"); // fieldTypes[0] -> Type
         sb.AppendLine("    {");
-        sb.AppendLine("        return m_Dic[key];");
+        sb.AppendLine("        if(m_Dic.ContainsKey(key)) return m_Dic[key];");
+        sb.AppendLine("        return null;");
         sb.AppendLine("    }");
 
         sb.AppendLine("}");

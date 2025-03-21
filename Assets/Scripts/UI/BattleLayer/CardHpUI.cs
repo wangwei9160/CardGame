@@ -11,7 +11,7 @@ public class CardHpUI : UIViewBase
     public int MaxHp;
     public GameObject Owner;
 
-    public override void Init(string uiName,GameObject obj)
+    public override void Init(string uiName,GameObject obj, string data)
     {
         Init(uiName);
         Owner = obj;

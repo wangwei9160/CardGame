@@ -84,44 +84,57 @@ public class UIManager : ManagerBase<UIManager>
         obj.transform.SetParent(m_LayerTransform[(int)ui.Layer]);
         return ui;
     }
-    
-    public void Show(string uiName)
+
+    private GameObject CreatePrefabByPath(string path)
     {
-        if (!m_SingleDic.ContainsKey(uiName))
-        {
-            var ui = CreatePrefabByName(uiName);
-            m_SingleDic[uiName] = ui;
-            m_SingleDic[uiName].Init(uiName);
-            
-        }
-        m_SingleDic[uiName].Show();
+        GameObject prefab = Resources.Load<GameObject>($"{path}");
+        GameObject obj = Instantiate(prefab);
+        return obj;
     }
 
-    public void Show(string uiName , string data)
+    public void Show(string uiName , string data = "{}")
     {
-        if (!m_SingleDic.ContainsKey(uiName))
+        UiConfig cfg = UIConfigManager.Configs[uiName];
+        if (!m_SingleDic.ContainsKey(cfg.Name))
         {
-            var ui = CreatePrefabByName(uiName);
+            if(cfg.BindScene != "")
+            {
+                // 通过prefab 创建场景相关内容
+                var obj = CreatePrefabByPath(cfg.BindScene);
+                obj.name = cfg.BindScene;
+            }
+
+            var uiObj = CreatePrefabByPath(cfg.UiPath);
+            UIViewBase ui = uiObj.GetComponent<UIViewBase>(); Push(ui);
+            uiObj.transform.SetParent(m_LayerTransform[(int)ui.Layer]);
             m_SingleDic[uiName] = ui;
             m_SingleDic[uiName].Init(uiName , data);
-
         }
         m_SingleDic[uiName].Show();
     }
 
-    public void Show(string uiName, GameObject parent)
+    public void Show(string uiName , GameObject parent , string data = "{}")
     {
+        UiConfig cfg = UIConfigManager.Configs[uiName];
         if (!m_SingleDic.ContainsKey(uiName))
         {
-            var ui = CreatePrefabByName(uiName);
+            if (cfg.BindScene != "")
+            {
+                // 通过prefab 创建场景相关内容
+                var obj = CreatePrefabByPath(cfg.BindScene);
+                obj.name = cfg.BindScene;
+            }
+
+            var uiObj = CreatePrefabByPath(cfg.UiPath);
+            UIViewBase ui = uiObj.GetComponent<UIViewBase>(); Push(ui);
+            uiObj.transform.SetParent(m_LayerTransform[(int)ui.Layer]);
             m_SingleDic[uiName] = ui;
-            m_SingleDic[uiName].Init(uiName , parent);
+            m_SingleDic[uiName].Init(uiName, parent , data);
         }
         m_SingleDic[uiName].Show();
-
     }
 
-    public void Show(string uiName , GameObject parent, ref int Index)
+    public void Show(string uiName , GameObject parent, ref int Index , string data = "{}")
     {
         if (!m_MultipDic.ContainsKey(uiName))
         {
@@ -141,7 +154,7 @@ public class UIManager : ManagerBase<UIManager>
         var ui = CreatePrefabByName(uiName);
         Index = m_MultipDicCnt[uiName]++;   // 自增赋值，需要注意多线程环境
         ui.ResetIndex(Index);
-        ui.Init(uiName, parent);
+        ui.Init(uiName, parent , data);
         m_MultipDic[uiName].Add(ui);
         
     }

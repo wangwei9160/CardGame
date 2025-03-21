@@ -7,8 +7,8 @@ public class EchoEventRender : MonoBehaviour
 {
     public bool isChose;
     public bool canClick;
-    public EchoEvent.EchoEventType echoEventType;
-    public Text  text;
+    public EchoEventType echoEventType;
+    public Text text;
     public int Index;
 
     private void Awake()
@@ -38,18 +38,25 @@ public class EchoEventRender : MonoBehaviour
         GetComponent<Outline>().enabled = isChose;
     }
 
-    public void SetData(EchoEvent.EchoEventType id , int pos)
+    public void SetData(EchoEventType id , int pos)
     {
-        Debug.Log(EchoEvent.EchoEventManager.GetEchoEventConfigByType(id).name + " " + pos.ToString());
-        Index = pos;
-        if (id == EchoEvent.EchoEventType.UnKnow || pos == -1)
+        var type = EchoEventManager.GetEchoEventClassByKey((int)id);
+        if (type != null)
         {
+            text.text = type.name;
+            Index = pos;
+            echoEventType = id;
+            GetComponent<Image>().sprite = Resources.Load<Sprite>("Arts/EchoEvent/" + type.icon);   // ¼ÓÔØÍ¼Æ¬
+        }
+        else
+        {
+            text.text = "";
+            echoEventType = id;
             canClick = false;
             DisableRaycastTarget();
+            GetComponent<Image>().sprite = null;
+            return;
         }
-        echoEventType = id;
-        //Debug.Log(echoEventType + " " + EchoEvent.EchoEventManager.GetEchoEventConfigByType(echoEventType).name);
-        text.text = EchoEvent.EchoEventManager.GetEchoEventConfigByType(echoEventType).name;
     }
 
     // ÆÁ±Îµã»÷
