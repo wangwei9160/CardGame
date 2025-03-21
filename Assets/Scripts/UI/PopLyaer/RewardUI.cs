@@ -85,7 +85,7 @@ public class RewardUI : UIViewBase
         EventCenter.RemoveListener(EventDefine.AfterEffectShowReward, ShowReward);
     }
 
-    public override void Init(string str, GameObject obj)
+    public override void Init(string str, GameObject obj , string data)
     {
         base.Init(str);
 

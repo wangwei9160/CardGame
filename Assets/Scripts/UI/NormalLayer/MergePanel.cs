@@ -1,4 +1,6 @@
-﻿using EchoEvent;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
@@ -53,16 +55,26 @@ public class MergePanel : UIViewBase
     private Text echoEventMessage;
 
     public Button confirmBtn;
+    public List<EchoEventType> baseTypes;
 
     public void MergeEventInit()
     {
         EventsTransform = mergeEvent.transform.Find("Events");
         Events = new EchoEventRender[EventsTransform.childCount];
+        baseTypes = new List<EchoEventType>();
+        foreach (var kv in EchoEventManager.m_Dic)
+        {
+            if(kv.Value.ps == "基础类型")
+            {
+                baseTypes.Add((EchoEventType)kv.Key);
+            }
+        }
         for (int i = 0; i < EventsTransform.childCount; i++)
         {
             Events[i] = EventsTransform.GetChild(i).GetComponent<EchoEventRender>();
-            EchoEventType typeId = RandomUtil.GetRandomValueInList(EchoEventManager.eventBaseTypeList, i == 0 ? 2 : 4); // 限制前2个
-            Events[i].SetData(typeId , i);
+            
+            EchoEventType typeId = RandomUtil.GetRandomValueInList(baseTypes, i == 0 ? 2 : 4); // 限制前2个
+            Events[i].SetData(typeId, i);
         }
         echoEventType = EchoEventType.UnKnow;   // 初始化为空
         echoEvent = mergeEvent.transform.Find("EchoEvent/Event").GetComponent<EchoEventRender>();
@@ -84,7 +96,9 @@ public class MergePanel : UIViewBase
     private void SetEchoEvent()
     {
         echoEvent.SetData(echoEventType , 0);
-        echoEventMessage.text = EchoEventManager.GetEchoEventConfigByType(echoEventType).message;
+        var type = EchoEventManager.GetEchoEventClassByKey((int)echoEventType);
+        if (type == null) echoEventMessage.text = "";
+        else echoEventMessage.text = type.description;
     }
 
     private int _echoCnt = 0;

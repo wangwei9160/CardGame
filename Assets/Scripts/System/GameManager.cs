@@ -1,5 +1,4 @@
-﻿using EchoEvent;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,7 +40,7 @@ public class GameManager : ManagerBase<GameManager>
         EventCenter.AddListener(EventDefine.OnMergePanelShow, OnMergePanelShow);
         EventCenter.AddListener<int>(EventDefine.SelectMoneyReward, SelectMoneyReward);    // 添加一个监听
         EventCenter.AddListener<int>(EventDefine.SelectCardReward, SelectCardReward);    // 添加一个监听
-        EventCenter.AddListener<EchoEvent.EchoEventType>(EventDefine.ON_ENTER_ECHOEVENT, OnEnterEchoEvent);
+        EventCenter.AddListener<EchoEventType>(EventDefine.ON_ENTER_ECHOEVENT, OnEnterEchoEvent);
     }
 
     private void OnDestroy()
@@ -51,7 +50,7 @@ public class GameManager : ManagerBase<GameManager>
         EventCenter.RemoveListener(EventDefine.OnMergePanelShow, OnMergePanelShow);
         EventCenter.RemoveListener<int>(EventDefine.SelectMoneyReward, SelectMoneyReward);    // 上个版本遗忘的更新
         EventCenter.RemoveListener<int>(EventDefine.SelectCardReward, SelectCardReward);    // 添加一个监听
-        EventCenter.RemoveListener<EchoEvent.EchoEventType>(EventDefine.ON_ENTER_ECHOEVENT, OnEnterEchoEvent);
+        EventCenter.RemoveListener<EchoEventType>(EventDefine.ON_ENTER_ECHOEVENT, OnEnterEchoEvent);
     }
 
     private void Start()
@@ -136,21 +135,8 @@ public class GameManager : ManagerBase<GameManager>
     // 进入启示事件
     public static void OnEnterEchoEvent(EchoEventType type)
     {
-        EchoEventConfig cfg = EchoEvent.EchoEventManager.GetEchoEventConfigByType(type);
-        string path = "Prefabs/EchoEvent/";
-        if (cfg != null)
-        {
-            if (cfg.prefabName != null)
-            {
-                path += cfg.prefabName;
-                GameObject go = Instantiate(Resources.Load<GameObject>(path));
-                go.name = cfg.prefabName;
-            }
-            if(cfg.uiName != null)
-            {
-                UIManager.Instance.Show(cfg.uiName , JsonUtility.ToJson(cfg));
-            }
-        }
+        EchoEventClass cls = EchoEventManager.GetEchoEventClassByKey((int)type);
+        UIManager.Instance.Show("BattleUI" , JsonUtility.ToJson(cls));
     }
 
     // 临时使用，用于初始化时添加我方角色
