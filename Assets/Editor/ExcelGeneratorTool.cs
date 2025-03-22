@@ -110,7 +110,14 @@ public class ExcelToClassGenerator
         // 生成字段
         for (int i = 0; i < fieldNames.Count; i++)
         {
-            sb.AppendLine($"    public {fieldTypes[i]} {fieldNames[i]};");
+            if (fieldTypes[i] == "list") // 如果字段类型是数组
+            {
+                sb.AppendLine($"    public List<int> {fieldNames[i]};");
+            }
+            else
+            {
+                sb.AppendLine($"    public {fieldTypes[i]} {fieldNames[i]};");
+            }
         }
 
         sb.AppendLine("}");
@@ -135,7 +142,11 @@ public class ExcelToClassGenerator
             {
                 var fieldName = fieldNames[i];
                 var value = data[fieldName];
-                if (fieldTypes[i] == "string")
+                if (fieldTypes[i] == "list")
+                {
+                    sb.Append($"{fieldName} = new List<int>() {{ {value} }}");
+                }
+                else if (fieldTypes[i] == "string")
                 {
                     sb.Append($"{fieldName} = \"{value}\"");
                 }
