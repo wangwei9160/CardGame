@@ -14,6 +14,7 @@ public class EchoEventRender : MonoBehaviour
     private void Awake()
     {
         text = transform.Find("Text").GetComponent<Text>(); // 需要提前获取
+        text.gameObject.SetActive(false);
         isChose = false;
         canClick = true;
     }
@@ -41,12 +42,15 @@ public class EchoEventRender : MonoBehaviour
     public void SetData(EchoEventType id , int pos)
     {
         var type = EchoEventManager.GetEchoEventClassByKey((int)id);
-        if (type != null)
+        if (id != 0)
         {
             text.text = type.name;
             Index = pos;
             echoEventType = id;
             GetComponent<Image>().sprite = Resources.Load<Sprite>("Arts/EchoEvent/" + type.icon);   // 加载图片
+            Color c = GetComponent<Image>().color;
+            c.a = 1;
+            GetComponent<Image>().color = c;
         }
         else
         {
@@ -55,6 +59,9 @@ public class EchoEventRender : MonoBehaviour
             canClick = false;
             DisableRaycastTarget();
             GetComponent<Image>().sprite = null;
+            Color c = GetComponent<Image>().color;
+            c.a = 0;
+            GetComponent<Image>().color = c;
             return;
         }
     }

@@ -136,7 +136,23 @@ public class GameManager : ManagerBase<GameManager>
     public static void OnEnterEchoEvent(EchoEventType type)
     {
         EchoEventClass cls = EchoEventManager.GetEchoEventClassByKey((int)type);
-        UIManager.Instance.Show("BattleUI" , JsonUtility.ToJson(cls));
+        // 去事件池子随机找一个事件 cls.type
+        List<EventClass> eventClassList = new List<EventClass>();
+        foreach (var kv in EventManager.m_Dic)
+        {
+            if(kv.Value.event_type == cls.type)
+            {
+                eventClassList.Add(kv.Value);
+            }
+        }
+        EventClass getEventClass = RandomUtil.GetRandomValueInList(eventClassList);
+        if(type == EchoEventType.FightEvent)
+        {
+            UIManager.Instance.Show("BattleUI" , JsonUtility.ToJson(cls));
+        }else
+        {
+            UIManager.Instance.Show("EventUI" , JsonUtility.ToJson(getEventClass));
+        }
     }
 
     // 临时使用，用于初始化时添加我方角色
