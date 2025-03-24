@@ -28,7 +28,7 @@ public class UIConfigManager
         {"TopInfo" , new UiConfig("TopInfo" , UILAYER.M_BATTLE_LAYER , "UI/TopInfo" , "") },
         { "RewardPanelUI", new UiConfig("RewardPanelUI", UILAYER.M_BATTLE_LAYER, "UI/RewardPanelUI", "") },
         { "MergePanel", new UiConfig("MergePanel", UILAYER.M_BATTLE_LAYER, "UI/MergePanel", "") },
-        {"HpUI" ,new UiConfig("HpUI" , UILAYER.M_BATTLE_LAYER ,"UI/HpUI" , "") }
-
+        {"HpUI" ,new UiConfig("HpUI" , UILAYER.M_BATTLE_LAYER ,"UI/HpUI" , "") },
+        {"EventUI" , new UiConfig("EventUI" , UILAYER.M_BATTLE_LAYER , "UI/NoneCombatUI" , "") },
     };
 }
