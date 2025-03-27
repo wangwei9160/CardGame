@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
@@ -13,10 +13,27 @@ public class EventUI : UIViewBase
     public Button skipBtn;
     public GameObject[] effectBtns;
 
-    #region  ˝æ›
+    #region Êï∞ÊçÆ
     public bool isTyping;
     public string fullText;
     #endregion
+
+    public override void OnAddlistening()
+    {
+        base.OnAddlistening();
+        EventCenter.AddListener(EventDefine.OnMergePanelShow , CloseMe);
+    }
+
+    public override void OnRemovelistening()
+    {
+        base.OnRemovelistening();
+        EventCenter.RemoveListener(EventDefine.OnMergePanelShow, CloseMe);
+    }
+
+    public void CloseMe()
+    {
+        UIManager.Instance.Close(Name);
+    }
 
     protected override void Awake()
     {
@@ -47,7 +64,7 @@ public class EventUI : UIViewBase
         for (int i = 0; i < dialogClass.op_ids.Count; i++)
         {
             var effectClass = EffectManager.GetEffectClassByKey(dialogClass.op_ids[i]);
-            effectBtns[i].transform.Find("Text").GetComponent<Text>().text = effectClass.op_name;
+            effectBtns[i].GetComponent<EffectSelectRender>().SetData(effectClass);
         }
         StartCoroutine(TypeText());
     }

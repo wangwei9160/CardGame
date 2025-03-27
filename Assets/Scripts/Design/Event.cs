@@ -22,8 +22,11 @@ public class EventManager
             {2, new EventClass() { id = 2, name = "沼泽奇遇（一）", type_ids = 101, event_type = "event" } },
             {3, new EventClass() { id = 3, name = "舞牛", type_ids = 101, event_type = "event" } },
             {4, new EventClass() { id = 4, name = "柳暗花明", type_ids = 102, event_type = "rest" } },
-            {5, new EventClass() { id = 5, name = "林中小屋（一）", type_ids = 101, event_type = "event" } },
+            {5, new EventClass() { id = 5, name = "山中小屋（一）", type_ids = 101, event_type = "event" } },
             {6, new EventClass() { id = 6, name = "狐威", type_ids = 100, event_type = "combat" } },
+            {7, new EventClass() { id = 7, name = "江湖郎中", type_ids = 100, event_type = "combat" } },
+            {8, new EventClass() { id = 8, name = "十里", type_ids = 103, event_type = "reward" } },
+            {9, new EventClass() { id = 9, name = "废弃营地", type_ids = 103, event_type = "reward" } },
         };
     }
     public static EventClass GetEventClassByKey(int key)

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,9 +7,9 @@ using UnityEngine.UI;
 
 public class SmallCardRender : MonoBehaviour , IDragHandler , IBeginDragHandler, IEndDragHandler , IPointerEnterHandler, IPointerExitHandler
 {
-    public int Pos;                 // µ±Ç°Î»ÖÃ
-    public bool isLock;             // Ç¿ÖÆÉÏËø·ÀÖ¹ĞüÍ£ĞŞ¸Ä
-    public bool canDrag;            // ÊÇ·ñ¿ÉÒÔÍÏ×§
+    public int Pos;                 // å½“å‰ä½ç½®
+    public bool isLock;             // å¼ºåˆ¶ä¸Šé”é˜²æ­¢æ‚¬åœä¿®æ”¹
+    public bool canDrag;            // æ˜¯å¦å¯ä»¥æ‹–æ‹½
 
     public Sprite sprite;
 
@@ -34,7 +34,7 @@ public class SmallCardRender : MonoBehaviour , IDragHandler , IBeginDragHandler,
         isLock = false;
     }
 
-    #region ¿¨ÅÆÍÏ×§ĞüÍ£Ğ§¹û
+    #region å¡ç‰Œæ‹–æ‹½æ‚¬åœæ•ˆæœ
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (!canDrag) return;
@@ -64,15 +64,15 @@ public class SmallCardRender : MonoBehaviour , IDragHandler , IBeginDragHandler,
     {
         if (canDrag || isLock) return;
         oldColor = GetComponent<Image>().color;
-        GetComponent<Image>().color = Color.black;                      // µ±Ç°ÓÃÓÚÌáÊ¾¸üĞÂÕâ¸ö¿¨
-        EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_HOVER , Pos);    // ¹ã²¥µ±Ç°¿¨ÅÆĞüÍ£
+        GetComponent<Image>().color = Color.black;                      // å½“å‰ç”¨äºæç¤ºæ›´æ–°è¿™ä¸ªå¡
+        EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_HOVER , Pos);    // å¹¿æ’­å½“å‰å¡ç‰Œæ‚¬åœ
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         if (canDrag || isLock) return;
         GetComponent<Image>().color = oldColor;
-        EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_HOVER, -1);    // Àë¿ªºóÖØÖÃĞüÍ£µÄ¿¨ÅÆ
+        EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_HOVER, -1);    // ç¦»å¼€åé‡ç½®æ‚¬åœçš„å¡ç‰Œ
     }
 
     public void OnDragMove(PointerEventData eventData)
@@ -80,29 +80,29 @@ public class SmallCardRender : MonoBehaviour , IDragHandler , IBeginDragHandler,
         transform.position = eventData.position;
     }
     #endregion
-    // CardInfo --È±Ê§
+    // CardInfo --ç¼ºå¤±
 
-    // ÉèÖÃË÷Òı£¬ÉèÖÃ²»¿ÉÍÏ×§
+    // è®¾ç½®ç´¢å¼•ï¼Œè®¾ç½®ä¸å¯æ‹–æ‹½
     public void SetPosition(int pIndex)
     {
         Pos = pIndex;
         canDrag = false;
     }
-    // ÉèÖÃ¿¨ÅÆÊı¾İ
+    // è®¾ç½®å¡ç‰Œæ•°æ®
     public void SetData()
     {
-        Debug.Log("¸üĞÂµ±Ç°¿¨ÅÆÊı¾İ");
-        isLock = true;          // ¸üĞÂ¿¨ÅÆÊı¾İºóÇ¿ÖÆÉÏËø·ÀÖ¹´ËÊ±ĞüÍ£bug
+        Debug.Log("æ›´æ–°å½“å‰å¡ç‰Œæ•°æ®");
+        isLock = true;          // æ›´æ–°å¡ç‰Œæ•°æ®åå¼ºåˆ¶ä¸Šé”é˜²æ­¢æ­¤æ—¶æ‚¬åœbug
         GetComponent<Image>().color = Color.blue;
         StartCoroutine(WaitForTimeUnLock());
     }
-    // ÖØÖÃ¿¨ÅÆÊı¾İ
+    // é‡ç½®å¡ç‰Œæ•°æ®
     public void RefreshCardRender()
     {
         GetComponent<Image>().sprite = null;
     }
 
-    // ¶¨Ê±Æ÷½âËø
+    // å®šæ—¶å™¨è§£é”
     IEnumerator WaitForTimeUnLock()
     {
         yield return new WaitForSeconds(0.5f);
