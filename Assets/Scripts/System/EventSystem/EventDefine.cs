@@ -21,6 +21,7 @@
     OnPlayerTurnStart,      // 玩家可操作回合开始
     OnFinishPlayerTurn,     // 玩家回合结束
     OnMergePanelShow,
+    ON_STAGE_INCREMENT,     // 阶段自增
 
     // 调整分辨率，修改布局
     AdjustPosition,
@@ -30,6 +31,7 @@
     ON_CARD_DRAG,           // 拖拽卡牌
     ON_CARD_DRAG_STOP,      // 结束拖拽
     ON_CARD_DRAG_HOVER,     // 拖拽时停在哪个card上
+    ON_LEVEL_INFO_CHANGE,   // 关卡进度更新
 
 
     // 启示事件

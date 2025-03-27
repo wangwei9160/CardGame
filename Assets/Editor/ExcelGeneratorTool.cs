@@ -127,7 +127,7 @@ public class ExcelToClassGenerator
         // 生成 Manager 类
         sb.AppendLine($"public class {managerName}");
         sb.AppendLine("{");
-        sb.AppendLine($"    public static Dictionary<int, {className}> m_Dic;");
+        sb.AppendLine($"    public static Dictionary<{fieldTypes[0]}, {className}> m_Dic;");
         sb.AppendLine();
         sb.AppendLine($"    static {managerName}()");
         sb.AppendLine("    {");
@@ -138,7 +138,7 @@ public class ExcelToClassGenerator
         foreach (var data in dataList)
         {
             sb.Append("            {");
-            sb.Append($"{data["id"]}, new {className}() {{ ");
+            sb.Append($"{data[fieldNames[0]]}, new {className}() {{ ");
             for (int i = 0; i < fieldNames.Count; i++)
             {
                 var fieldName = fieldNames[i];

@@ -43,7 +43,7 @@ public class TopInfoPanel : UIViewBase
         base.OnAddlistening();
         EventCenter.AddListener<int>(EventDefine.OnMoneyChange , OnMoneyChange);
         EventCenter.AddListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
-        EventCenter.AddListener(EventDefine.OnBattleStart , Refresh);
+        EventCenter.AddListener(EventDefine.ON_LEVEL_INFO_CHANGE, Refresh);
     }
 
     public override void OnRemovelistening()
@@ -51,7 +51,7 @@ public class TopInfoPanel : UIViewBase
         base.OnRemovelistening();
         EventCenter.RemoveListener<int>(EventDefine.OnMoneyChange, OnMoneyChange);
         EventCenter.RemoveListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
-        EventCenter.RemoveListener(EventDefine.OnBattleStart, Refresh);
+        EventCenter.RemoveListener(EventDefine.ON_LEVEL_INFO_CHANGE, Refresh);
     }
 
     public override void Show()

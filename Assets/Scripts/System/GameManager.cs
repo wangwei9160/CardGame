@@ -41,6 +41,7 @@ public class GameManager : ManagerBase<GameManager>
         EventCenter.AddListener<int>(EventDefine.SelectMoneyReward, SelectMoneyReward);    // 添加一个监听
         EventCenter.AddListener<int>(EventDefine.SelectCardReward, SelectCardReward);    // 添加一个监听
         EventCenter.AddListener<EchoEventType>(EventDefine.ON_ENTER_ECHOEVENT, OnEnterEchoEvent);
+        EventCenter.AddListener(EventDefine.ON_STAGE_INCREMENT, OnStageIncrement);
     }
 
     private void OnDestroy()
@@ -51,6 +52,7 @@ public class GameManager : ManagerBase<GameManager>
         EventCenter.RemoveListener<int>(EventDefine.SelectMoneyReward, SelectMoneyReward);    // 上个版本遗忘的更新
         EventCenter.RemoveListener<int>(EventDefine.SelectCardReward, SelectCardReward);    // 添加一个监听
         EventCenter.RemoveListener<EchoEventType>(EventDefine.ON_ENTER_ECHOEVENT, OnEnterEchoEvent);
+        EventCenter.RemoveListener(EventDefine.ON_STAGE_INCREMENT, OnStageIncrement);
     }
 
     private void Start()
@@ -93,9 +95,14 @@ public class GameManager : ManagerBase<GameManager>
         gameData.CardReward.Add(1);
         gameData.CardReward.Add(2);
         gameData.CardReward.Add(3);
-        gameData.CurrentStage++;    // 当前地图阶段自增 
         UIManager.Instance.Show("RewardPanelUI", ContainerManager.Instance.Enemies[id].gameObject);
         UIManager.Instance.Close(GameString.BATTLEUI);   // 隐藏战斗ui
+    }
+
+    public void OnStageIncrement()
+    {
+        gameData.CurrentStage++;    // 当前地图阶段自增 
+        EventCenter.Broadcast(EventDefine.ON_LEVEL_INFO_CHANGE);
     }
 
     // 临时暴露奖励接口
@@ -242,6 +249,7 @@ public class GameManager : ManagerBase<GameManager>
     private void OnMergePanelShow()
     {
         UIManager.Instance.Show(GameString.MERGEUI);    // 合成界面
+        OnStageIncrement();
     }
 
     #endregion

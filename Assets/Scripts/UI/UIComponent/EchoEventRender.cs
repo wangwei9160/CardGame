@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +13,7 @@ public class EchoEventRender : MonoBehaviour
 
     private void Awake()
     {
-        text = transform.Find("Text").GetComponent<Text>(); // ĞèÒªÌáÇ°»ñÈ¡
+        text = transform.Find("Text").GetComponent<Text>(); // éœ€è¦æå‰è·å–
         text.gameObject.SetActive(false);
         isChose = false;
         canClick = true;
@@ -28,7 +28,7 @@ public class EchoEventRender : MonoBehaviour
     private void OnClick()
     {
         if (!canClick) return;
-        isChose = !isChose; // Ñ¡ÖĞ»òÕß²»Ñ¡ÖĞ
+        isChose = !isChose; // é€‰ä¸­æˆ–è€…ä¸é€‰ä¸­
         SetClick(isChose);
         EventCenter.Broadcast(EventDefine.ON_ECHOEVENT_SELECT, isChose, Index, echoEventType);
     }
@@ -47,7 +47,7 @@ public class EchoEventRender : MonoBehaviour
             text.text = type.name;
             Index = pos;
             echoEventType = id;
-            GetComponent<Image>().sprite = Resources.Load<Sprite>("Arts/EchoEvent/" + type.icon);   // ¼ÓÔØÍ¼Æ¬
+            GetComponent<Image>().sprite = Resources.Load<Sprite>("Arts/EchoEvent/" + type.icon);   // åŠ è½½å›¾ç‰‡
             Color c = GetComponent<Image>().color;
             c.a = 1;
             GetComponent<Image>().color = c;
@@ -66,7 +66,7 @@ public class EchoEventRender : MonoBehaviour
         }
     }
 
-    // ÆÁ±Îµã»÷
+    // å±è”½ç‚¹å‡»
     public void DisableRaycastTarget()
     {
         GetComponent<Image>().raycastTarget = false;
