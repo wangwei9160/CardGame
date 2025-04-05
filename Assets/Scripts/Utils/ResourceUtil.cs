@@ -1,0 +1,12 @@
+using UnityEngine;
+
+// 美术资源获取通用工具
+public class ResourceUtil
+{
+    public static Sprite GetTreasureByID(int id)
+    {
+        TreasureBase treasure = TreasureFactory.GetTreasure(id);
+        TreasureClass cls = treasure.treasureCfg;
+        return Resources.Load<Sprite>("Arts/Spirte/" + cls.Icon);
+    }
+}

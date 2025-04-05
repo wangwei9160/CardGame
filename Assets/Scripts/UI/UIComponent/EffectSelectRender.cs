@@ -10,27 +10,27 @@ public class EffectSelectRender : MonoBehaviour
     public Text title;
     public EffectClass effectClass;
 
-    Dictionary<int, Action> actions = new Dictionary<int, Action>
-    {
-        {111 , OnEnterCombat },
-        {112 , OnEnterRelics },
-        {113,OnEnterSkip },
-        {114, OnEnterBuff },
-        {115, OnEnterFriend},
-        {116 , OnEnterTrade },
-        {117 , OnEnterDelete }
-    };
+    public bool isCanSelect = true;
+
+    Dictionary<int, Action> actions = new Dictionary<int, Action>();
 
     private void Awake()
     {
         btn = GetComponent<Button>();
         title = transform.Find("Title").GetComponent<Text>();
+        actions.Add(111,OnEnterCombat);
+        actions.Add(112,OnEnterRelics);
+        actions.Add(113,OnEnterSkip);
+        actions.Add(114,OnEnterBuff);
+        actions.Add(115,OnEnterFriend);
+        actions.Add(116,OnEnterTrade);
+        actions.Add(117,OnEnterDelete);
     }
 
     private void Start()
     {
-        
         btn.onClick.AddListener(OnButtonClick);
+        CheckSelectable();
     }
 
     public void SetData(EffectClass data)
@@ -41,43 +41,67 @@ public class EffectSelectRender : MonoBehaviour
 
     public void OnButtonClick()
     {
+        if (!isCanSelect) return;
         actions[effectClass.effect_ids]();
     }
 
-    static public void OnEnterCombat()
+    public void CheckSelectable()
+    {
+        if(effectClass.op_ids == 41 || effectClass.op_ids == 42)
+        {
+            isCanSelect = GameManager.Instance.isEnoughMoney(20);
+        }
+        if (!isCanSelect)
+        {
+            // 不可点击
+        }
+    }
+
+    public void OnEnterCombat()
     {
         Debug.Log("OnEnterCombat");
         EventCenter.Broadcast(EventDefine.OnMergePanelShow);
     }
 
-    static public void OnEnterRelics()
+    public void OnEnterRelics()
     {
         Debug.Log("OnEnterRelics");
         EventCenter.Broadcast(EventDefine.OnMergePanelShow);
     }
 
-    static public void OnEnterBuff()
+    public void OnEnterBuff()
     {
         Debug.Log("OnEnterBuff");
         EventCenter.Broadcast(EventDefine.OnMergePanelShow);
     }
-    static public void OnEnterSkip()
+    public void OnEnterSkip()
     {
         Debug.Log("OnEnterSkip");
         EventCenter.Broadcast(EventDefine.OnMergePanelShow);
     }
-    static public void OnEnterFriend()
+    public void OnEnterFriend()
     {
         Debug.Log("OnEnterFriend");
         EventCenter.Broadcast(EventDefine.OnMergePanelShow);
     }
     
-    static public void OnEnterTrade()
+    public void OnEnterTrade()
     {
         Debug.Log("OnEnterTrade");
+        if(effectClass.op_ids == 41) 
+        {
+            //op_name = "买个苹果", effect_ids = 116, effect_types = "trade", effect = "花费20金币，恢复1/3的生命值" 
+            int maxHp = GameManager.Instance.GetPlayerMaxHP();
+            GameManager.Instance.OnPlayerGetHp(maxHp / 3);
+        }
+        else if(effectClass.op_ids == 42) 
+        {
+            // op_name = "买点装备", effect_ids = 116, effect_types = "trade", effect = "花费20金币，获得两个随机卡"
+            
+        }
         EventCenter.Broadcast(EventDefine.OnMergePanelShow);
     }
-    static public void OnEnterDelete()
+    public void OnEnterDelete()
     {
         Debug.Log("OnEnterDelete");
         EventCenter.Broadcast(EventDefine.OnMergePanelShow);

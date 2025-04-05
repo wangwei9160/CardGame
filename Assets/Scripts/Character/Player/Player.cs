@@ -22,13 +22,13 @@ public class Player : BaseCharacter
 
     private void Update()
     {
-        f += Time.deltaTime;
-        if(f > 1f)
-        {
-            EventCenter.Broadcast(EventDefine.OnPlayerAttributeChange, hp , maxHp, HpUIIndex);
-            f = 0f;
-            hp = (hp + 10) % maxHp; 
-        }
+        // f += Time.deltaTime;
+        // if(f > 1f)
+        // {
+        //     EventCenter.Broadcast(EventDefine.OnPlayerAttributeChange, hp , maxHp, HpUIIndex);
+        //     f = 0f;
+        //     hp = (hp + 10) % maxHp; 
+        // }
     }
 
 }

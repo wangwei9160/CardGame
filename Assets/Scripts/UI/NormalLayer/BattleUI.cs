@@ -77,7 +77,7 @@ public class BattleUI : UIViewBase
 
     IEnumerator WaitTimeUnLock()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         isLock = false;
     }
 

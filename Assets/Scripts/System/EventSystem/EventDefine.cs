@@ -5,7 +5,6 @@
     OnPlayerAttributeChange,    // 角色属性变化
 
     
-    OnEnemyTurn,    // 临时使用，用于切换到敌方回合时的敌方自动掉血
     OnEnemyDeath,   // 敌方随从死亡
     // 法力值修正
     OnMagicPowerChange,
@@ -37,5 +36,8 @@
     // 启示事件
     ON_ECHOEVENT_SELECT,    // 启示事件被点击
     ON_ENTER_ECHOEVENT,     // 进入启示选择的事件
+
+    // 遗物事件
+    ON_GET_TREASURE_BY_ID, // 通过ID获取遗物
 }
 

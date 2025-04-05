@@ -42,6 +42,7 @@ public class GameManager : ManagerBase<GameManager>
         EventCenter.AddListener<int>(EventDefine.SelectCardReward, SelectCardReward);    // 添加一个监听
         EventCenter.AddListener<EchoEventType>(EventDefine.ON_ENTER_ECHOEVENT, OnEnterEchoEvent);
         EventCenter.AddListener(EventDefine.ON_STAGE_INCREMENT, OnStageIncrement);
+        EventCenter.AddListener<int>(EventDefine.ON_GET_TREASURE_BY_ID , GetTreasureByID);  // 获得遗物接口
     }
 
     private void OnDestroy()
@@ -53,12 +54,46 @@ public class GameManager : ManagerBase<GameManager>
         EventCenter.RemoveListener<int>(EventDefine.SelectCardReward, SelectCardReward);    // 添加一个监听
         EventCenter.RemoveListener<EchoEventType>(EventDefine.ON_ENTER_ECHOEVENT, OnEnterEchoEvent);
         EventCenter.RemoveListener(EventDefine.ON_STAGE_INCREMENT, OnStageIncrement);
+        EventCenter.AddListener<int>(EventDefine.ON_GET_TREASURE_BY_ID, GetTreasureByID);  // 获得遗物接口
     }
 
     private void Start()
     {
         EventCenter.Broadcast(EventDefine.ON_ENTER_ECHOEVENT, Data.EchoEventType);// 临时使用用于默认进入战斗
         UIManager.Instance.Show("TopInfo");
+    }
+
+    #region 角色属性
+
+    public int GetPlayerHP()
+    {
+        return gameData.hp;
+    }
+
+    public int GetPlayerMaxHP()
+    {
+        return gameData.maxHp;
+    }
+
+    public void OnPlayerGetHp(int val)
+    {
+        gameData.hp = Mathf.Min(gameData.maxHp , gameData.hp + val);
+    }
+
+    public void OnPlayerGetMaxHp(int val)
+    {
+        gameData.maxHp += val;
+        OnPlayerGetHp(val);
+    }
+
+    public void OnHpChangeByValue(int val)
+    {
+
+    }
+
+    public bool isEnoughMoney(int val)
+    {
+        return gameData.money >= val;
     }
 
     // 增加钱的数量的方法
@@ -76,6 +111,8 @@ public class GameManager : ManagerBase<GameManager>
         
         EventCenter.Broadcast(EventDefine.OnMagicPowerChange , gameData.MagicPower , gameData.MaxMagicPower);
     }
+
+    #endregion 
 
     public void OnEnemyDeath(int id)
     {
@@ -114,6 +151,19 @@ public class GameManager : ManagerBase<GameManager>
     public List<int> CardReward()
     {
         return gameData.CardReward;
+    }
+
+    public List<TreasureBase> GetAllTreasure()
+    {
+        return gameData.treasureList;
+    }
+
+    public void GetTreasureByID(int id)
+    {
+        TreasureBase treasure = TreasureFactory.GetTreasure(id);
+        Debug.Log($"获得了遗物{treasure.treasureCfg.Name}");
+        gameData.treasureList.Add(treasure);
+        treasure.OnGet();   // 获得遗物
     }
 
     // 是否拿取金币奖励
@@ -211,6 +261,11 @@ public class GameManager : ManagerBase<GameManager>
 
     private IEnumerator BeforePlayerTurn()
     {
+        List<TreasureBase> allTreasure = GetAllTreasure();
+        foreach (var treasure in allTreasure)
+        {
+            treasure.OnTurnStart();
+        }
         // 提前预留卡牌的动画效果
         for(int i = 0; i < 2; i++)
         {

@@ -216,10 +216,11 @@ MonoBehaviour:
   btn: {fileID: 0}
   title: {fileID: 0}
   effectClass:
-    id: 0
+    op_ids: 0
     op_name: 
     op_dialog: 
     effect_ids: 0
+    effect_types: 
     effect: 
 --- !u!1 &1916654243944515059
 GameObject:
@@ -500,7 +501,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 50
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -882,10 +883,11 @@ MonoBehaviour:
   btn: {fileID: 0}
   title: {fileID: 0}
   effectClass:
-    id: 0
+    op_ids: 0
     op_name: 
     op_dialog: 
     effect_ids: 0
+    effect_types: 
     effect: 
 --- !u!1 &7734452543844476995
 GameObject:
@@ -1141,8 +1143,9 @@ MonoBehaviour:
   btn: {fileID: 0}
   title: {fileID: 0}
   effectClass:
-    id: 0
+    op_ids: 0
     op_name: 
     op_dialog: 
     effect_ids: 0
+    effect_types: 
     effect: 

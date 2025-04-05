@@ -1,18 +1,18 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using Unity.Mathematics;
 
 public class GameData 
 {
-    public int CurrentLvel;                         // µ±Ç°ÎªCurrentLvel¹Ø¿¨
-    public int CurrentStage;                        // µ±Ç°¹Ø¿¨µÄµÚCurrentStage½×¶Î
-    public int CurrentTurn;                         // µ±Ç°½×¶ÎµÄCurrentTurn»ØºÏ
-    public EchoEventType EchoEventType;   // ÏÂÒ»¸ö¹Ø¿¨µÄÀàĞÍ
+    public int CurrentLvel;                         // å½“å‰ä¸ºCurrentLvelå…³å¡
+    public int CurrentStage;                        // å½“å‰å…³å¡çš„ç¬¬CurrentStageé˜¶æ®µ
+    public int CurrentTurn;                         // å½“å‰é˜¶æ®µçš„CurrentTurnå›åˆ
+    public EchoEventType EchoEventType;   // ä¸‹ä¸€ä¸ªå…³å¡çš„ç±»å‹
 
 
-    // Íæ¼ÒÊôĞÔ ºóĞø¿ÉÒÔ´æµ½playerattributeÀàÄÚ
-    public int hp;              // µ±Ç°ÉúÃüÖµ
-    public int maxHp;           // ×î´óÉúÃüÖµ
-    public int money;           // µ±Ç°³ÖÓĞ½ğ±ÒÊıÁ¿
+    // ç©å®¶å±æ€§ åç»­å¯ä»¥å­˜åˆ°playerattributeç±»å†…
+    public int hp;              // å½“å‰ç”Ÿå‘½å€¼
+    public int maxHp;           // æœ€å¤§ç”Ÿå‘½å€¼
+    public int money;           // å½“å‰æŒæœ‰é‡‘å¸æ•°é‡
 
     public int Money
     {
@@ -20,12 +20,13 @@ public class GameData
         set { money = value; EventCenter.Broadcast(EventDefine.OnMoneyChange , money); }
     }
     
-    public int magicPower;      // ·¨Á¦Öµ
-    public int maxMagicPower;   // ×î´ó·¨Á¦Öµ
+    public int magicPower;      // æ³•åŠ›å€¼
+    public int maxMagicPower;   // æœ€å¤§æ³•åŠ›å€¼
 
-    // ¹Ø¿¨Í¨¹Ø½±Àø£¬ÔÚÃ»ÓĞ»òÕßÑ¡ÔñºóÓ¦¸ÃÎª¿Õ; ÔİÊ±Ê¹ÓÃÕâÖÖ·½Ê½ÊµÏÖ£¬ºóĞø¿´ÊÇ·ñÓÉ²ß»®±íÍ³Ò»
-    public int MoneyReward;             // ½ğ±Ò½±Àø
-    public List<int> CardReward;        // ¿¨ÅÆ½±Àø
+    // å…³å¡é€šå…³å¥–åŠ±ï¼Œåœ¨æ²¡æœ‰æˆ–è€…é€‰æ‹©ååº”è¯¥ä¸ºç©º; æš‚æ—¶ä½¿ç”¨è¿™ç§æ–¹å¼å®ç°ï¼Œåç»­çœ‹æ˜¯å¦ç”±ç­–åˆ’è¡¨ç»Ÿä¸€
+    public int MoneyReward;             // é‡‘å¸å¥–åŠ±
+    public List<int> CardReward;        // å¡ç‰Œå¥–åŠ±
+    public List<TreasureBase> treasureList;
 
     public int MagicPower
     {
@@ -49,6 +50,7 @@ public class GameData
         magicPower = 0;
         CardReward = new List<int>();
         EchoEventType = EchoEventType.FightEvent;
+        treasureList = new List<TreasureBase>();
     }
     
 }
