@@ -203,11 +203,28 @@ public class UIManager : ManagerBase<UIManager>
             Pop(m_SingleDic[uiName]);
             m_SingleDic[uiName].Close();
             m_SingleDic.Remove(uiName);
+            UiConfig cfg = UIConfigManager.Configs[uiName];
+            if(cfg.BindScene != "")
+            {
+                Destroy(GameObject.Find(cfg.BindScene));
+            }
         }
     }
 
     public void Close(string uiName , int Index)
     {
+        if(m_SingleDic.ContainsKey(uiName))
+        {
+            Pop(m_SingleDic[uiName]);
+            m_SingleDic[uiName].Close();
+            UiConfig cfg = UIConfigManager.Configs[uiName];
+            if(cfg.BindScene != "")
+            {
+                GameObject obj = GameObject.Find(cfg.BindScene);
+                if (obj != null) Destroy(obj);
+            }
+            m_SingleDic.Remove(uiName);
+        }
         for (int i = 0; i < m_MultipDic[uiName].Count; i++)
         {
             if (m_MultipDic[uiName][i].index == Index)
