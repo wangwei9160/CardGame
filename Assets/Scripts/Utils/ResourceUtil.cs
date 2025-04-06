@@ -7,6 +7,6 @@ public class ResourceUtil
     {
         TreasureBase treasure = TreasureFactory.GetTreasure(id);
         TreasureClass cls = treasure.treasureCfg;
-        return Resources.Load<Sprite>("Arts/Spirte/" + cls.Icon);
+        return Resources.Load<Sprite>("Arts/Treasures/" + cls.Icon);
     }
 }

@@ -164,6 +164,7 @@ public class GameManager : ManagerBase<GameManager>
         Debug.Log($"获得了遗物{treasure.treasureCfg.Name}");
         gameData.treasureList.Add(treasure);
         treasure.OnGet();   // 获得遗物
+        EventCenter.Broadcast(EventDefine.ON_TREASURE_UPDATE_SHOW);
     }
 
     // 是否拿取金币奖励
