@@ -39,5 +39,6 @@
 
     // 遗物事件
     ON_GET_TREASURE_BY_ID, // 通过ID获取遗物
+    ON_TREASURE_UPDATE_SHOW,// 刷新遗物显示
 }
 

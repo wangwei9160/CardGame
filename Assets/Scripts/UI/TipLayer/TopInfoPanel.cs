@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +20,13 @@ public class TopInfoPanel : UIViewBase
     [Tooltip("钱")] public Text moneyText;   // 钱的数量
     [Tooltip("关卡信息")] public Text levelInfo;   // 关卡信息
 
-    
+    public Transform treasures;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        treasures = transform.Find("TopCanvas/Top/Treasures/Scroll View/Viewport/Content");
+    }
 
     protected override void Start()
     {
@@ -44,6 +51,8 @@ public class TopInfoPanel : UIViewBase
         EventCenter.AddListener<int>(EventDefine.OnMoneyChange , OnMoneyChange);
         EventCenter.AddListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
         EventCenter.AddListener(EventDefine.ON_LEVEL_INFO_CHANGE, Refresh);
+        EventCenter.AddListener(EventDefine.ON_TREASURE_UPDATE_SHOW, OnUpdateTreasureShow);
+        
     }
 
     public override void OnRemovelistening()
@@ -52,6 +61,7 @@ public class TopInfoPanel : UIViewBase
         EventCenter.RemoveListener<int>(EventDefine.OnMoneyChange, OnMoneyChange);
         EventCenter.RemoveListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
         EventCenter.RemoveListener(EventDefine.ON_LEVEL_INFO_CHANGE, Refresh);
+        EventCenter.RemoveListener(EventDefine.ON_TREASURE_UPDATE_SHOW, OnUpdateTreasureShow);
     }
 
     public override void Show()
@@ -67,6 +77,30 @@ public class TopInfoPanel : UIViewBase
         levelInfo.text = string.Format(GameString.STAGEINFO,
             Constants.MapLength[GameManager.Instance.Data.CurrentLvel] - GameManager.Instance.Data.CurrentStage,
             Constants.MapName[GameManager.Instance.Data.CurrentLvel]);
+        OnUpdateTreasureShow();
+    }
+
+    private void OnUpdateTreasureShow()
+    {
+        List<TreasureBase> _list = GameManager.Instance.GetAllTreasure();
+        for(int i = 0; i <  _list.Count; i++)
+        {
+            Transform obj;
+            if(i < treasures.childCount)
+            {
+                obj = treasures.GetChild(i);
+            }
+            else
+            {
+                var go = new GameObject();
+                go.AddComponent<TreasureRender>();
+                go.transform.SetParent(treasures);
+                obj = go.transform;
+            }
+            TreasureRender item = obj.GetComponent<TreasureRender>();
+            item.SetData(index, _list[i].ID);
+        }
+
     }
 
     private void OnMoneyChange(int val)
