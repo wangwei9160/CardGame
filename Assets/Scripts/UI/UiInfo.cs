@@ -6,15 +6,21 @@ public class UiConfig
 {
     public string Name;         // name
     public UILAYER layer;       // 层次
-    public string UiPath;       // ui prefab 路径
+    public string uiPath;       // ui prefab 路径
     public string BindScene;    // 绑定的场景 -- prefab
     public UiConfig() { }
+
+    public UiConfig(string name , string uipath)
+    {
+        Name = name;
+        uiPath = uipath;
+    }
 
     public UiConfig(string name,UILAYER lay,string uipath , string bindScene)
     {
         Name = name;
         layer = lay;
-        UiPath = uipath;
+        uiPath = uipath;
         BindScene = bindScene;
     }
 }
@@ -31,5 +37,6 @@ public class UIConfigManager
         { "MergePanel", new UiConfig("MergePanel", UILAYER.M_BATTLE_LAYER, "UI/MergePanel", "") },
         {"HpUI" ,new UiConfig("HpUI" , UILAYER.M_BATTLE_LAYER ,"UI/HpUI" , "") },
         {"EventUI" , new UiConfig("EventUI" , UILAYER.M_BATTLE_LAYER , "UI/NoneCombatUI" , "") },
+        {"HandBookUI" , new UiConfig("HandBookUI" , UILAYER.M_TIP_LAYER , "UI/HandBookUI" , "") },
     };
 }
