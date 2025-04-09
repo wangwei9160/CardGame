@@ -104,8 +104,9 @@ public class UIManager : ManagerBase<UIManager>
                 obj.name = cfg.BindScene;
             }
 
-            var uiObj = CreatePrefabByPath(cfg.UiPath);
+            var uiObj = CreatePrefabByPath(cfg.uiPath);
             UIViewBase ui = uiObj.GetComponent<UIViewBase>(); Push(ui);
+            uiObj.name = uiName;
             uiObj.transform.SetParent(m_LayerTransform[(int)ui.Layer]);
             m_SingleDic[uiName] = ui;
             m_SingleDic[uiName].Init(uiName , data);
@@ -125,7 +126,8 @@ public class UIManager : ManagerBase<UIManager>
                 obj.name = cfg.BindScene;
             }
 
-            var uiObj = CreatePrefabByPath(cfg.UiPath);
+            var uiObj = CreatePrefabByPath(cfg.uiPath);
+            uiObj.name = uiName;
             UIViewBase ui = uiObj.GetComponent<UIViewBase>(); Push(ui);
             uiObj.transform.SetParent(m_LayerTransform[(int)ui.Layer]);
             m_SingleDic[uiName] = ui;

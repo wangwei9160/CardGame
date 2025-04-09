@@ -39,10 +39,10 @@ public class TopInfoPanel : UIViewBase
         //{
         //    UIManager.Instance.Show("DeckUI");
         //});
-        //cardBookBtn.onClick.AddListener(() =>
-        //{
-        //    UIManager.Instance.Show("CardBookUI");
-        //});
+        cardBookBtn.onClick.AddListener(() =>
+        {
+            UIManager.Instance.Show("HandBookUI");
+        });
     }
 
     public override void OnAddlistening()
