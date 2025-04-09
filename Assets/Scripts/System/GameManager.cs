@@ -161,6 +161,9 @@ public class GameManager : ManagerBase<GameManager>
     public void GetTreasureByID(int id)
     {
         TreasureBase treasure = TreasureFactory.GetTreasure(id);
+        if(treasure == null) {
+            return ;
+        }
         Debug.Log($"获得了遗物{treasure.treasureCfg.Name}");
         gameData.treasureList.Add(treasure);
         treasure.OnGet();   // 获得遗物
