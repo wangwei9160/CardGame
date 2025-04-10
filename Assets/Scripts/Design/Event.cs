@@ -27,6 +27,7 @@ public class EventManager
             {7, new EventClass() { id = 7, name = "江湖郎中", type_ids = 100, event_type = "combat" } },
             {8, new EventClass() { id = 8, name = "十里", type_ids = 103, event_type = "reward" } },
             {9, new EventClass() { id = 9, name = "废弃营地", type_ids = 103, event_type = "reward" } },
+            {10, new EventClass() { id = 10, name = "小吃摊", type_ids = 101, event_type = "event" } },
         };
     }
     public static EventClass GetEventClassByKey(int key)
