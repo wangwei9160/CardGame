@@ -9,4 +9,8 @@ public class ResourceUtil
         TreasureClass cls = treasure.treasureCfg;
         return Resources.Load<Sprite>("Arts/Treasures/" + cls.Icon);
     }
+    public static Sprite GetTreasureByName(string name)
+    {
+        return Resources.Load<Sprite>("Arts/Treasures/" + name);
+    }
 }

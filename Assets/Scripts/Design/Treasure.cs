@@ -40,6 +40,7 @@ public class TreasureManager
             {1018, new TreasureClass() { ID = 1018, Name = "蜡烛", Icon = "1018蜡烛", Type = 1, Description = "每场战斗中，第一个死亡的友方随从将不会进入墓地，而是回到手牌中。", PS = "" } },
             {1019, new TreasureClass() { ID = 1019, Name = "羊皮卷", Icon = "1019羊皮卷", Type = 1, Description = "手牌中的随从获得+x/+x（x等于墓地中牌的数量）。", PS = "" } },
             {1020, new TreasureClass() { ID = 1020, Name = "金树叶", Icon = "1020金树叶", Type = 1, Description = "每有一名敌人死亡，获得5金币。", PS = "" } },
+            {1021, new TreasureClass() { ID = 1021, Name = "蚀工", Icon = "1021蚀工", Type = 1, Description = "战斗时，第一回合对敌人造成伤害＋1，下回合对敌人造成伤害-1，以此循环", PS = "" } },
             {2001, new TreasureClass() { ID = 2001, Name = "剑鞘", Icon = "2001剑鞘", Type = 2, Description = "战斗开始时，巫真获得装备中的武器卡的属性值。", PS = "" } },
             {2002, new TreasureClass() { ID = 2002, Name = "首饰盒", Icon = "2002首饰盒", Type = 2, Description = "战斗开始时，巫真获得装备中的饰品卡的属性值。", PS = "" } },
             {2003, new TreasureClass() { ID = 2003, Name = "狂妄", Icon = "2003狂妄", Type = 2, Description = "你的所有卡牌的攻击将发动两次，但治疗将不再生效。", PS = "" } },
@@ -68,5 +69,20 @@ public class TreasureManager
     {
         if(m_Dic.ContainsKey(key)) return m_Dic[key];
         return null;
+    }
+
+    public static List<TreasureClass> GetAllTreasure()
+    {
+        List<TreasureClass> ret = new List<TreasureClass>();
+        foreach (var item in m_Dic)
+        {
+            ret.Add(item.Value);
+        }
+        return ret;
+    }
+
+    public static int GetTreasureNum()
+    {
+        return m_Dic.Count;
     }
 }

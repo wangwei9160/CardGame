@@ -151,6 +151,17 @@ public class ExcelToClassGenerator
                 {
                     sb.Append($"{fieldName} = \"{value}\"");
                 }
+                else if (fieldTypes[i] == "int")
+                {
+                    Debug.Log(value);
+                    if (value == "" || value == " ")
+                    {
+                        sb.Append($"{fieldName} = 0");
+                    }else
+                    {
+                        sb.Append($"{fieldName} = {value}");
+                    }
+                }
                 else
                 {
                     sb.Append($"{fieldName} = {value}");
