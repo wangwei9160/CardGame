@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,8 +39,8 @@ public class TreasureTip : MonoBehaviour
     IEnumerator AdjustBackgroundAfterLayout()
     {
         yield return null;
-        BG.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Mathf.Max(200f, 10 + description.rectTransform.rect.width));
-        BG.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 30 + description.rectTransform.rect.height);
+        BG.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 24 + description.rectTransform.rect.width);
+        BG.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 50 + description.rectTransform.rect.height);
     }
 
     public void Hide()
