@@ -45,6 +45,7 @@ public class BattleManager : ManagerBase<BattleManager>
     protected override void Awake()
     {
         base.Awake();
+        battleData = new BattleData();
         EventCenter.AddListener(EventDefine.OnBattleStart, OnBattleStart);    // Õ½¶·¿ªÊ¼
         EventCenter.AddListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // µĞÈËËÀÍö
     }
@@ -53,11 +54,6 @@ public class BattleManager : ManagerBase<BattleManager>
     {
         EventCenter.RemoveListener(EventDefine.OnBattleStart, OnBattleStart);    // ÒÆ³ı
         EventCenter.RemoveListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // ÒÆ³ı¼àÌı
-    }
-
-    public void Start()
-    {
-        battleData = new BattleData();
     }
 
     public bool IsInBattle()
