@@ -38,5 +38,6 @@ public class UIConfigManager
         {"HpUI" ,new UiConfig("HpUI" , UILAYER.M_BATTLE_LAYER ,"UI/HpUI" , "") },
         {"EventUI" , new UiConfig("EventUI" , UILAYER.M_BATTLE_LAYER , "UI/NoneCombatUI" , "") },
         {"HandBookUI" , new UiConfig("HandBookUI" , UILAYER.M_TIP_LAYER , "UI/HandBookUI" , "") },
+        {"StoreUI" , new UiConfig("StoreUI" , UILAYER.M_NORMAL_LAYER , "UI/StoreUI" , "") },
     };
 }

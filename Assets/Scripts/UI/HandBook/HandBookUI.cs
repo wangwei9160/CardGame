@@ -31,6 +31,7 @@ public class HandBookUI : UIViewBase
             btn.onClickItem = (index) => this.OnClickItem(index);
         }
         closeBtn.onClick.AddListener(() => { UIManager.Instance.Close(name); });
+        OnClickItem(0);
     }
 
     public void OnClickItem(int idx)
@@ -41,9 +42,11 @@ public class HandBookUI : UIViewBase
             if(i != idx)
             {
                 // ÇÐ»»Õý³£×´Ì¬
+                tableBtnList[i].ClickHide();
             }else
             {
                 // ÇÐ»»µã»÷×´Ì¬
+                tableBtnList[i].ClickShow();
                 uiName = tableBtnList[i].name;
             }
         }

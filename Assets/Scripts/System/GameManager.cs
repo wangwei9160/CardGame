@@ -12,8 +12,6 @@ public enum GameState
 
 public class GameManager : ManagerBase<GameManager>
 {
-    [Tooltip("角色预制体")]public GameObject player;   
-    [Tooltip("敌方预制体")]public GameObject enemy;
 
     [Tooltip("整个游戏的状态")] private GameState gameState;
 
@@ -25,18 +23,11 @@ public class GameManager : ManagerBase<GameManager>
     private GameData gameData;
     [Tooltip("数据")] public GameData Data { get { return gameData; } private set { } }
 
-    #region 临时使用
-    private readonly int playerNum = 1;
-    private readonly int dogNum = 0;
-    private int enemyNum = 2;
-    #endregion
-
     protected override void Awake()
     {
         base.Awake();
         gameData = new GameData();
         EventCenter.AddListener(EventDefine.OnBattleStart, OnBattleStart);    // 战斗开始
-        EventCenter.AddListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 添加一个监听
         EventCenter.AddListener(EventDefine.OnMergePanelShow, OnMergePanelShow);
         EventCenter.AddListener<int>(EventDefine.SelectMoneyReward, SelectMoneyReward);    // 添加一个监听
         EventCenter.AddListener<int>(EventDefine.SelectCardReward, SelectCardReward);    // 添加一个监听
@@ -48,7 +39,6 @@ public class GameManager : ManagerBase<GameManager>
     private void OnDestroy()
     {
         EventCenter.RemoveListener(EventDefine.OnBattleStart, OnBattleStart);    // 移除
-        EventCenter.RemoveListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 移除监听
         EventCenter.RemoveListener(EventDefine.OnMergePanelShow, OnMergePanelShow);
         EventCenter.RemoveListener<int>(EventDefine.SelectMoneyReward, SelectMoneyReward);    // 上个版本遗忘的更新
         EventCenter.RemoveListener<int>(EventDefine.SelectCardReward, SelectCardReward);    // 添加一个监听
@@ -114,17 +104,9 @@ public class GameManager : ManagerBase<GameManager>
 
     #endregion 
 
-    public void OnEnemyDeath(int id)
+    public void BettleWin(int id)
     {
-        enemyNum--;
-        if(enemyNum == 0)
-        {
-            BettleWin(id);
-        }
-    }
-
-    private void BettleWin(int id)
-    {
+        if (!BattleManager.Instance.IsInBattle()) return;
         gameState = GameState.Reward;
         Debug.Log("进入奖励结算");
         System.Random rd = new System.Random();
@@ -197,50 +179,31 @@ public class GameManager : ManagerBase<GameManager>
     public static void OnEnterEchoEvent(EchoEventType type)
     {
         EchoEventClass cls = EchoEventManager.GetEchoEventClassByKey((int)type);
-        // 去事件池子随机找一个事件 cls.type
-        List<EventClass> eventClassList = new List<EventClass>();
-        foreach (var kv in EventManager.m_Dic)
+        if (cls.type == "combat")
         {
-            if(kv.Value.event_type == cls.type)
+            UIManager.Instance.Show("BattleUI", JsonUtility.ToJson(cls));
+        }
+        else if(cls.type == "event")
+        {
+            // 去事件池子随机找一个事件 cls.type
+            List<EventClass> eventClassList = new List<EventClass>();
+            foreach (var kv in EventManager.m_Dic)
             {
-                eventClassList.Add(kv.Value);
+                if (kv.Value.event_type == cls.type)
+                {
+                    eventClassList.Add(kv.Value);
+                }
             }
-        }
-        EventClass getEventClass = RandomUtil.GetRandomValueInList(eventClassList);
-        if(type == EchoEventType.FightEvent)
+            EventClass getEventClass = RandomUtil.GetRandomValueInList(eventClassList);
+            UIManager.Instance.Show("EventUI", JsonUtility.ToJson(getEventClass));
+        }else if(cls.type == "rest")
         {
-            UIManager.Instance.Show("BattleUI" , JsonUtility.ToJson(cls));
-        }else
-        {
-            UIManager.Instance.Show("EventUI" , JsonUtility.ToJson(getEventClass));
+            UIManager.Instance.Show("StoreUI");
         }
+        
     }
 
-    // 临时使用，用于初始化时添加我方角色
-    private void AddPlayer(int PlayerNum, int CardNum)
-    {
-        PlayerNum = Math.Min(PlayerNum, 1);
-        for (int i = 0; i < PlayerNum; i++)
-        {
-            if (ContainerManager.Instance.Players[i].childCount > 0) continue;  // 防止重复添加Player
-            Instantiate(player, ContainerManager.Instance.Players[i]);
-        }
-        CardNum = Math.Min(CardNum, 5 - PlayerNum);
-        for (int i = 0; i < CardNum; i++)
-        {
-            Instantiate(enemy, ContainerManager.Instance.Players[i + PlayerNum]);
-        }
-    }
-    // 临时使用，用于初始化时添加敌方角色
-    private void AddEnemy(int num)
-    {
-        num = Math.Min(num, 3);
-        for (int i = 0; i < num; i++)
-        {
-            var obj = Instantiate(enemy, ContainerManager.Instance.Enemies[i]);
-            obj.GetComponent<BaseEnemy>().Index = i;
-        }
-    }
+
 
     private void OnBattleStart()
     {
@@ -248,9 +211,6 @@ public class GameManager : ManagerBase<GameManager>
         gameData.CurrentTurn = 0;
         gameData.MaxMagicPower = 0; // 先增加最大的
         gameData.MagicPower = 0;
-        AddPlayer(playerNum, dogNum);
-        enemyNum = 2;
-        AddEnemy(enemyNum);
         gameState = GameState.Battle;   // 暂时初始化为战斗开始
         BeforeTurn(); // 代替状态机的切换
     }

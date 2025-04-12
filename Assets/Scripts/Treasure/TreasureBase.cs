@@ -7,6 +7,11 @@ public class TreasureBase
 
     public void print() { Debug.Log(treasureCfg.Description); }
 
+    public virtual string Description(bool isOnlyShow)
+    {
+        return treasureCfg.Description;
+    }
+
     // 获得遗物
     public virtual void OnGet() { }
 

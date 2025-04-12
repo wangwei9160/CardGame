@@ -5,7 +5,7 @@ public class RandomUtil
 {
     public static int RandomInt(int mi , int mx)
     {
-        return Random.Range(mi, mx);    // [mi , mx)
+        return Random.Range(mi, mx);    // 返回 [mi , mx)
     }
 
     public static float RandomFloat(float range , bool neg = true)

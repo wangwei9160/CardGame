@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 56316948}
   - component: {fileID: 56316949}
   - component: {fileID: 56316950}
+  - component: {fileID: 56316951}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -167,8 +168,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3803873dc02a3104a9375021c97e8dd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 839685021123685854, guid: 7f53395240165a740aed6c2331f69af1, type: 3}
-  enemy: {fileID: 952095489147001320, guid: edad7f912aa41ac4c999a183576be8a3, type: 3}
 --- !u!114 &56316950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,6 +180,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af43391e5b14b84449ff58dfdf26186d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &56316951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56316947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dff500cd91732ae498e37d4104cf29bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 839685021123685854, guid: 7f53395240165a740aed6c2331f69af1, type: 3}
+  enemy: {fileID: 952095489147001320, guid: edad7f912aa41ac4c999a183576be8a3, type: 3}
+  isBattle: 0
 --- !u!1 &58236989
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,20 +7,20 @@ public class HoverBehaviour : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("OnPointerEnter");
+        //Debug.Log("OnPointerEnter");
     }
 
     public virtual void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("OnPointerExit");
+        //Debug.Log("OnPointerExit");
     }
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("OnPointerDown");
+        //Debug.Log("OnPointerDown");
     }
     public virtual void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("OnPointUp");
+        //Debug.Log("OnPointUp");
     }
 }

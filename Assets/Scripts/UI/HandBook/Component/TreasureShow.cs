@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class TreasureShow : MonoBehaviour
+public class TreasureShow : MonoBehaviour 
 {
+    public int ID;
     public Image icon;
     public Text title;
     public Text description;
@@ -21,9 +23,10 @@ public class TreasureShow : MonoBehaviour
     public void SetData(TreasureClass cfg)
     {
         gameObject.SetActive(true);
-        name = cfg.Name;
+        ID = cfg.ID;
+        name = ID + "-" + cfg.Name;
         icon.sprite = ResourceUtil.GetTreasureByName(cfg.Icon);
-        title.text = name;
+        title.text = cfg.Name;
         description.text = cfg.Description;
     }
 
