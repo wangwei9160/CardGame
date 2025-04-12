@@ -152,7 +152,20 @@ public class MergePanel : UIViewBase
     {
         Debug.Log("选择" + (turn == 1 ? "既定的道路" : "自我的探索"));
         UIManager.Instance.Close(Name);
-        echoEventType = turn == 1 ? EchoEventType.FightEvent : EchoEventType.ChanceEvent;
+        if(turn == 1)
+        {
+            echoEventType = EchoEventType.FightEvent;
+        }else
+        {
+            int rd = RandomUtil.RandomInt(0, 2);
+            if(rd == 0)
+            {
+                echoEventType = EchoEventType.ChanceEvent;
+            }else
+            {
+                echoEventType = EchoEventType.PeaceEvent;
+            }
+        }
         GameManager.OnEnterEchoEvent(echoEventType);
     }
 

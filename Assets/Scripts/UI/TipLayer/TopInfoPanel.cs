@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,16 +9,16 @@ public class TopInfoPanel : UIViewBase
     public override UIViewType Type => base.Type;
     public override UILAYER Layer => UILAYER.M_TIP_LAYER;
 
-    [Header("°´Å¥")]
-    [Tooltip("ÉèÖÃ°´Å¥")] public Button settingBtn;   // ÉèÖÃ°´Å¥
-    [Tooltip("ÅÆ×é°´Å¥")] public Button deckBtn;      // ÅÆ×é°´Å¥
-    [Tooltip("Í¼¼ø°´Å¥")] public Button cardBookBtn;  // Í¼¼ø°´Å¥
+    [Header("æŒ‰é’®")]
+    [Tooltip("è®¾ç½®æŒ‰é’®")] public Button settingBtn;   // è®¾ç½®æŒ‰é’®
+    [Tooltip("ç‰Œç»„æŒ‰é’®")] public Button deckBtn;      // ç‰Œç»„æŒ‰é’®
+    [Tooltip("å›¾é‰´æŒ‰é’®")] public Button cardBookBtn;  // å›¾é‰´æŒ‰é’®
 
-    [Header("ÎÄ±¾")]
-    [Tooltip("ÑªÁ¿")] public Text hpText; // ÑªÁ¿
-    [Tooltip("ÑªÌõ")] public Slider hpSlider; //  ÑªÌõ
-    [Tooltip("Ç®")] public Text moneyText;   // Ç®µÄÊıÁ¿
-    [Tooltip("¹Ø¿¨ĞÅÏ¢")] public Text levelInfo;   // ¹Ø¿¨ĞÅÏ¢
+    [Header("æ–‡æœ¬")]
+    [Tooltip("è¡€é‡")] public Text hpText; // è¡€é‡
+    [Tooltip("è¡€æ¡")] public Slider hpSlider; //  è¡€æ¡
+    [Tooltip("é’±")] public Text moneyText;   // é’±çš„æ•°é‡
+    [Tooltip("å…³å¡ä¿¡æ¯")] public Text levelInfo;   // å…³å¡ä¿¡æ¯
 
     public Transform treasures;
 
@@ -67,13 +67,13 @@ public class TopInfoPanel : UIViewBase
     public override void Show()
     {
         base.Show();
-        OnMoneyChange(GameManager.Instance.Data.money);     // ´ÓÊı¾İÀïÄÃµ½Ç®µÄÊıÁ¿
+        OnMoneyChange(GameManager.Instance.Data.money);     // ä»æ•°æ®é‡Œæ‹¿åˆ°é’±çš„æ•°é‡
         Refresh();
     }
 
     public void Refresh()
     {
-        // ÏÔÊ¾ĞÅÏ¢µÄ¸üĞÂ
+        // æ˜¾ç¤ºä¿¡æ¯çš„æ›´æ–°
         levelInfo.text = string.Format(GameString.STAGEINFO,
             Constants.MapLength[GameManager.Instance.Data.CurrentLvel] - GameManager.Instance.Data.CurrentStage,
             Constants.MapName[GameManager.Instance.Data.CurrentLvel]);

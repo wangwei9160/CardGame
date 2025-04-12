@@ -31,11 +31,11 @@ public class TreasureRender : MonoBehaviour , IPointerEnterHandler, IPointerExit
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log(transform.name);
+        EventCenter.Broadcast(EventDefine.TREASURE_TIP_HIDE);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        
+        EventCenter.Broadcast(EventDefine.TREASURE_TIP_SHOW, transform.position , ID);
     }
 }

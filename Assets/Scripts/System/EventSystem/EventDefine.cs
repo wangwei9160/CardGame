@@ -38,7 +38,9 @@
     ON_ENTER_ECHOEVENT,     // 进入启示选择的事件
 
     // 遗物事件
-    ON_GET_TREASURE_BY_ID, // 通过ID获取遗物
-    ON_TREASURE_UPDATE_SHOW,// 刷新遗物显示
+    ON_GET_TREASURE_BY_ID,      // 通过ID获取遗物
+    ON_TREASURE_UPDATE_SHOW,    // 刷新遗物显示
+    TREASURE_TIP_SHOW ,         // 灵物提示信息显示
+    TREASURE_TIP_HIDE,          // 灵物提示信息隐藏
 }
 

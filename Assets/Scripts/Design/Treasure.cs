@@ -29,7 +29,7 @@ public class TreasureManager
             {1007, new TreasureClass() { ID = 1007, Name = "防滑手柄", Icon = "1007防滑手柄", Type = 1, Description = "每场战斗中，第一次使用武器不需要消耗法力值。", PS = "" } },
             {1008, new TreasureClass() { ID = 1008, Name = "丝绸手帕", Icon = "1008丝绸手帕", Type = 1, Description = "每场战斗中，第一次使用饰品不需要消耗法力值。", PS = "" } },
             {1009, new TreasureClass() { ID = 1009, Name = "口哨", Icon = "1009口哨", Type = 1, Description = "每场战斗中，第一张随从牌的法力值消耗减少2。", PS = "" } },
-            {1010, new TreasureClass() { ID = 1010, Name = "虎皮披风", Icon = "1010虎皮披风", Type = 1, Description = "手牌中的随从获得+x/+x（x等于友方战场的随从数量）。", PS = "" } },
+            {1010, new TreasureClass() { ID = 1010, Name = "虎皮披风", Icon = "1010虎皮披风", Type = 1, Description = "手牌中的随从获得+x/+x（x等于友方战场的随从数量）", PS = "" } },
             {1011, new TreasureClass() { ID = 1011, Name = "望远镜", Icon = "1011望远镜", Type = 1, Description = "你的法术牌在对最后方的敌人释放时获得+2/+2。", PS = "" } },
             {1012, new TreasureClass() { ID = 1012, Name = "细长法杖", Icon = "1012细长法杖", Type = 1, Description = "你的法术牌获得+x/+x（x等于友方战场上剩余的空位）。", PS = "" } },
             {1013, new TreasureClass() { ID = 1013, Name = "压缩空气", Icon = "1013压缩空气", Type = 1, Description = "如果巫真前方没有友方随从，则巫真获得2防御。", PS = "" } },
