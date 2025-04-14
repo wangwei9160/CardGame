@@ -28,6 +28,7 @@ public class TreasureShow : MonoBehaviour
         icon.sprite = ResourceUtil.GetTreasureByName(cfg.Icon);
         title.text = cfg.Name;
         description.text = cfg.Description;
+        TextUtil.ProcessTextWrap(description , 250f , 5);
     }
 
     public void Hide()

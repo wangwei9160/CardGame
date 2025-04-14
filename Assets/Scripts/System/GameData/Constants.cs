@@ -1,4 +1,4 @@
-// Ò»Ğ©³£Á¿£¬ÓÎÏ·¼ÓÔØºó²»»áĞŞ¸ÄµÄÄÚÈİ
+ï»¿// ä¸€äº›å¸¸é‡ï¼Œæ¸¸æˆåŠ è½½åä¸ä¼šä¿®æ”¹çš„å†…å®¹
 
 using System.Collections.Generic;
 
@@ -7,10 +7,10 @@ public class Constants
     public static string[] MapName = new string[]
     {
         "Unknown",
-        "É½ÖĞ´ÔÁÖ",
-        "°ëÉ½Ê¯Ä®",
-        "É½¶¥Ñ©µØ",
-        "Ï¿¹ÈÉî´¦"
+        "å±±ä¸­ä¸›æ—",
+        "åŠå±±çŸ³æ¼ ",
+        "å±±é¡¶é›ªåœ°",
+        "å³¡è°·æ·±å¤„"
     };
     public static int[] MapLength = new int[]
     {

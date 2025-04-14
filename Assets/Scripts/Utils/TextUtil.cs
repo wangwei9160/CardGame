@@ -3,19 +3,27 @@ using UnityEngine.UI;
 using System.Text;
 using System;
 using System.Security.Cryptography;
+using Unity.Mathematics;
 
 public static class TextUtil
 {
-    private const float CHAR_WIDTH = 10f; // 单字符宽度
-    public static void ProcessTextWrap(Text textCom , float _lineLength = 190f)
+    public static void ProcessTextWrap(Text textCom , float _lineLength = 190f , float _defaultLine = 3f)
     {
         if (textCom == null) return;
 
-        AdjustTextComWidth(textCom , _lineLength);
-        textCom.text = ProcessTextContent(textCom.text , textCom);
+        AdjustTextComWidth(textCom , _lineLength , _defaultLine);
+        ProcessTextContent(textCom.text , textCom);
     }
 
-    public static void AdjustTextComWidth(Text textCom , float _lineLength = 190f)
+    public static void AdjustTextComBySelf(Text textCom , float _maxLineLength , float _maxLineNum)
+    {
+        float maxCol = _maxLineLength * (textCom.fontSize + 1) ;
+        float maxRow = _maxLineNum * (textCom.fontSize + 1);
+        textCom.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxCol);
+        textCom.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, maxRow);
+    }
+
+    public static void AdjustTextComWidth(Text textCom , float _lineLength = 190f , float _defaultLine = 3f)
     {
         string res = textCom.text;
         if (string.IsNullOrEmpty(res)) return;
@@ -23,16 +31,16 @@ public static class TextUtil
         float maxWidth = maxLen * (textCom.fontSize + 1);
         
         float preferredWidth = _lineLength;
-        if (maxWidth >= _lineLength * 3)
+        if (maxWidth >= _lineLength * _defaultLine)
         {
-            preferredWidth = maxWidth / 3f + textCom.fontSize - 1;
+            preferredWidth = maxWidth / _defaultLine + textCom.fontSize - 1;
         }
         textCom.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, preferredWidth);
         float preferredHeight = Mathf.CeilToInt(maxWidth / preferredWidth) * (textCom.fontSize + 1) + (textCom.fontSize / 2);
         textCom.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, preferredHeight);
     }
 
-    private static string ProcessTextContent(string input, Text textCom)
+    public static void ProcessTextContent(string input, Text textCom)
     {
         // 使用Unity的TextGenerator获取换行信息
         var generator = new TextGenerator();
@@ -65,10 +73,9 @@ public static class TextUtil
         for (int i = 0; i < lines.Count; i++)
         {
             string line = lines[i];
-
             // 检查行首是否是标点或数字
-            if (i > 0 && line.Length > 0 &&
-                ((char.IsPunctuation(line[0]) && line[0] != '(' && line[0] != '（') || char.IsDigit(line[0])))
+            while (i > 0 && line.Length > 0 &&
+                ((char.IsPunctuation(line[0]) && line[0] != '(' && line[0] != '（') || isNotChinese(line[0])))
             {
                 // 将问题字符移到上一行末尾
                 lines[i - 1] += line[0];
@@ -77,11 +84,26 @@ public static class TextUtil
                 // 如果移除了字符后当前行为空，则跳过
                 if (string.IsNullOrEmpty(line)) continue;
             }
-
-            result.AppendLine(line);
+            lines[i] = line;
         }
+        float _maxLineLength = 0f;
+        float _maxLineNum = 0f;
+        for(int i = 0 ; i < lines.Count ; i++){
+            if(string.IsNullOrEmpty(lines[i])) continue;
+            result.AppendLine(lines[i]);
+            _maxLineLength = math.max(_maxLineLength , lines[i].Length);
+            _maxLineNum += 1;
+        }
+        textCom.text = result.ToString().TrimEnd();
+        AdjustTextComBySelf(textCom , _maxLineLength , _maxLineNum);
+    }
 
-        return result.ToString().TrimEnd();
+    public static bool isNotChinese(char c)
+    {
+        if(char.IsDigit(c)) return true;
+        if(c >= 'a' && c <= 'z') return true;
+        if(c >= 'A' && c <= 'Z') return true;
+        return false;
     }
 
 }
