@@ -1,6 +1,5 @@
 using UnityEngine;
 
-// 美术资源获取通用工具
 public class ResourceUtil
 {
     public static Sprite GetTreasureByID(int id)
@@ -13,4 +12,14 @@ public class ResourceUtil
     {
         return Resources.Load<Sprite>("Arts/Treasures/" + name);
     }
+    public static Sprite GetCardByID(int id)
+    {
+        Card card = CardFactory.GetCard(id);
+        Test0Class cls = card.cardCfg;
+        return Resources.Load<Sprite>("Arts/Card/" + cls.Icon);
+    }  
+    public static Sprite GetCardByName(string name)
+    {
+        return Resources.Load<Sprite>("Arts/Card/" + name);
+    } 
 }

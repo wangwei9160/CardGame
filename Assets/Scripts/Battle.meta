@@ -1,7 +1,12 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/Battle.meta
 guid: 6a669ff0702304d4f8604fbfd7389c07
 folderAsset: yes
 DefaultImporter:
+========
+guid: ce657cfc77a7c094b8c411f8883d7a0c
+PrefabImporter:
+>>>>>>>> b149cb8ba3fdeb9c499cc6b978be302c6ae61a78:Assets/Resources/UI/HandBook/Component/Card.prefab.meta
   externalObjects: {}
   userData: 
   assetBundleName: 
