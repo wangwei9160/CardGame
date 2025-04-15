@@ -170,7 +170,7 @@ public class PlayerManager : MonoBehaviour
     // 重置随从状态
     private void ResetMinions()
     {
-        List<GameObject> minions = BattleManager.Instance.GetPlayerMinions();
+        List<GameObject> minions = CardBattleManager.Instance.GetPlayerMinions();
         
         foreach (GameObject minion in minions)
         {

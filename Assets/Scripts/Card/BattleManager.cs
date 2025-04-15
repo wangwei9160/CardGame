@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 战场管理器
-public class BattleManager : MonoBehaviour
+public class CardBattleManager : MonoBehaviour
 {
     // 单例模式
-    public static BattleManager Instance { get; private set; }
+    public static CardBattleManager Instance { get; private set; }
     
     // 战场设置
     public int maxBattlefieldSize = 5;  // 战场最大空间

@@ -149,7 +149,7 @@ public class MinionCard : HandCard
         if (base.OnPlayWithTarget(target))
         {
             // 检查战场空间
-            if (!BattleManager.Instance.HasAvailableSpace())
+            if (!CardBattleManager.Instance.HasAvailableSpace())
             {
                 Debug.Log("战场空间不足，无法放置随从");
                 return false;
@@ -183,7 +183,7 @@ public class MinionCard : HandCard
             }
             
             // 将随从添加到战场
-            BattleManager.Instance.AddMinionToBattlefield(minion);
+            CardBattleManager.Instance.AddMinionToBattlefield(minion);
             
             Debug.Log("放置随从: " + cardName);
             return true;

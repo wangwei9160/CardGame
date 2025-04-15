@@ -88,7 +88,7 @@ public class Minion : MonoBehaviour
     private void OnDeath()
     {
         // 从战场移除
-        BattleManager.Instance.RemoveMinionFromBattlefield(gameObject);
+        CardBattleManager.Instance.RemoveMinionFromBattlefield(gameObject);
         
         // 销毁随从
         Destroy(gameObject);
