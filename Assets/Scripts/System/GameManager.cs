@@ -49,6 +49,8 @@ public class GameManager : ManagerBase<GameManager>
 
     private void Start()
     {
+        // 查找玩家
+        Player = FindObjectOfType<Player>();
         EventCenter.Broadcast(EventDefine.ON_ENTER_ECHOEVENT, Data.EchoEventType);// 临时使用用于默认进入战斗
         UIManager.Instance.Show("TopInfo");
     }
@@ -273,4 +275,28 @@ public class GameManager : ManagerBase<GameManager>
 
     #endregion
 
+    /// <summary>
+    /// 消耗法力值
+    /// </summary>
+    public void ConsumeMana(int amount)
+    {
+        playerMana = Mathf.Max(0, playerMana - amount);
+    }
+    
+    /// <summary>
+    /// 恢复法力值
+    /// </summary>
+    public void RestoreMana(int amount)
+    {
+        playerMana = Mathf.Min(maxPlayerMana, playerMana + amount);
+    }
+    
+    /// <summary>
+    /// 回合开始时恢复法力值
+    /// </summary>
+    public void OnTurnStart()
+    {
+        // 恢复法力值到最大值
+        playerMana = maxPlayerMana;
+    }
 }

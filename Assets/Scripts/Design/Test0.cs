@@ -1,0 +1,46 @@
+using System;
+using System.Collections.Generic;
+
+[Serializable]
+public class Test0Class
+{
+    public int ID;
+    public string Name;
+    public string Icon;
+    public int Type;
+    public string Description;
+    public string PS;
+}
+
+public class Test0Manager
+{
+    public static Dictionary<int, Test0Class> m_Dic;
+
+    static Test0Manager()
+    {
+        m_Dic = new Dictionary<int, Test0Class>()
+        {
+            {400001, new Test0Class() { ID = 400001, Name = "直击", Icon = "400001直击", Type = 4, Description = "攻击目标。", PS = "" } },
+            {400002, new Test0Class() { ID = 400002, Name = "附魔打击", Icon = "400002附魔打击", Type = 4, Description = "攻击目标。", PS = "" } },
+            {400003, new Test0Class() { ID = 400003, Name = "转移刺", Icon = "400003转移刺", Type = 4, Description = "攻击目标。", PS = "" } },
+            {400004, new Test0Class() { ID = 400004, Name = "横劈", Icon = "400004横劈", Type = 4, Description = "攻击所有敌人。", PS = "" } },
+            {400005, new Test0Class() { ID = 400005, Name = "恢复", Icon = "400005恢复", Type = 4, Description = "治疗目标。", PS = "" } },
+            {400006, new Test0Class() { ID = 400006, Name = "基本功", Icon = "400006基本功", Type = 4, Description = "攻击目标。", PS = "" } },
+        };
+    }
+    public static Test0Class GetTest0ClassByKey(int key)
+    {
+        if(m_Dic.ContainsKey(key)) return m_Dic[key];
+        return null;
+    }
+
+    public static List<Test0Class> GetAllCard()
+    {
+        List<Test0Class> ret = new List<Test0Class>();
+        foreach (var item in m_Dic)
+        {
+            ret.Add(item.Value);
+        }
+        return ret;
+    }
+}

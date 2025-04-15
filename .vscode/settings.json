@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "KaiTuoXin.sln"
+    "dotnet.defaultSolution": "KaiTuoXin-o.sln"
 }
