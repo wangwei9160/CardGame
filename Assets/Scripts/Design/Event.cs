@@ -28,6 +28,8 @@ public class EventManager
             {8, new EventClass() { id = 8, name = "十里", type_ids = 103, event_type = "reward" } },
             {9, new EventClass() { id = 9, name = "废弃营地", type_ids = 103, event_type = "reward" } },
             {10, new EventClass() { id = 10, name = "小吃摊", type_ids = 101, event_type = "event" } },
+            {11, new EventClass() { id = 11, name = "壶中灵", type_ids = 101, event_type = "event" } },
+            {12, new EventClass() { id = 12, name = "奇宝人", type_ids = 101, event_type = "event" } },
         };
     }
     public static EventClass GetEventClassByKey(int key)

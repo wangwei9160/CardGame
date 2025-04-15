@@ -31,7 +31,7 @@ public class EchoEventManager
             {8, new EchoEventClass() { id = 8, name = "机遇+机遇", icon = "机遇+机遇", description = "千载难逢，天赐良机", ps = "合成类型", type = "event" } },
             {20, new EchoEventClass() { id = 20, name = "机遇+财运", icon = "财运+机遇", description = "小赌怡情，不怡也行", ps = "合成类型", type = "event" } },
             {68, new EchoEventClass() { id = 68, name = "机遇+宁静", icon = "宁静+机遇", description = "步步为营，徐徐图之", ps = "合成类型", type = "event" } },
-            {32, new EchoEventClass() { id = 32, name = "财运+财运", icon = "财运+财运", description = "堆金积玉，盆满钵满", ps = "合成类型", type = "event" } },
+            {12, new EchoEventClass() { id = 12, name = "财运+财运", icon = "财运+财运", description = "堆金积玉，盆满钵满", ps = "合成类型", type = "event" } },
             {80, new EchoEventClass() { id = 80, name = "财运+宁静", icon = "宁静+财运", description = "或做买卖，或存仁义", ps = "合成类型", type = "store" } },
             {128, new EchoEventClass() { id = 128, name = "宁静+宁静", icon = "宁静+宁静", description = "屏息凝神，超凡入圣", ps = "合成类型", type = "rest" } },
             {3, new EchoEventClass() { id = 3, name = "boss", icon = "", description = "纵使路有千条……", ps = "", type = "combat" } },

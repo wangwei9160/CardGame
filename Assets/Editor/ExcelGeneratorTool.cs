@@ -20,7 +20,20 @@ public class ExcelToClassGenerator
             Debug.LogWarning("No file selected.");
             return;
         }
+        ReadExcelFile(excelPath);
+    }
 
+    private string className ;
+    private string managerName ;
+
+    public static void ReadExcelFile(string excelPath)
+    {
+        // 检查文件是否存在
+        if (!File.Exists(excelPath))
+        {
+            Debug.LogError($"文件不存在: {excelPath}");
+            return;
+        }
         // 读取 Excel 文件
         using (var stream = File.Open(excelPath, FileMode.Open, FileAccess.Read))
         {
@@ -65,7 +78,7 @@ public class ExcelToClassGenerator
 
                 if (startRow == -1)
                 {
-                    Debug.LogWarning("No data row starting with '$' found.");
+                    Debug.LogWarning("Excel 文件内 缺失 '$' 标识符.");
                     return;
                 }
 
@@ -111,9 +124,23 @@ public class ExcelToClassGenerator
         // 生成字段
         for (int i = 0; i < fieldNames.Count; i++)
         {
-            if (fieldTypes[i] == "list") // 如果字段类型是数组
+            if (fieldTypes[i].StartsWith("list")) // 如果字段类型是数组
             {
-                sb.AppendLine($"    public List<int> {fieldNames[i]};");
+                string[] str = fieldTypes[i].Split('_');
+                string pre = "" , ed = "";
+                for(int j = 0 ; j < str.Length; j++)
+                {
+                    if(str[j] == "list")
+                    {
+                        pre += "List<";
+                        ed += ">";
+                    }else {
+                        pre += str[j];
+                        break;
+                    }
+                }
+                string tp = pre + ed;
+                sb.AppendLine($"    public {tp} {fieldNames[i]};");
             }
             else
             {
@@ -142,10 +169,12 @@ public class ExcelToClassGenerator
             for (int i = 0; i < fieldNames.Count; i++)
             {
                 var fieldName = fieldNames[i];
+                string fieldType = fieldTypes[i].ToLower();
                 var value = data[fieldName];
-                if (fieldTypes[i] == "list")
+                if (fieldType.StartsWith("list") || fieldType.StartsWith("vector"))
                 {
-                    sb.Append($"{fieldName} = new List<int>() {{ {value} }}");
+                    var (depth, baseType) = ParseListType(fieldType);
+                    sb.Append($"{fieldName} = {GenerateListInitialization(value, depth, baseType)}");
                 }
                 else if (fieldTypes[i] == "string")
                 {
@@ -186,6 +215,60 @@ public class ExcelToClassGenerator
 
         return sb.ToString();
     }
+
+    private static (int depth, string baseType) ParseListType(string type)
+    {
+        int depth = 0;
+        string currentType = type.ToLower();
+        while (currentType.StartsWith("list"))
+        {
+            depth++;
+            currentType = currentType.Substring(5, currentType.Length - 5);
+        }
+        while (currentType.StartsWith("vector"))
+        {
+            depth++;
+            currentType = currentType.Substring(6, currentType.Length - 6);
+        }
+        return (depth, currentType);
+    }
+
+    private static string GenerateListInitialization(string value, int depth, string baseType)
+    {
+        if (depth == 0)
+        {
+            if (baseType == "string")
+                return $"\"{value}\"";
+            else
+                return value;
+        }
+
+        char separator = depth switch
+        {
+            1 => ',',
+            2 => ';',
+            _ => '|'
+        };
+
+        string[] elements = value.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries);
+
+        List<string> parts = new List<string>();
+        foreach (var element in elements)
+        {
+            parts.Add(GenerateListInitialization(element, depth - 1, baseType));
+        }
+
+        string listType = GetListType(depth - 1, baseType);
+        return $"new List<{listType}>() {{ {string.Join(", ", parts)} }}";
+    }
+
+    private static string GetListType(int depth, string baseType)
+    {
+        if (depth == 0)
+            return baseType;
+        return $"List<{GetListType(depth - 1, baseType)}>";
+    }
+
     /// <summary>
     /// 将下划线分隔的字符串转换为驼峰命名并首字母大写
     /// </summary>
