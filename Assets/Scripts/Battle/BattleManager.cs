@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,12 +31,13 @@ public class BattleData
 
 public class BattleManager : ManagerBase<BattleManager>
 {
-    [Tooltip("½ÇÉ«Ô¤ÖÆÌå")] public GameObject player;
-    [Tooltip("µĞ·½Ô¤ÖÆÌå")] public GameObject enemy;
+    [Tooltip("è§’è‰²é¢„åˆ¶ä½“")] public GameObject player;
+    [Tooltip("æ•Œæ–¹é¢„åˆ¶ä½“")] public GameObject enemy;
+    [Tooltip("å¡ç‰Œé¢„åˆ¶ä½“")] public GameObject handcard;
     public BattleData battleData;
     public bool isBattle = false;
 
-    #region ÁÙÊ±Ê¹ÓÃ
+    #region ä¸´æ—¶ä½¿ç”¨
     private readonly int playerNum = 1;
     private readonly int dogNum = 0;
     private int enemyNum = 2;
@@ -46,14 +47,14 @@ public class BattleManager : ManagerBase<BattleManager>
     {
         base.Awake();
         battleData = new BattleData();
-        EventCenter.AddListener(EventDefine.OnBattleStart, OnBattleStart);    // Õ½¶·¿ªÊ¼
-        EventCenter.AddListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // µĞÈËËÀÍö
+        EventCenter.AddListener(EventDefine.OnBattleStart, OnBattleStart);    // æˆ˜æ–—å¼€å§‹
+        EventCenter.AddListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // æ•Œäººæ­»äº¡
     }
 
     private void OnDestroy()
     {
-        EventCenter.RemoveListener(EventDefine.OnBattleStart, OnBattleStart);    // ÒÆ³ı
-        EventCenter.RemoveListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // ÒÆ³ı¼àÌı
+        EventCenter.RemoveListener(EventDefine.OnBattleStart, OnBattleStart);    // ç§»é™¤
+        EventCenter.RemoveListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // ç§»é™¤ç›‘å¬
     }
 
     public bool IsInBattle()
@@ -70,13 +71,13 @@ public class BattleManager : ManagerBase<BattleManager>
         AddEnemy(enemyNum);
     }
 
-    // ÁÙÊ±Ê¹ÓÃ£¬ÓÃÓÚ³õÊ¼»¯Ê±Ìí¼ÓÎÒ·½½ÇÉ«
+    // ä¸´æ—¶ä½¿ç”¨ï¼Œç”¨äºåˆå§‹åŒ–æ—¶æ·»åŠ æˆ‘æ–¹è§’è‰²
     private void AddPlayer(int PlayerNum, int CardNum)
     {
         PlayerNum = Math.Min(PlayerNum, 1);
         for (int i = 0; i < PlayerNum; i++)
         {
-            if (ContainerManager.Instance.Players[i].childCount > 0) continue;  // ·ÀÖ¹ÖØ¸´Ìí¼ÓPlayer
+            if (ContainerManager.Instance.Players[i].childCount > 0) continue;  // é˜²æ­¢é‡å¤æ·»åŠ Player
             var go = Instantiate(player, ContainerManager.Instance.Players[i]);
             battleData.playerTeam.Add(go.GetComponent<BaseCharacter>());
         }
@@ -86,7 +87,7 @@ public class BattleManager : ManagerBase<BattleManager>
             Instantiate(enemy, ContainerManager.Instance.Players[i + PlayerNum]);
         }
     }
-    // ÁÙÊ±Ê¹ÓÃ£¬ÓÃÓÚ³õÊ¼»¯Ê±Ìí¼ÓµĞ·½½ÇÉ«
+    // ä¸´æ—¶ä½¿ç”¨ï¼Œç”¨äºåˆå§‹åŒ–æ—¶æ·»åŠ æ•Œæ–¹è§’è‰²
     private void AddEnemy(int num)
     {
         num = Math.Min(num, 3);
@@ -97,10 +98,76 @@ public class BattleManager : ManagerBase<BattleManager>
         }
     }
 
+    public void GetHandCard()
+    {
+        int curNum = ContainerManager.Instance.HandCard.childCount;
+        if(curNum < 8) 
+        {
+            GameObject handCard = Instantiate(handcard , ContainerManager.Instance.HandCard);
+        }
+        AdjustCardPosition();
+    }
+
+    // ä¸´æ—¶ä½¿ç”¨åˆ é™¤ä¸€å¼ å¡
+    public void RemoveOneHandCard()
+    {
+        int curNum = ContainerManager.Instance.HandCard.childCount;
+        if(curNum > 0) 
+        {
+            Destroy(ContainerManager.Instance.HandCard.GetChild(0).gameObject);
+        }
+        StartCoroutine(AdjustCardIEnumerator());
+    }
+
+    IEnumerator AdjustCardIEnumerator()
+    {
+        yield return new WaitForEndOfFrame();
+        AdjustCardPosition();
+    }
+
+    [Tooltip("æŒæœ‰ä¸åŒæ•°é‡å¡ç‰Œæ—¶çš„é—´éš”(ç±»å‹:float)[æ•°é‡0-8]")]
+    public float[] spacingList = {0f,0f,4f,3f,3f,2f,1.5f,1.3f,1f};
+    [Tooltip("æŒæœ‰å¤šå°‘å¼ å¡ç‰Œæ—¶éœ€è¦æºå¸¦ä¸€ç‚¹æ—‹è½¬(ç±»å‹:int)")]
+    public int applyRotationTime = 5;
+
+    public void AdjustCardPosition()
+    {
+        int cardCount = ContainerManager.Instance.HandCard.childCount;
+        if(cardCount <= 1) 
+        {
+            Transform card = ContainerManager.Instance.HandCard.GetChild(0);
+            card.localPosition = new Vector3(0,0,0);
+            return;
+        }
+        // è®¡ç®—ä¸­é—´åç§»é‡
+        float middleOffset = (cardCount - 1) / 2f;
+
+        float spacing = spacingList[cardCount];
+        bool applyRotation = cardCount >= applyRotationTime ? true : false ;
+        
+        for(int i = 0; i < cardCount; i++)
+        {
+            float offset = i - middleOffset;
+            float xPos = (i - (cardCount - 1) / 2f) * spacing;
+            float yPos = 0f;
+            if(applyRotation) yPos = -Mathf.Abs(offset) * 0.2f * spacing; 
+            
+            Vector3 position = new Vector3(xPos, yPos, 0);
+            
+            Transform card = ContainerManager.Instance.HandCard.GetChild(i);
+            card.localPosition = position;
+            float rotationZ = applyRotation ? -offset * 10f : 0f;
+            card.localRotation = Quaternion.Euler(0, 0, rotationZ);
+            
+            card.name = $"Card_{i+1}";
+            card.GetComponent<SpriteRenderer>().sortingOrder = i + 1;
+        }
+    }
+
     public void OnEnemyDeath(int id)
     {
         enemyNum--;
-        Debug.Log($"µĞÈË{id} ËÀÍö");
+        Debug.Log($"æ•Œäºº{id} æ­»äº¡");
         if (enemyNum == 0)
         {
             GameManager.Instance.BettleWin(id);

@@ -100,7 +100,7 @@ public class ExcelToClassGenerator
                 // 生成 C# 文件
                 name = ToCamelCaseClassName(name);
                 string className = name + "Class";
-                string managerName = name + "Manager";
+                string managerName = name + "Config";
                 string scriptPath = Path.Combine(Application.dataPath, $"Scripts/Design/{name}.cs").Replace("\\", "/");
                 string code = GenerateClassCode(className, fieldNames, fieldTypes, dataList, managerName);
                 File.WriteAllText(scriptPath, code);

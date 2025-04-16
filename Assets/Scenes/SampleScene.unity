@@ -460,6 +460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 839685021123685854, guid: 7f53395240165a740aed6c2331f69af1, type: 3}
   enemy: {fileID: 952095489147001320, guid: edad7f912aa41ac4c999a183576be8a3, type: 3}
+  handcard: {fileID: 0}
   isBattle: 0
 --- !u!4 &1060953901
 Transform:
