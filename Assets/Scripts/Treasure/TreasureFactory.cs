@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -53,13 +53,13 @@ public static class TreasureFactory
         }
         else
         {
-            Debug.LogError($"ÒÅÎïTreasure = {id} ÖØ¸´, {_typeMap[id]} ºÍ {type}");
+            Debug.LogError($"é—ç‰©Treasure = {id} é‡å¤, {_typeMap[id]} å’Œ {type}");
         }
 
         if (!_instanceMap.ContainsKey(id))
         {
             _instanceMap[id] = instance;
-            Debug.Log($"×¢²áTreasure {id}");
+            Debug.Log($"æ³¨å†ŒTreasure {id}");
         }
     }
 
@@ -70,7 +70,7 @@ public static class TreasureFactory
         {
             return treasure;
         }
-        Debug.LogError($"ÕÒ²»µ½IDÎª {id} µÄTreasure");
+        Debug.LogError($"æ‰¾ä¸åˆ°IDä¸º {id} çš„Treasure");
         return null;
     }
 
@@ -81,7 +81,7 @@ public static class TreasureFactory
         {
             return type;
         }
-        Debug.LogError($"ÕÒ²»µ½IDÎª {id} µÄTreasureÀàĞÍ");
+        Debug.LogError($"æ‰¾ä¸åˆ°IDä¸º {id} çš„Treasureç±»å‹");
         return null;
     }
 }

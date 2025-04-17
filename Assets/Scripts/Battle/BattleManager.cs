@@ -33,7 +33,7 @@ public class BattleManager : ManagerBase<BattleManager>
 {
     [Tooltip("角色预制体")] public GameObject player;
     [Tooltip("敌方预制体")] public GameObject enemy;
-    [Tooltip("卡牌预制体")] public GameObject handcard;
+    // [Tooltip("卡牌预制体")] public GameObject handcard;
     public BattleData battleData;
     public bool isBattle = false;
 
@@ -100,68 +100,13 @@ public class BattleManager : ManagerBase<BattleManager>
 
     public void GetHandCard()
     {
-        int curNum = ContainerManager.Instance.HandCard.childCount;
-        if(curNum < 8) 
-        {
-            GameObject handCard = Instantiate(handcard , ContainerManager.Instance.HandCard);
-        }
-        AdjustCardPosition();
+        EventCenter.Broadcast(EventDefine.OnGetCard);
     }
 
     // 临时使用删除一张卡
     public void RemoveOneHandCard()
     {
-        int curNum = ContainerManager.Instance.HandCard.childCount;
-        if(curNum > 0) 
-        {
-            Destroy(ContainerManager.Instance.HandCard.GetChild(0).gameObject);
-        }
-        StartCoroutine(AdjustCardIEnumerator());
-    }
-
-    IEnumerator AdjustCardIEnumerator()
-    {
-        yield return new WaitForEndOfFrame();
-        AdjustCardPosition();
-    }
-
-    [Tooltip("持有不同数量卡牌时的间隔(类型:float)[数量0-8]")]
-    public float[] spacingList = {0f,0f,4f,3f,3f,2f,1.5f,1.3f,1f};
-    [Tooltip("持有多少张卡牌时需要携带一点旋转(类型:int)")]
-    public int applyRotationTime = 5;
-
-    public void AdjustCardPosition()
-    {
-        int cardCount = ContainerManager.Instance.HandCard.childCount;
-        if(cardCount <= 1) 
-        {
-            Transform card = ContainerManager.Instance.HandCard.GetChild(0);
-            card.localPosition = new Vector3(0,0,0);
-            return;
-        }
-        // 计算中间偏移量
-        float middleOffset = (cardCount - 1) / 2f;
-
-        float spacing = spacingList[cardCount];
-        bool applyRotation = cardCount >= applyRotationTime ? true : false ;
-        
-        for(int i = 0; i < cardCount; i++)
-        {
-            float offset = i - middleOffset;
-            float xPos = (i - (cardCount - 1) / 2f) * spacing;
-            float yPos = 0f;
-            if(applyRotation) yPos = -Mathf.Abs(offset) * 0.2f * spacing; 
-            
-            Vector3 position = new Vector3(xPos, yPos, 0);
-            
-            Transform card = ContainerManager.Instance.HandCard.GetChild(i);
-            card.localPosition = position;
-            float rotationZ = applyRotation ? -offset * 10f : 0f;
-            card.localRotation = Quaternion.Euler(0, 0, rotationZ);
-            
-            card.name = $"Card_{i+1}";
-            card.GetComponent<SpriteRenderer>().sortingOrder = i + 1;
-        }
+        EventCenter.Broadcast(EventDefine.OnDeleteCard);
     }
 
     public void OnEnemyDeath(int id)
@@ -178,6 +123,22 @@ public class BattleManager : ManagerBase<BattleManager>
     public int getPlayerTeamNum()
     {
         return battleData.playerTeam.Count;
+    }
+
+    private int currentSelectCard = -1; // 使用私有字段作为后备存储
+
+    public int CURRENT_SELECT_CARD
+    {
+        get { return currentSelectCard; }
+        set 
+        {
+            if (currentSelectCard != value)
+            {
+                int previousCard = currentSelectCard;
+                currentSelectCard = value; // 更新实际值
+                Debug.Log($"Selected card changed from {previousCard} to {currentSelectCard}");
+            }
+        }
     }
 
 }
