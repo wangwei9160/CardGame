@@ -18,8 +18,7 @@ public class BattleUI : UIViewBase
     public Transform cardArea;
 
     public List<GameObject> Cards;
-    //private EchoEventConfig cfg;
-
+    public ShowCardUICom showCard;
     public override void Init(string str, string data)
     {
         base.Init(str, data);
@@ -33,9 +32,9 @@ public class BattleUI : UIViewBase
         EventCenter.AddListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
         EventCenter.AddListener(EventDefine.OnGetCard, OnGetCard);
         EventCenter.AddListener(EventDefine.OnDeleteCard, OnDeleteCard);
-        EventCenter.AddListener(EventDefine.AdjustCardPosition, StartAdjustCard);
         EventCenter.AddListener<int>(EventDefine.ON_CARD_SELECT, ON_CARD_SELECT);
         EventCenter.AddListener<int>(EventDefine.ON_CARD_UNSELECT, ON_CARD_UNSELECT);
+        EventCenter.AddListener(EventDefine.AdjustCardPosition, StartAdjustCard);
         EventCenter.AddListener<int , int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
     }
 
@@ -46,9 +45,9 @@ public class BattleUI : UIViewBase
         EventCenter.RemoveListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
         EventCenter.RemoveListener(EventDefine.OnGetCard, OnGetCard);
         EventCenter.RemoveListener(EventDefine.OnDeleteCard, OnDeleteCard);
+        EventCenter.RemoveListener<int>(EventDefine.ON_CARD_SELECT, ON_CARD_SELECT);
+        EventCenter.RemoveListener<int>(EventDefine.ON_CARD_UNSELECT, ON_CARD_UNSELECT);
         EventCenter.RemoveListener(EventDefine.AdjustCardPosition, StartAdjustCard);
-        EventCenter.AddListener<int>(EventDefine.ON_CARD_SELECT, ON_CARD_SELECT);
-        EventCenter.AddListener<int>(EventDefine.ON_CARD_UNSELECT, ON_CARD_UNSELECT);
         EventCenter.RemoveListener<int , int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
     }
 
@@ -57,6 +56,8 @@ public class BattleUI : UIViewBase
         base.Awake();
         spacingList = new float[] {0f,0f,300f,300f,300f,200f,160f,140f,120f};
         applyRotationTime = 2;
+        showCard = transform.Find("HandCard/ShowCard").GetComponent<ShowCardUICom>();
+        showCard.Hide();
     }
 
     protected override void Start()
@@ -141,21 +142,22 @@ public class BattleUI : UIViewBase
 
     public void ON_CARD_SELECT(int id)
     {
-        Debug.Log("Enter -> ON_CARD_DRAG_START");
-        // 无人选中才可以选中
-        if(BattleManager.Instance.CURRENT_SELECT_CARD == -1)
-        {
-            BattleManager.Instance.CURRENT_SELECT_CARD = id;
-        }
+        int cardCount = cardArea.childCount;
+        bool applyRotation = cardCount >= applyRotationTime;
+        float middleOffset = (cardCount - 1) / 2f;
+        float offset = id - middleOffset;
+        float spacing = spacingList[cardCount];
+        float fixPos = Mathf.Abs(offset) * 0.2f * spacing;
+        Vector3 pos = cardArea.GetChild(id).position + new Vector3(0 , 50f + fixPos , 0);
+        showCard.SetData(id , pos );
     }
 
     public void ON_CARD_UNSELECT(int id)
     {
-        if(BattleManager.Instance.CURRENT_SELECT_CARD == id) 
-        {
-            BattleManager.Instance.CURRENT_SELECT_CARD = -1;
-            StartAdjustCard();
-        }
+        Debug.Log($"ON_CARD_UNSELECT {id}");
+        if(id == -1) return ;
+        showCard.TryHide(id);
+        cardArea.GetChild(id).GetComponent<CardUI>().Show();
     }
 
     public void StartAdjustCard()
@@ -188,7 +190,7 @@ public class BattleUI : UIViewBase
             card.anchoredPosition = Vector2.zero;
             card.localRotation = Quaternion.Euler(0, 0, 0);
             card.localScale = Vector3.one;
-            card.GetComponent<CardUI>().SetIndex(0);
+            card.GetComponent<CardUI>().SetData(0);
             return;
         }
 
@@ -209,10 +211,9 @@ public class BattleUI : UIViewBase
             Vector2 position = new Vector2(xPos, yPos);
             
             RectTransform card = cardArea.GetChild(i) as RectTransform;
-            card.GetComponent<CardUI>().SetIndex(i);
+            card.GetComponent<CardUI>().SetData(i);
             // 使用anchoredPosition而不是localPosition
             card.anchoredPosition = position;
-            
             float rotationZ = applyRotation ? -offset * 10f : 0f;
             card.localRotation = Quaternion.Euler(0, 0, rotationZ);
             

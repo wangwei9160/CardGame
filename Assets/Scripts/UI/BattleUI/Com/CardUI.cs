@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ShowCardUICom : MonoBehaviour
+public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler , IPointerEnterHandler
 {
     private int Index;
     private Text cardName;
@@ -11,11 +11,15 @@ public class ShowCardUICom : MonoBehaviour
     {
         cardName = transform.Find("name").GetComponent<Text>();
     }
+
     public void SetData(int idx)
     {
         Index = idx;
         cardName.text = $"卡牌-{idx}";
     }
+
+    public void Hide() {gameObject.SetActive(false);}
+    public void Show() {gameObject.SetActive(true);}
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -34,12 +38,8 @@ public class ShowCardUICom : MonoBehaviour
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        
+        EventCenter.Broadcast(EventDefine.ON_CARD_SELECT , Index);
+        Hide();
     }
 
 }
