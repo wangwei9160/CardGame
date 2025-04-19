@@ -53,7 +53,7 @@ public class EventUI : UIViewBase
     {
         base.Init(str, data);
         eventClass = JsonUtility.FromJson<EventClass>(data);
-        var dia = DialogManager.GetDialogClassByKey(eventClass.id);
+        var dia = DialogConfig.GetDialogClassByKey(eventClass.id);
         SetData(JsonUtility.ToJson(dia));
     }
 
@@ -63,7 +63,7 @@ public class EventUI : UIViewBase
         fullText = dialogClass.content;
         for (int i = 0; i < dialogClass.op_ids.Count; i++)
         {
-            var effectClass = EffectManager.GetEffectClassByKey(dialogClass.op_ids[i]);
+            var effectClass = EffectConfig.GetEffectClassByKey(dialogClass.op_ids[i]);
             effectBtns[i].GetComponent<EffectSelectRender>().SetData(effectClass);
         }
         StartCoroutine(TypeText());

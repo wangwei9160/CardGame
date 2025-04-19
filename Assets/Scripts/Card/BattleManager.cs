@@ -35,24 +35,8 @@ public class CardBattleManager : MonoBehaviour
             Destroy(gameObject);
         }
         
-        // 初始化战场位置
-        InitializeBattlefieldPositions();
     }
-    
-    // 初始化战场位置
-    private void InitializeBattlefieldPositions()
-    {
-        battlefieldPositions = new Vector3[maxBattlefieldSize];
-        
-        // 设置战场位置
-        for (int i = 0; i < maxBattlefieldSize; i++)
-        {
-            // 从右到左排列，主角在最左边
-            float xPos = 5f - (i * minionSpacing);
-            battlefieldPositions[i] = new Vector3(xPos, 0f, 0f);
-        }
-    }
-    
+
     // 添加随从到战场
     public void AddMinionToBattlefield(GameObject minion)
     {

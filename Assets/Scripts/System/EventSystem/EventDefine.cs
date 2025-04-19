@@ -22,6 +22,13 @@
     OnMergePanelShow,
     ON_STAGE_INCREMENT,     // 阶段自增
 
+    // 卡牌ui展示相关
+
+    OnGetCard,              // 获得一张卡牌
+    OnDeleteCard,            // 删除一张卡牌
+
+    AdjustCardPosition,     // 调整手牌里的布局
+
     // 调整分辨率，修改布局
     AdjustPosition,
 
@@ -31,6 +38,9 @@
     ON_CARD_DRAG_STOP,      // 结束拖拽
     ON_CARD_DRAG_HOVER,     // 拖拽时停在哪个card上
     ON_LEVEL_INFO_CHANGE,   // 关卡进度更新
+
+    ON_CARD_SELECT,         // 卡牌选中
+    ON_CARD_UNSELECT,       // 卡牌取消选中
 
 
     // 启示事件

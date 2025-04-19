@@ -12,11 +12,11 @@ public class EchoEventClass
     public string type;
 }
 
-public class EchoEventManager
+public class EchoEventConfig
 {
     public static Dictionary<int, EchoEventClass> m_Dic;
 
-    static EchoEventManager()
+    static EchoEventConfig()
     {
         m_Dic = new Dictionary<int, EchoEventClass>()
         {
@@ -43,4 +43,11 @@ public class EchoEventManager
         if(m_Dic.ContainsKey(key)) return m_Dic[key];
         return null;
     }
+    public static List<EchoEventClass> GetAll()
+    {
+        List<EchoEventClass> ret = new List<EchoEventClass>();
+        foreach (var item in m_Dic) ret.Add(item.Value);
+        return ret;
+    }
+    public static int GetAllNum() { return m_Dic.Count; }
 }

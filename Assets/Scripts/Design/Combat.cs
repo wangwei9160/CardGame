@@ -9,11 +9,11 @@ public class CombatClass
     public List<List<int>> enemy_id;
 }
 
-public class CombatManager
+public class CombatConfig
 {
     public static Dictionary<int, CombatClass> m_Dic;
 
-    static CombatManager()
+    static CombatConfig()
     {
         m_Dic = new Dictionary<int, CombatClass>()
         {
@@ -32,4 +32,11 @@ public class CombatManager
         if(m_Dic.ContainsKey(key)) return m_Dic[key];
         return null;
     }
+    public static List<CombatClass> GetAll()
+    {
+        List<CombatClass> ret = new List<CombatClass>();
+        foreach (var item in m_Dic) ret.Add(item.Value);
+        return ret;
+    }
+    public static int GetAllNum() { return m_Dic.Count; }
 }

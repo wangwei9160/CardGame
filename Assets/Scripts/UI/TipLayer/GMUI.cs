@@ -9,6 +9,8 @@ public class GMUI : UIViewBase
     public InputField inputText;
     public Button okBtn;
     public Button treasureBtn;
+    public Button cardBtn;
+    public Button delCardBtn;
 
     private Action pendingAction;
 
@@ -18,6 +20,8 @@ public class GMUI : UIViewBase
         
         if (okBtn != null) okBtn.onClick.AddListener(SendGM);
         if (treasureBtn != null) treasureBtn.onClick.AddListener(SetTreasureCommand);
+        if (cardBtn != null) cardBtn.onClick.AddListener(SetCardCommand);
+        if (delCardBtn != null) delCardBtn.onClick.AddListener(SetDelCardCommand);
     }
 
     void Update()
@@ -29,6 +33,16 @@ public class GMUI : UIViewBase
     private void SetTreasureCommand()
     {
         pendingAction = () => inputText.text = "GetTreasure 1001";
+    }
+
+    private void SetCardCommand()
+    {
+        pendingAction = () => inputText.text = "GetCard 100001";
+    }
+
+    private void SetDelCardCommand()
+    {
+        pendingAction = () => inputText.text = "DeleteOneCard (移除一张手牌)";
     }
 
     public void SendGM()
@@ -57,6 +71,16 @@ public class GMUI : UIViewBase
                     // 为角色添加遗物: treasureId
                     EventCenter.Broadcast(EventDefine.ON_GET_TREASURE_BY_ID , treasureId);
                 }
+                break;
+            case "GetCard" :
+                if (parts.Length > 1 && int.TryParse(parts[1], out int cardId))
+                {
+                    // 为角色添加一张卡牌
+                    BattleManager.Instance.GetHandCard();
+                }
+                break;
+            case "DeleteOneCard":
+                BattleManager.Instance.RemoveOneHandCard();
                 break;
             default:
                 Debug.LogWarning($"Unknown GM command: {parts[0]}");

@@ -69,14 +69,10 @@ public class HandCard : Card
         }
         
         // 检查是否有足够的法力值
-        if (PlayerManager.Instance.currentMana < manaCost)
-        {
-            Debug.Log("法力值不足，无法使用卡牌");
-            return false;
-        }
+
         
         // 扣除法力值
-        PlayerManager.Instance.currentMana -= manaCost;
+
         
         // 触发主动效果
         bool success = false;
@@ -102,14 +98,10 @@ public class HandCard : Card
         }
         
         // 检查是否有足够的法力值
-        if (PlayerManager.Instance.currentMana < manaCost)
-        {
-            Debug.Log("法力值不足，无法使用卡牌");
-            return false;
-        }
+
         
         // 扣除法力值
-        PlayerManager.Instance.currentMana -= manaCost;
+
         
         // 触发主动效果
         bool success = false;

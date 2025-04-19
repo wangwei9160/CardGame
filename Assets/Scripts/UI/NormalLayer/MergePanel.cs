@@ -65,7 +65,7 @@ public class MergePanel : UIViewBase
         EventsTransform = mergeEvent.transform.Find("Events");
         Events = new EchoEventRender[EventsTransform.childCount];
         baseTypes = new List<EchoEventType>();
-        foreach (var kv in EchoEventManager.m_Dic)
+        foreach (var kv in EchoEventConfig.m_Dic)
         {
             if(kv.Value.ps == "基础类型")
             {
@@ -99,7 +99,7 @@ public class MergePanel : UIViewBase
     private void SetEchoEvent()
     {
         echoEvent.SetData(echoEventType , 0);
-        var type = EchoEventManager.GetEchoEventClassByKey((int)echoEventType);
+        var type = EchoEventConfig.GetEchoEventClassByKey((int)echoEventType);
         string msg = type.description;
         echoEventMessage.text = msg;
     }

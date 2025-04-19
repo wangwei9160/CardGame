@@ -15,6 +15,8 @@ public class BattleUI : UIViewBase
     [Tooltip("回合计数")] public Text turnInfo;   // 回合计数
     [Tooltip("法力值")] public Text magicPowerInfo;   // 法力值信息
 
+    public Transform cardArea;
+
     public List<GameObject> Cards;
     //private EchoEventConfig cfg;
 
@@ -29,6 +31,11 @@ public class BattleUI : UIViewBase
         base.OnAddlistening();
         EventCenter.AddListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
         EventCenter.AddListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
+        EventCenter.AddListener(EventDefine.OnGetCard, OnGetCard);
+        EventCenter.AddListener(EventDefine.OnDeleteCard, OnDeleteCard);
+        EventCenter.AddListener(EventDefine.AdjustCardPosition, StartAdjustCard);
+        EventCenter.AddListener<int>(EventDefine.ON_CARD_SELECT, ON_CARD_SELECT);
+        EventCenter.AddListener<int>(EventDefine.ON_CARD_UNSELECT, ON_CARD_UNSELECT);
         EventCenter.AddListener<int , int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
     }
 
@@ -37,13 +44,26 @@ public class BattleUI : UIViewBase
         base.OnRemovelistening();
         EventCenter.RemoveListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
         EventCenter.RemoveListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
+        EventCenter.RemoveListener(EventDefine.OnGetCard, OnGetCard);
+        EventCenter.RemoveListener(EventDefine.OnDeleteCard, OnDeleteCard);
+        EventCenter.RemoveListener(EventDefine.AdjustCardPosition, StartAdjustCard);
+        EventCenter.AddListener<int>(EventDefine.ON_CARD_SELECT, ON_CARD_SELECT);
+        EventCenter.AddListener<int>(EventDefine.ON_CARD_UNSELECT, ON_CARD_UNSELECT);
         EventCenter.RemoveListener<int , int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        spacingList = new float[] {0f,0f,300f,300f,300f,200f,160f,140f,120f};
+        applyRotationTime = 2;
     }
 
     protected override void Start()
     {
         base.Start();
         Cards = new List<GameObject>();
+        cardArea = transform.Find("HandCard/HandCardArea");
         
         endTurnBtn.GetComponent<EndTurnBtnHover>().OnChange(0.6f);
         endTurnBtn.onClick.AddListener(() =>
@@ -100,6 +120,103 @@ public class BattleUI : UIViewBase
     private void OnMagicPowerChange(int val , int maxVal)
     {
         magicPowerInfo.text = string.Format(GameString.MAGICEINFO, val, maxVal);
+    }
+    public int ID = 1;
+    public void OnGetCard()
+    {
+        if(cardArea.childCount == 8) return;
+        GameObject card = ResourceUtil.GetCard();
+        card.name = $"Card_{ID}";
+        ID++;
+        Instantiate(card , cardArea);
+        AdjustCardPosition();
+    }
+
+    public void OnDeleteCard()
+    {
+        if(cardArea.childCount == 0) return;
+        Destroy(cardArea.GetChild(0).gameObject);
+        StartCoroutine(AdjustCardIEnumerator());
+    }
+
+    public void ON_CARD_SELECT(int id)
+    {
+        Debug.Log("Enter -> ON_CARD_DRAG_START");
+        // 无人选中才可以选中
+        if(BattleManager.Instance.CURRENT_SELECT_CARD == -1)
+        {
+            BattleManager.Instance.CURRENT_SELECT_CARD = id;
+        }
+    }
+
+    public void ON_CARD_UNSELECT(int id)
+    {
+        if(BattleManager.Instance.CURRENT_SELECT_CARD == id) 
+        {
+            BattleManager.Instance.CURRENT_SELECT_CARD = -1;
+            StartAdjustCard();
+        }
+    }
+
+    public void StartAdjustCard()
+    {
+        StartCoroutine(AdjustCardIEnumerator());
+    }
+
+    IEnumerator AdjustCardIEnumerator()
+    {
+        yield return new WaitForEndOfFrame();
+        AdjustCardPosition();
+    }
+
+    [Tooltip("持有不同数量卡牌时的间隔(类型:float)[数量0-8]")]
+    public float[] spacingList = {0f,0f,300f,300f,300f,200f,160f,140f,120f};
+    [Tooltip("持有多少张卡牌时需要携带一点旋转(类型:int)")]
+    public int applyRotationTime = 2;
+
+    public void AdjustCardPosition()
+    {
+        int cardCount = cardArea.childCount;
+        if(cardCount == 0) return;
+        
+        // 获取父容器的RectTransform
+        RectTransform handCardRect = cardArea as RectTransform;
+        
+        if(cardCount == 1) 
+        {
+            RectTransform card = cardArea.GetChild(0) as RectTransform;
+            card.anchoredPosition = Vector2.zero;
+            card.localRotation = Quaternion.Euler(0, 0, 0);
+            card.localScale = Vector3.one;
+            card.GetComponent<CardUI>().SetIndex(0);
+            return;
+        }
+
+        // 计算中间偏移量
+        float middleOffset = (cardCount - 1) / 2f;
+        float spacing = spacingList[cardCount];
+        bool applyRotation = cardCount >= applyRotationTime;
+        
+        for(int i = 0; i < cardCount; i++)
+        {
+            float offset = i - middleOffset;
+            float xPos = (i - (cardCount - 1) / 2f) * spacing;
+            float yPos = 0f;
+            
+            if(applyRotation) 
+                yPos = -Mathf.Abs(offset) * 0.2f * spacing; 
+            
+            Vector2 position = new Vector2(xPos, yPos);
+            
+            RectTransform card = cardArea.GetChild(i) as RectTransform;
+            card.GetComponent<CardUI>().SetIndex(i);
+            // 使用anchoredPosition而不是localPosition
+            card.anchoredPosition = position;
+            
+            float rotationZ = applyRotation ? -offset * 10f : 0f;
+            card.localRotation = Quaternion.Euler(0, 0, rotationZ);
+            
+        }
     }
 
 }
