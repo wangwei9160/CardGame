@@ -16,11 +16,11 @@ public class FriendClass
     public int friend_mana;
 }
 
-public class FriendManager
+public class FriendConfig
 {
     public static Dictionary<int, FriendClass> m_Dic;
 
-    static FriendManager()
+    static FriendConfig()
     {
         m_Dic = new Dictionary<int, FriendClass>()
         {
@@ -35,4 +35,11 @@ public class FriendManager
         if(m_Dic.ContainsKey(key)) return m_Dic[key];
         return null;
     }
+    public static List<FriendClass> GetAll()
+    {
+        List<FriendClass> ret = new List<FriendClass>();
+        foreach (var item in m_Dic) ret.Add(item.Value);
+        return ret;
+    }
+    public static int GetAllNum() { return m_Dic.Count; }
 }

@@ -19,7 +19,7 @@ public class TreasureRender : MonoBehaviour , IPointerEnterHandler, IPointerExit
         gameObject.SetActive(true);
         Index = index; 
         ID = id;
-        TreasureClass tcls = TreasureManager.GetTreasureClassByKey(ID);
+        TreasureClass tcls = TreasureConfig.GetTreasureClassByKey(ID);
         icon.sprite = ResourceUtil.GetTreasureByID(id);
         transform.name = tcls.Name;
     }

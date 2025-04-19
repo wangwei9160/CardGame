@@ -9,11 +9,11 @@ public class DialogClass
     public List<int> op_ids;
 }
 
-public class DialogManager
+public class DialogConfig
 {
     public static Dictionary<int, DialogClass> m_Dic;
 
-    static DialogManager()
+    static DialogConfig()
     {
         m_Dic = new Dictionary<int, DialogClass>()
         {
@@ -36,4 +36,11 @@ public class DialogManager
         if(m_Dic.ContainsKey(key)) return m_Dic[key];
         return null;
     }
+    public static List<DialogClass> GetAll()
+    {
+        List<DialogClass> ret = new List<DialogClass>();
+        foreach (var item in m_Dic) ret.Add(item.Value);
+        return ret;
+    }
+    public static int GetAllNum() { return m_Dic.Count; }
 }

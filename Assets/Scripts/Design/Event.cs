@@ -10,11 +10,11 @@ public class EventClass
     public string event_type;
 }
 
-public class EventManager
+public class EventConfig
 {
     public static Dictionary<int, EventClass> m_Dic;
 
-    static EventManager()
+    static EventConfig()
     {
         m_Dic = new Dictionary<int, EventClass>()
         {
@@ -37,4 +37,11 @@ public class EventManager
         if(m_Dic.ContainsKey(key)) return m_Dic[key];
         return null;
     }
+    public static List<EventClass> GetAll()
+    {
+        List<EventClass> ret = new List<EventClass>();
+        foreach (var item in m_Dic) ret.Add(item.Value);
+        return ret;
+    }
+    public static int GetAllNum() { return m_Dic.Count; }
 }

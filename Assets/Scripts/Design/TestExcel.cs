@@ -12,11 +12,11 @@ public class TestExcelClass
     public List<List<string>> arrArrString;
 }
 
-public class TestExcelManager
+public class TestExcelConfig
 {
     public static Dictionary<int, TestExcelClass> m_Dic;
 
-    static TestExcelManager()
+    static TestExcelConfig()
     {
         m_Dic = new Dictionary<int, TestExcelClass>()
         {
@@ -28,4 +28,11 @@ public class TestExcelManager
         if(m_Dic.ContainsKey(key)) return m_Dic[key];
         return null;
     }
+    public static List<TestExcelClass> GetAll()
+    {
+        List<TestExcelClass> ret = new List<TestExcelClass>();
+        foreach (var item in m_Dic) ret.Add(item.Value);
+        return ret;
+    }
+    public static int GetAllNum() { return m_Dic.Count; }
 }

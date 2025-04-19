@@ -34,7 +34,7 @@ public class TreasurePage : UIViewBase
 
     public void updateTreasure()
     {
-        List<TreasureClass> _list = TreasureManager.GetAllTreasure();
+        List<TreasureClass> _list = TreasureConfig.GetAll();
         for(int i = 0; i < MaxSize; i++)
         {
             int idx = baseIndex + i;
@@ -53,7 +53,7 @@ public class TreasurePage : UIViewBase
     {
         int nxtIndex = baseIndex + op * MaxSize; 
         
-        if (nxtIndex >= TreasureManager.m_Dic.Count || nxtIndex < 0)
+        if (nxtIndex >= TreasureConfig.m_Dic.Count || nxtIndex < 0)
         {
             return;
         }
