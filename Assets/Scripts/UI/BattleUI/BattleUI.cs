@@ -9,7 +9,6 @@ public class BattleUI : UIViewBase
     [Header("按钮")]
     [Tooltip("结束按钮")] public Button endTurnBtn;   // 回合结束按钮
     private bool isLock = false;                    // 回合结束锁
-    public Transform CardsTransform;    // 临时存放所有卡牌的位置
 
     [Header("文本")]
     [Tooltip("回合计数")] public Text turnInfo;   // 回合计数
@@ -54,17 +53,19 @@ public class BattleUI : UIViewBase
     protected override void Awake()
     {
         base.Awake();
-        spacingList = new float[] {0f,0f,300f,300f,300f,200f,160f,140f,120f};
-        applyRotationTime = 2;
+        // spacingList = new float[] {0f,0f,300f,300f,300f,200f,160f,140f,120f};
+        // applyRotationTime = 2;
         showCard = transform.Find("HandCard/ShowCard").GetComponent<ShowCardUICom>();
         showCard.Hide();
+        endTurnBtn = transform.Find("MiddleCanvas/Middle/EndTurnBtn").GetComponent<Button>();
+        turnInfo = transform.Find("TopCanvas/Top/LevelInfo/currentTurn").GetComponent<Text>();
+        magicPowerInfo = transform.Find("MiddleCanvas/Middle/EndTurnBtn/Info/MagicPowerText").GetComponent<Text>();
+        cardArea = transform.Find("HandCard/HandCardArea");
     }
 
     protected override void Start()
     {
         base.Start();
-        Cards = new List<GameObject>();
-        cardArea = transform.Find("HandCard/HandCardArea");
         
         endTurnBtn.GetComponent<EndTurnBtnHover>().OnChange(0.6f);
         endTurnBtn.onClick.AddListener(() =>
@@ -154,7 +155,6 @@ public class BattleUI : UIViewBase
 
     public void ON_CARD_UNSELECT(int id)
     {
-        Debug.Log($"ON_CARD_UNSELECT {id}");
         if(id == -1) return ;
         showCard.TryHide(id);
         cardArea.GetChild(id).GetComponent<CardUI>().Show();
@@ -171,9 +171,9 @@ public class BattleUI : UIViewBase
         AdjustCardPosition();
     }
 
-    [Tooltip("持有不同数量卡牌时的间隔(类型:float)[数量0-8]")]
+    [Header("持有不同数量卡牌时的间隔(类型:float)[数量0-8]")]
     public float[] spacingList = {0f,0f,300f,300f,300f,200f,160f,140f,120f};
-    [Tooltip("持有多少张卡牌时需要携带一点旋转(类型:int)")]
+    [Header("持有多少张卡牌时需要携带一点旋转(类型:int)")]
     public int applyRotationTime = 2;
 
     public void AdjustCardPosition()

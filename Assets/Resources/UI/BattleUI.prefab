@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: 8686187071534167159}
   - component: {fileID: 3929626054431916724}
   m_Layer: 0
-  m_Name: Text (Legacy)
+  m_Name: currentTurn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -916,10 +916,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: 
   index: 0
-  endTurnBtn: {fileID: 8090758951447332900}
-  CardsTransform: {fileID: 4677069435435535964}
-  turnInfo: {fileID: 3929626054431916724}
-  magicPowerInfo: {fileID: 1024829203918535987}
+  endTurnBtn: {fileID: 0}
+  turnInfo: {fileID: 0}
+  magicPowerInfo: {fileID: 0}
   cardArea: {fileID: 0}
   Cards: []
   showCard: {fileID: 0}
@@ -927,13 +926,13 @@ MonoBehaviour:
   spacingList:
   - 0
   - 0
-  - 3
-  - 3
-  - 3
-  - 2
-  - 1.6
-  - 1.4
-  - 1.2
+  - 300
+  - 300
+  - 300
+  - 200
+  - 160
+  - 140
+  - 120
   applyRotationTime: 2
 --- !u!1 &1533172560159177142
 GameObject:
