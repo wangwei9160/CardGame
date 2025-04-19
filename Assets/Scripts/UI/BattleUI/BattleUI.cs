@@ -31,6 +31,9 @@ public class BattleUI : UIViewBase
         EventCenter.AddListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
         EventCenter.AddListener(EventDefine.OnGetCard, OnGetCard);
         EventCenter.AddListener(EventDefine.OnDeleteCard, OnDeleteCard);
+        EventCenter.AddListener(EventDefine.ON_CARD_DRAG_START, ON_CARD_DRAG_START);
+        EventCenter.AddListener(EventDefine.ON_CARD_DRAG_STOP, ON_CARD_DRAG_STOP);
+        EventCenter.AddListener<int>(EventDefine.OnDeleteCardByIndex, OnDeleteCardByIndex);
         EventCenter.AddListener<int>(EventDefine.ON_CARD_SELECT, ON_CARD_SELECT);
         EventCenter.AddListener<int>(EventDefine.ON_CARD_UNSELECT, ON_CARD_UNSELECT);
         EventCenter.AddListener(EventDefine.AdjustCardPosition, StartAdjustCard);
@@ -44,6 +47,9 @@ public class BattleUI : UIViewBase
         EventCenter.RemoveListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
         EventCenter.RemoveListener(EventDefine.OnGetCard, OnGetCard);
         EventCenter.RemoveListener(EventDefine.OnDeleteCard, OnDeleteCard);
+        EventCenter.RemoveListener(EventDefine.ON_CARD_DRAG_START, ON_CARD_DRAG_START);
+        EventCenter.RemoveListener(EventDefine.ON_CARD_DRAG_STOP, ON_CARD_DRAG_STOP);
+        EventCenter.RemoveListener<int>(EventDefine.OnDeleteCardByIndex, OnDeleteCardByIndex);
         EventCenter.RemoveListener<int>(EventDefine.ON_CARD_SELECT, ON_CARD_SELECT);
         EventCenter.RemoveListener<int>(EventDefine.ON_CARD_UNSELECT, ON_CARD_UNSELECT);
         EventCenter.RemoveListener(EventDefine.AdjustCardPosition, StartAdjustCard);
@@ -61,6 +67,8 @@ public class BattleUI : UIViewBase
         turnInfo = transform.Find("TopCanvas/Top/LevelInfo/currentTurn").GetComponent<Text>();
         magicPowerInfo = transform.Find("MiddleCanvas/Middle/EndTurnBtn/Info/MagicPowerText").GetComponent<Text>();
         cardArea = transform.Find("HandCard/HandCardArea");
+        MASK = transform.Find("HandCard/Mask");
+        MASK.gameObject.SetActive(false);
     }
 
     protected override void Start()
@@ -141,6 +149,12 @@ public class BattleUI : UIViewBase
         StartCoroutine(AdjustCardIEnumerator());
     }
 
+    public void OnDeleteCardByIndex(int id)
+    {
+        Destroy(cardArea.GetChild(id).gameObject);
+        StartCoroutine(AdjustCardIEnumerator());
+    }
+
     public void ON_CARD_SELECT(int id)
     {
         int cardCount = cardArea.childCount;
@@ -152,6 +166,7 @@ public class BattleUI : UIViewBase
         float fixPos = Mathf.Abs(offset) * spacingY;
         Vector3 pos = cardArea.GetChild(id).position + new Vector3(0 , 50f + fixPos , 0);
         showCard.SetData(id , pos );
+        AdjustCardPositionWhenCardSelect(id);
     }
 
     public void ON_CARD_UNSELECT(int id)
@@ -159,6 +174,10 @@ public class BattleUI : UIViewBase
         if(id == -1) return ;
         showCard.TryHide(id);
         cardArea.GetChild(id).GetComponent<CardUI>().Show();
+        if(!showCard.IsSomethingSlect())
+        {
+            AdjustCardPosition();
+        }
     }
 
     public void StartAdjustCard()
@@ -184,14 +203,13 @@ public class BattleUI : UIViewBase
     public int applyRotationTime = 2;
     [Header("持有不通数量卡牌时统一两卡之间旋转幅度(类型:float)[数量0-8]")]
     public float[] rotationList = {0f,0f,10f,10f,10f,10f,10f,10f,10f};
+    [Header("有选中卡牌时左右偏移量")]
+    public int spaceWhenSelect = 100;
 
     public void AdjustCardPosition()
     {
         int cardCount = cardArea.childCount;
         if(cardCount == 0) return;
-        
-        // 获取父容器的RectTransform
-        RectTransform handCardRect = cardArea as RectTransform;
         
         if(cardCount == 1) 
         {
@@ -230,5 +248,39 @@ public class BattleUI : UIViewBase
             
         }
     }
+
+    public void AdjustCardPositionWhenCardSelect(int id)
+    {
+        int cardCount = cardArea.childCount;
+        if(cardCount <= 1) return;
+        AdjustCardPosition();
+        
+        for(int i = 0; i < cardCount; i++)
+        {
+            if(id == i) continue;
+
+            float op = i <= id ? -1 : 1;
+            float xPos = op * spaceWhenSelect;
+            Vector2 position = new Vector2(xPos, 0);
+            RectTransform card = cardArea.GetChild(i) as RectTransform;
+            card.anchoredPosition += position;
+        }
+    }
+
+    #region Drag Event Mask
+
+    private Transform MASK;
+
+    public void ON_CARD_DRAG_START()
+    {
+        MASK.gameObject.SetActive(true);
+    }
+
+    public void ON_CARD_DRAG_STOP()
+    {
+        MASK.gameObject.SetActive(false);
+    }
+
+    #endregion
 
 }

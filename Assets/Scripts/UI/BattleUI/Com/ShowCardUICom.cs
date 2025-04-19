@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ShowCardUICom : MonoBehaviour , IPointerExitHandler
+public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHandler, IDragHandler, IEndDragHandler 
 {
     public int Index;
     public Text cardName;
@@ -17,7 +17,7 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler
     public void Hide() 
     {
         gameObject.SetActive(false);
-        transform.localScale = new Vector3(1f,1f,1f);
+        transform.localScale = Vector3.one;
     }
     public void Show() 
     {
@@ -29,6 +29,11 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler
     {
         Debug.Log($"tryHide {id} , CurIndex {Index}");
         if(id == Index) Hide();
+    }
+
+    public bool IsSomethingSlect()
+    {
+        return Index == -1;
     }
 
     public void SetData(int idx , Vector3 pos)
@@ -44,7 +49,6 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler
         Index = idx;
         transform.position = pos;
         cardName.text = $"卡牌-{idx}";
-        
     }
 
     public void SetPositionToMouse()
@@ -55,6 +59,7 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if(isDrag) return ;
         int lastIndex = Index;
         Index = -1;
         if(lastIndex != -1) EventCenter.Broadcast<int>(EventDefine.ON_CARD_UNSELECT , lastIndex);
@@ -68,6 +73,40 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler
         if(Index == -1) 
         {
             Hide();
+            EventCenter.Broadcast(EventDefine.AdjustCardPosition);
         }
     }
+
+    #region Drag operate
+    public bool isDrag = false;
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        isDrag = true;
+        EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_START);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        RectTransform rectTransform = transform.GetComponent<RectTransform>();
+        float halfHeight = rectTransform.rect.height * 0.5f;
+        
+        rectTransform.anchoredPosition =  eventData.position + new Vector2(0, halfHeight);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        isDrag = false;
+        EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_STOP);
+        if(eventData.position.y >= 700f) 
+        {
+            EventCenter.Broadcast(EventDefine.OnDeleteCardByIndex , Index);
+        }
+        else {
+            EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);
+        }
+        Hide();
+    }
+
+    #endregion Drag operate
 }

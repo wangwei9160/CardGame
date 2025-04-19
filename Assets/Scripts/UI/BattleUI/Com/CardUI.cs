@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler , IPointerEnterHandler
+public class CardUI : MonoBehaviour, IPointerEnterHandler
 {
     private int Index;
     private Text cardName;
@@ -20,21 +20,6 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 
     public void Hide() {gameObject.SetActive(false);}
     public void Show() {gameObject.SetActive(true);}
-
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-
-    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
