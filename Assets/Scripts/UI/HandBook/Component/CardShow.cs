@@ -29,7 +29,6 @@ public class CardShow : MonoBehaviour
         description.text = cfg.Description;
         Type.text = cfg.Type;
     }
-
     public void Hide()
     {
         gameObject.SetActive(false);
