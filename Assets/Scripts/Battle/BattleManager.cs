@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,12 +31,13 @@ public class BattleData
 
 public class BattleManager : ManagerBase<BattleManager>
 {
-    [Tooltip("½ÇÉ«Ô¤ÖÆÌå")] public GameObject player;
-    [Tooltip("µĞ·½Ô¤ÖÆÌå")] public GameObject enemy;
+    [Tooltip("è§’è‰²é¢„åˆ¶ä½“")] public GameObject player;
+    [Tooltip("æ•Œæ–¹é¢„åˆ¶ä½“")] public GameObject enemy;
+    // [Tooltip("å¡ç‰Œé¢„åˆ¶ä½“")] public GameObject handcard;
     public BattleData battleData;
     public bool isBattle = false;
 
-    #region ÁÙÊ±Ê¹ÓÃ
+    #region ä¸´æ—¶ä½¿ç”¨
     private readonly int playerNum = 1;
     private readonly int dogNum = 0;
     private int enemyNum = 2;
@@ -46,14 +47,14 @@ public class BattleManager : ManagerBase<BattleManager>
     {
         base.Awake();
         battleData = new BattleData();
-        EventCenter.AddListener(EventDefine.OnBattleStart, OnBattleStart);    // Õ½¶·¿ªÊ¼
-        EventCenter.AddListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // µĞÈËËÀÍö
+        EventCenter.AddListener(EventDefine.OnBattleStart, OnBattleStart);    // æˆ˜æ–—å¼€å§‹
+        EventCenter.AddListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // æ•Œäººæ­»äº¡
     }
 
     private void OnDestroy()
     {
-        EventCenter.RemoveListener(EventDefine.OnBattleStart, OnBattleStart);    // ÒÆ³ı
-        EventCenter.RemoveListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // ÒÆ³ı¼àÌı
+        EventCenter.RemoveListener(EventDefine.OnBattleStart, OnBattleStart);    // ç§»é™¤
+        EventCenter.RemoveListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // ç§»é™¤ç›‘å¬
     }
 
     public bool IsInBattle()
@@ -70,13 +71,13 @@ public class BattleManager : ManagerBase<BattleManager>
         AddEnemy(enemyNum);
     }
 
-    // ÁÙÊ±Ê¹ÓÃ£¬ÓÃÓÚ³õÊ¼»¯Ê±Ìí¼ÓÎÒ·½½ÇÉ«
+    // ä¸´æ—¶ä½¿ç”¨ï¼Œç”¨äºåˆå§‹åŒ–æ—¶æ·»åŠ æˆ‘æ–¹è§’è‰²
     private void AddPlayer(int PlayerNum, int CardNum)
     {
         PlayerNum = Math.Min(PlayerNum, 1);
         for (int i = 0; i < PlayerNum; i++)
         {
-            if (ContainerManager.Instance.Players[i].childCount > 0) continue;  // ·ÀÖ¹ÖØ¸´Ìí¼ÓPlayer
+            if (ContainerManager.Instance.Players[i].childCount > 0) continue;  // é˜²æ­¢é‡å¤æ·»åŠ Player
             var go = Instantiate(player, ContainerManager.Instance.Players[i]);
             battleData.playerTeam.Add(go.GetComponent<BaseCharacter>());
         }
@@ -86,7 +87,7 @@ public class BattleManager : ManagerBase<BattleManager>
             Instantiate(enemy, ContainerManager.Instance.Players[i + PlayerNum]);
         }
     }
-    // ÁÙÊ±Ê¹ÓÃ£¬ÓÃÓÚ³õÊ¼»¯Ê±Ìí¼ÓµĞ·½½ÇÉ«
+    // ä¸´æ—¶ä½¿ç”¨ï¼Œç”¨äºåˆå§‹åŒ–æ—¶æ·»åŠ æ•Œæ–¹è§’è‰²
     private void AddEnemy(int num)
     {
         num = Math.Min(num, 3);
@@ -97,10 +98,21 @@ public class BattleManager : ManagerBase<BattleManager>
         }
     }
 
+    public void GetHandCard()
+    {
+        EventCenter.Broadcast(EventDefine.OnGetCard);
+    }
+
+    // ä¸´æ—¶ä½¿ç”¨åˆ é™¤ä¸€å¼ å¡
+    public void RemoveOneHandCard()
+    {
+        EventCenter.Broadcast(EventDefine.OnDeleteCard);
+    }
+
     public void OnEnemyDeath(int id)
     {
         enemyNum--;
-        Debug.Log($"µĞÈË{id} ËÀÍö");
+        Debug.Log($"æ•Œäºº{id} æ­»äº¡");
         if (enemyNum == 0)
         {
             GameManager.Instance.BettleWin(id);
@@ -111,6 +123,22 @@ public class BattleManager : ManagerBase<BattleManager>
     public int getPlayerTeamNum()
     {
         return battleData.playerTeam.Count;
+    }
+
+    private int currentSelectCard = -1; // ä½¿ç”¨ç§æœ‰å­—æ®µä½œä¸ºåå¤‡å­˜å‚¨
+
+    public int CURRENT_SELECT_CARD
+    {
+        get { return currentSelectCard; }
+        set 
+        {
+            if (currentSelectCard != value)
+            {
+                int previousCard = currentSelectCard;
+                currentSelectCard = value; // æ›´æ–°å®é™…å€¼
+                Debug.Log($"Selected card changed from {previousCard} to {currentSelectCard}");
+            }
+        }
     }
 
 }

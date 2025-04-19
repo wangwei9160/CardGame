@@ -13,11 +13,11 @@ public class EffectClass
     public int to_ids;
 }
 
-public class EffectManager
+public class EffectConfig
 {
     public static Dictionary<int, EffectClass> m_Dic;
 
-    static EffectManager()
+    static EffectConfig()
     {
         m_Dic = new Dictionary<int, EffectClass>()
         {
@@ -60,4 +60,11 @@ public class EffectManager
         if(m_Dic.ContainsKey(key)) return m_Dic[key];
         return null;
     }
+    public static List<EffectClass> GetAll()
+    {
+        List<EffectClass> ret = new List<EffectClass>();
+        foreach (var item in m_Dic) ret.Add(item.Value);
+        return ret;
+    }
+    public static int GetAllNum() { return m_Dic.Count; }
 }

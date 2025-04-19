@@ -17,7 +17,7 @@ public class Player : BaseCharacter
 
     private void OnDestroy()
     {
-        UIManager.Instance.Close("HpUI" , HpUIIndex);
+        // UIManager.Instance.Close("HpUI" , HpUIIndex);
     }
 
     private void Update()

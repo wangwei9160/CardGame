@@ -41,7 +41,7 @@ public class EchoEventRender : MonoBehaviour
 
     public void SetData(EchoEventType id , int pos)
     {
-        var type = EchoEventManager.GetEchoEventClassByKey((int)id);
+        var type = EchoEventConfig.GetEchoEventClassByKey((int)id);
         if (id != 0)
         {
             text.text = type.name;

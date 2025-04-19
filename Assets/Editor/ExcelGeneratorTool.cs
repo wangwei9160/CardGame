@@ -55,12 +55,14 @@ public class ExcelToClassGenerator
                 var fieldNames = new List<string>();
                 for (int col = 0; col < table.Columns.Count; col++)
                 {
-                    fieldNames.Add(table.Rows[0][col].ToString());
+                    string curName = table.Rows[0][col].ToString();
+                    if(curName == "") break;
+                    fieldNames.Add(curName);
                 }
 
                 // 获取字段类型（第二行）
                 var fieldTypes = new List<string>();
-                for (int col = 0; col < table.Columns.Count; col++)
+                for (int col = 0; col < table.Columns.Count && col < fieldNames.Count ; col++)
                 {
                     fieldTypes.Add(table.Rows[1][col].ToString());
                 }
@@ -87,7 +89,7 @@ public class ExcelToClassGenerator
                 for (int row = startRow; row < table.Rows.Count; row++)
                 {
                     var data = new Dictionary<string, string>();
-                    for (int col = 0; col < table.Columns.Count; col++)
+                    for (int col = 0; col < table.Columns.Count && col < fieldNames.Count; col++)
                     {
                         var fieldName = fieldNames[col];
                         var fieldType = fieldTypes[col];
@@ -100,7 +102,7 @@ public class ExcelToClassGenerator
                 // 生成 C# 文件
                 name = ToCamelCaseClassName(name);
                 string className = name + "Class";
-                string managerName = name + "Manager";
+                string managerName = name + "Config";
                 string scriptPath = Path.Combine(Application.dataPath, $"Scripts/Design/{name}.cs").Replace("\\", "/");
                 string code = GenerateClassCode(className, fieldNames, fieldTypes, dataList, managerName);
                 File.WriteAllText(scriptPath, code);
@@ -182,7 +184,6 @@ public class ExcelToClassGenerator
                 }
                 else if (fieldTypes[i] == "int")
                 {
-                    Debug.Log(value);
                     if (value == "" || value == " ")
                     {
                         sb.Append($"{fieldName} = 0");
@@ -210,7 +211,13 @@ public class ExcelToClassGenerator
         sb.AppendLine("        if(m_Dic.ContainsKey(key)) return m_Dic[key];");
         sb.AppendLine("        return null;");
         sb.AppendLine("    }");
-
+        sb.AppendLine($"    public static List<{className}> GetAll()");
+        sb.AppendLine("    {");
+        sb.AppendLine($"        List<{className}> ret = new List<{className}>();");
+        sb.AppendLine("        foreach (var item in m_Dic) ret.Add(item.Value);");
+        sb.AppendLine("        return ret;");
+        sb.AppendLine("    }");
+        sb.AppendLine("    public static int GetAllNum() { return m_Dic.Count; }");
         sb.AppendLine("}");
 
         return sb.ToString();

@@ -189,14 +189,10 @@ public class Card : MonoBehaviour
     public virtual bool OnPlay()
     {
         // 检查法力值是否足够
-        if (PlayerManager.Instance.currentMana < manaCost)
-        {
-            Debug.Log("法力值不足，无法使用卡牌");
-            return false;
-        }
+
         
         // 扣除法力值
-        PlayerManager.Instance.currentMana -= manaCost;
+
         
         // 触发卡牌效果
         TriggerEffects();

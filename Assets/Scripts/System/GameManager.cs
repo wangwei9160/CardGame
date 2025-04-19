@@ -178,7 +178,7 @@ public class GameManager : ManagerBase<GameManager>
     // 进入启示事件
     public static void OnEnterEchoEvent(EchoEventType type)
     {
-        EchoEventClass cls = EchoEventManager.GetEchoEventClassByKey((int)type);
+        EchoEventClass cls = EchoEventConfig.GetEchoEventClassByKey((int)type);
         if (cls.type == "combat")
         {
             UIManager.Instance.Show("BattleUI", JsonUtility.ToJson(cls));
@@ -187,7 +187,7 @@ public class GameManager : ManagerBase<GameManager>
         {
             // 去事件池子随机找一个事件 cls.type
             List<EventClass> eventClassList = new List<EventClass>();
-            foreach (var kv in EventManager.m_Dic)
+            foreach (var kv in EventConfig.m_Dic)
             {
                 if (kv.Value.event_type == cls.type)
                 {

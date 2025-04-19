@@ -14,11 +14,11 @@ public class EnemyClass
     public string enemy_passive;
 }
 
-public class EnemyManager
+public class EnemyConfig
 {
     public static Dictionary<int, EnemyClass> m_Dic;
 
-    static EnemyManager()
+    static EnemyConfig()
     {
         m_Dic = new Dictionary<int, EnemyClass>()
         {
@@ -44,4 +44,11 @@ public class EnemyManager
         if(m_Dic.ContainsKey(key)) return m_Dic[key];
         return null;
     }
+    public static List<EnemyClass> GetAll()
+    {
+        List<EnemyClass> ret = new List<EnemyClass>();
+        foreach (var item in m_Dic) ret.Add(item.Value);
+        return ret;
+    }
+    public static int GetAllNum() { return m_Dic.Count; }
 }

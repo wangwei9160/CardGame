@@ -6,4 +6,5 @@ public class ContainerManager : Singleton<ContainerManager>
 {
     public Transform[] Players;
     public Transform[] Enemies;
+    public Transform HandCard;
 }

@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class ResourceUtil
 {
+    public static GameObject GetCard()
+    {
+        return Resources.Load<GameObject>("Arts/Card/UI/Card");
+    }
+
     public static Sprite GetTreasureByID(int id)
     {
         TreasureBase treasure = TreasureFactory.GetTreasure(id);

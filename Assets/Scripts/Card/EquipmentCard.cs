@@ -123,14 +123,14 @@ public class WeaponCard : EquipmentCard
         base.OnEquip();
         
         // 增加玩家攻击力
-        PlayerManager.Instance.AddAttack(attackValue);
+
     }
     
     // 卸下装备时触发
     protected override void OnUnequip()
     {
         // 减少玩家攻击力
-        PlayerManager.Instance.AddAttack(-attackValue);
+
         
         base.OnUnequip();
     }
@@ -163,14 +163,14 @@ public class AccessoryCard : EquipmentCard
         base.OnEquip();
         
         // 增加玩家属性
-        PlayerManager.Instance.AddBonus(bonusValue, BonusClass);
+
     }
     
     // 卸下装备时触发
     protected override void OnUnequip()
     {
         // 减少玩家属性
-        PlayerManager.Instance.AddBonus(-bonusValue, BonusClass);
+
         
         base.OnUnequip();
     }

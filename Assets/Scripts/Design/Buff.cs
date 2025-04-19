@@ -9,11 +9,11 @@ public class BuffClass
     public string buff_effect;
 }
 
-public class BuffManager
+public class BuffConfig
 {
     public static Dictionary<int, BuffClass> m_Dic;
 
-    static BuffManager()
+    static BuffConfig()
     {
         m_Dic = new Dictionary<int, BuffClass>()
         {
@@ -34,4 +34,11 @@ public class BuffManager
         if(m_Dic.ContainsKey(key)) return m_Dic[key];
         return null;
     }
+    public static List<BuffClass> GetAll()
+    {
+        List<BuffClass> ret = new List<BuffClass>();
+        foreach (var item in m_Dic) ret.Add(item.Value);
+        return ret;
+    }
+    public static int GetAllNum() { return m_Dic.Count; }
 }

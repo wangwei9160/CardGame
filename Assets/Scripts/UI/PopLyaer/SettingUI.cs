@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class SettingUI : UIViewBase
 {
     public override UIViewType Type => UIViewType.Singleton;
-    public override UILAYER Layer => UILAYER.M_POP_LAYER;
+    public override UILAYER Layer => UILAYER.M_TOP_LAYER;
 
 
     public Button CloseBtn;

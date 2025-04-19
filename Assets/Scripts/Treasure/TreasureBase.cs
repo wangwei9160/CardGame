@@ -3,7 +3,7 @@
 public class TreasureBase
 {
     public virtual int ID { get; protected set; } = 1;
-    public TreasureClass treasureCfg => TreasureManager.GetTreasureClassByKey(ID);
+    public TreasureClass treasureCfg => TreasureConfig.GetTreasureClassByKey(ID);
 
     public void print() { Debug.Log(treasureCfg.Description); }
 
