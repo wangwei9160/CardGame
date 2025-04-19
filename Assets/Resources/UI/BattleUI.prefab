@@ -875,7 +875,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1271267353950767660}
-  - component: {fileID: 2731114250185485090}
+  - component: {fileID: 7105346705315118405}
   m_Layer: 0
   m_Name: BattleUI
   m_TagString: Untagged
@@ -902,7 +902,7 @@ Transform:
   - {fileID: 4237339412344531996}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2731114250185485090
+--- !u!114 &7105346705315118405
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -923,7 +923,8 @@ MonoBehaviour:
   Cards: []
   showCard: {fileID: 0}
   ID: 1
-  spacingList:
+  maxCardCount: 8
+  spacingXposList:
   - 0
   - 0
   - 300
@@ -933,7 +934,27 @@ MonoBehaviour:
   - 160
   - 140
   - 120
+  spacingYposList:
+  - 0
+  - 0
+  - 60
+  - 60
+  - 60
+  - 40
+  - 32
+  - 28
+  - 24
   applyRotationTime: 2
+  rotationList:
+  - 0
+  - 0
+  - 10
+  - 10
+  - 10
+  - 10
+  - 10
+  - 10
+  - 10
 --- !u!1 &1533172560159177142
 GameObject:
   m_ObjectHideFlags: 0

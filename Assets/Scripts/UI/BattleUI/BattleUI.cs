@@ -126,7 +126,7 @@ public class BattleUI : UIViewBase
     public int ID = 1;
     public void OnGetCard()
     {
-        if(cardArea.childCount == 8) return;
+        if(cardArea.childCount == maxCardCount) return;
         GameObject card = ResourceUtil.GetCard();
         card.name = $"Card_{ID}";
         ID++;
@@ -147,8 +147,9 @@ public class BattleUI : UIViewBase
         bool applyRotation = cardCount >= applyRotationTime;
         float middleOffset = (cardCount - 1) / 2f;
         float offset = id - middleOffset;
-        float spacing = spacingList[cardCount];
-        float fixPos = Mathf.Abs(offset) * 0.2f * spacing;
+        float spacing = spacingXposList[cardCount];
+        float spacingY = spacingYposList[cardCount];
+        float fixPos = Mathf.Abs(offset) * spacingY;
         Vector3 pos = cardArea.GetChild(id).position + new Vector3(0 , 50f + fixPos , 0);
         showCard.SetData(id , pos );
     }
@@ -171,10 +172,18 @@ public class BattleUI : UIViewBase
         AdjustCardPosition();
     }
 
-    [Header("持有不同数量卡牌时的间隔(类型:float)[数量0-8]")]
-    public float[] spacingList = {0f,0f,300f,300f,300f,200f,160f,140f,120f};
+    [Header("持有卡牌上限")]
+    public int maxCardCount = 8;
+
+    [Header("持有不同数量时的x坐标间隔(类型:float)")]
+    public float[] spacingXposList = {0f,0f,300f,300f,300f,200f,160f,140f,120f};
+    [Header("持有不同数量时的y坐标间隔(类型:float)")]
+    public float[] spacingYposList = {0f,0f,60f,60f,60f,40f,32f,28f,24f};
+    
     [Header("持有多少张卡牌时需要携带一点旋转(类型:int)")]
     public int applyRotationTime = 2;
+    [Header("持有不通数量卡牌时统一两卡之间旋转幅度(类型:float)[数量0-8]")]
+    public float[] rotationList = {0f,0f,10f,10f,10f,10f,10f,10f,10f};
 
     public void AdjustCardPosition()
     {
@@ -196,17 +205,19 @@ public class BattleUI : UIViewBase
 
         // 计算中间偏移量
         float middleOffset = (cardCount - 1) / 2f;
-        float spacing = spacingList[cardCount];
+        float spacingX = spacingXposList[cardCount];
+        float spacingY = spacingYposList[cardCount];
         bool applyRotation = cardCount >= applyRotationTime;
+        float rot = rotationList[cardCount];
         
         for(int i = 0; i < cardCount; i++)
         {
             float offset = i - middleOffset;
-            float xPos = (i - (cardCount - 1) / 2f) * spacing;
+            float xPos = (i - (cardCount - 1) / 2f) * spacingX;
             float yPos = 0f;
             
             if(applyRotation) 
-                yPos = -Mathf.Abs(offset) * 0.2f * spacing; 
+                yPos = -Mathf.Abs(offset) * spacingY; 
             
             Vector2 position = new Vector2(xPos, yPos);
             
@@ -214,7 +225,7 @@ public class BattleUI : UIViewBase
             card.GetComponent<CardUI>().SetData(i);
             // 使用anchoredPosition而不是localPosition
             card.anchoredPosition = position;
-            float rotationZ = applyRotation ? -offset * 10f : 0f;
+            float rotationZ = applyRotation ? -offset * rot : 0f;
             card.localRotation = Quaternion.Euler(0, 0, rotationZ);
             
         }
