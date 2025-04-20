@@ -19,4 +19,8 @@ public class BaseCharacter : MonoBehaviour
     public int hp = 50;
     protected virtual void Start() { }
 
+    public virtual void OnHeal(int val){}
+    public virtual void OnHurt(int val){}
+    public virtual void OnDeadCheck(){}
+
 }

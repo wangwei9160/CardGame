@@ -28,19 +28,25 @@ public class BaseEnemy : BaseCharacter
         // 临时用来扣血的
         var rd = Random.Range(10, 30);
         hp -= rd;
+        OnDeadCheck();
+        EventCenter.Broadcast<int, int>(EventDefine.OnHpChangeByName, hp, HpUIIndex);
+    }
+
+    public override void OnHurt(int damage)
+    {
+        hp -= damage;
+        OnDeadCheck();
+        EventCenter.Broadcast<int, int>(EventDefine.OnHpChangeByName, hp, HpUIIndex);
+    }
+
+    public override void OnDeadCheck()
+    {
         if(hp <= 0)
         {
             hp = 0;
             Destroy(gameObject , 0.3f); // 延迟死亡 可以用于创建协程触发死亡动画
             EventCenter.Broadcast(EventDefine.OnEnemyDeath , Index);
         }
-        EventCenter.Broadcast<int, int>(EventDefine.OnHpChangeByName, hp, HpUIIndex);
-    }
-
-    public void OnHurt(int damage)
-    {
-        hp -= damage;
-        EventCenter.Broadcast<int, int>(EventDefine.OnHpChangeByName, hp, HpUIIndex);
     }
 
 }

@@ -131,10 +131,33 @@ public class BattleManager : ManagerBase<BattleManager>
         return battleData.playerTeam.Count;
     }
 
+    #region 外部接口,提供数据
+
+    // 获取所有敌方目标
     public List<BaseEnemy> getAllEnemy()
     {
         return battleData.enemies;
     }
+
+    public BaseCharacter getEnemyByIndex(int pos)
+    {
+        if(pos < 0 || pos >= battleData.enemies.Count) return null;
+        return battleData.enemies[pos];
+    }
+
+    // 获取所有敌方目标
+    public List<BaseCharacter> getAllPlayerTeam()
+    {
+        return battleData.playerTeam;
+    }
+
+    public BaseCharacter getPlayerTeamByIndex(int pos)
+    {
+        if(pos < 0 || pos >= battleData.playerTeam.Count) return null;
+        return battleData.playerTeam[pos];
+    }
+
+    #endregion
 
     private int currentSelectCard = -1; // 使用私有字段作为后备存储
 

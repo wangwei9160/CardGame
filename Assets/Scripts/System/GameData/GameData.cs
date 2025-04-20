@@ -46,7 +46,7 @@ public class GameData
         CurrentStage = 0;
         money = 0;
         maxHp = 100;
-        hp = maxHp;
+        hp = 50;
         magicPower = 0;
         CardReward = new List<int>();
         EchoEventType = EchoEventType.FightEvent;

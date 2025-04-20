@@ -92,10 +92,15 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
     {
         isDrag = false;
         EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_STOP);
-        if(eventData.position.y >= 700f) 
+        if(eventData.position.y >= 600f) 
         {
             EventCenter.Broadcast(EventDefine.OnDeleteCardByIndex , Index);
-            SkillManager.Instance.ExecuteEffect(SkillType.DAMAGE , "");
+            int rd = RandomUtil.RandomInt(0,1 + 1);
+            if(rd == 0){
+                SkillManager.Instance.ExecuteEffect(SkillType.DAMAGE , "");
+            }else {
+                SkillManager.Instance.ExecuteEffect(SkillType.HEAL , "");
+            }
         }
         else {
             EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);

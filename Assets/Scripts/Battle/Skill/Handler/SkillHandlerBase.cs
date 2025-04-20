@@ -1,6 +1,8 @@
 using System;
-// 技能效果触发器基类
+// 鎶�鑳芥晥鏋滆Е鍙戝櫒鍩虹被
 public abstract class SkillHandlerBase
 {
-    public virtual void Execute(string cfg) { }
+    public abstract void Execute(string cfg);
+
+    public abstract string Description();
 }
