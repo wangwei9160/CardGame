@@ -26,6 +26,7 @@
 
     OnGetCard,              // 获得一张卡牌
     OnDeleteCard,            // 删除一张卡牌
+    OnDeleteCardByIndex,            // 删除一张卡牌
 
     AdjustCardPosition,     // 调整手牌里的布局
 
