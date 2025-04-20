@@ -157,13 +157,13 @@
 //         }
 //         else if (playerDiscardPile.Count > 0)
 //         {
-//             // 牌组为空，洗切弃牌堆
+//             // 牌组为空,洗切弃牌堆
 //             ReshuffleDiscardPile();
 //             DrawCard();
 //         }
 //         else
 //         {
-//             Debug.Log("牌组和弃牌堆都为空，无法抽牌");
+//             Debug.Log("牌组和弃牌堆都为空,无法抽牌");
 //         }
 //     }
     
@@ -174,7 +174,7 @@
 //         playerDiscardPile.Clear();
 //         ShuffleDeck();
         
-//         Debug.Log("洗切弃牌堆，牌组数量: " + playerDeck.Count);
+//         Debug.Log("洗切弃牌堆,牌组数量: " + playerDeck.Count);
 //     }
     
 //     // 使用卡牌
@@ -202,7 +202,7 @@
 //             // 从手牌中移除
 //             playerHand.Remove(card);
             
-//             // 如果是随从牌，不进入弃牌堆
+//             // 如果是随从牌,不进入弃牌堆
 //             if (!(card is MinionCard))
 //             {
 //                 // 添加到弃牌堆

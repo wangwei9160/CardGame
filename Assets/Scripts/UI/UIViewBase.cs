@@ -49,7 +49,7 @@ public class UIViewBase : MonoBehaviour
 
     // 传递json数据进来
     public virtual void Init(string str , string data) { Init(str); }
-    // 所有权归属，owner
+    // 所有权归属,owner
     public virtual void Init(string str ,GameObject obj , string data) { Init(str , data); }
 
     public virtual void Show()

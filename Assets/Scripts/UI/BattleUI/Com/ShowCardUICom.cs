@@ -7,6 +7,7 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
 {
     public int Index;
     public Text cardName;
+    public int ID;
 
     private void Awake()
     {
@@ -36,25 +37,18 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         return Index == -1;
     }
 
-    public void SetData(int idx , Vector3 pos)
+    public void SetData(int idx , Vector3 pos , int id)
     {
         if(Index != idx) 
         {
             EventCenter.Broadcast<int>(EventDefine.ON_CARD_UNSELECT , Index);
-            // 设置时是按第一帧计算的
-            // SetPositionToMouse(); // 强制落到鼠标中心位置，防止由于原物体的旋转导致的exit事件无法触发
         }
         Show();
-        Debug.Log($"tryShow {idx} , CurIndex {Index}");
         Index = idx;
+        ID = id;
         transform.position = pos;
-        cardName.text = $"卡牌-{idx}";
-    }
-
-    public void SetPositionToMouse()
-    {
-        Debug.Log(Input.mousePosition);
-        GetComponent<RectTransform>().position = Input.mousePosition;
+        CardClass cfg = CardConfig.GetCardClassByKey(id);
+        cardName.text = cfg.name;
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -68,7 +62,7 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
 
     IEnumerator waitTimeForHide()
     {
-        // 等待这一帧结束，防止因为原物体的旋转导致卡牌的区域变化
+        // 等待这一帧结束,防止因为原物体的旋转导致卡牌的区域变化
         yield return new WaitForEndOfFrame();
         if(Index == -1) 
         {
@@ -101,6 +95,7 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         if(eventData.position.y >= 700f) 
         {
             EventCenter.Broadcast(EventDefine.OnDeleteCardByIndex , Index);
+            SkillManager.Instance.ExecuteEffect(SkillType.DAMAGE , "");
         }
         else {
             EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);

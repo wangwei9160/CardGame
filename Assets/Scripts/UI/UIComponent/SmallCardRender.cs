@@ -82,7 +82,7 @@ public class SmallCardRender : MonoBehaviour , IDragHandler , IBeginDragHandler,
     #endregion
     // CardInfo --缺失
 
-    // 设置索引，设置不可拖拽
+    // 设置索引,设置不可拖拽
     public void SetPosition(int pIndex)
     {
         Pos = pIndex;

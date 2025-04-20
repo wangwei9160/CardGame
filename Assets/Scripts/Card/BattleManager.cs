@@ -43,7 +43,7 @@ public class CardBattleManager : MonoBehaviour
         // 检查战场空间
         if (playerMinions.Count >= maxBattlefieldSize)
         {
-            Debug.Log("战场空间不足，无法放置随从");
+            Debug.Log("战场空间不足,无法放置随从");
             return;
         }
         
@@ -82,7 +82,7 @@ public class CardBattleManager : MonoBehaviour
         {
             if (playerMinions[i] != null)
             {
-                // 从右到左排列，主角在最左边
+                // 从右到左排列,主角在最左边
                 float xPos = 5f - (i * minionSpacing);
                 playerMinions[i].transform.position = new Vector3(xPos, 0f, 0f);
             }
@@ -95,7 +95,7 @@ public class CardBattleManager : MonoBehaviour
         // 检查战场空间
         if (playerMinions.Count >= maxBattlefieldSize)
         {
-            Debug.Log("战场空间不足，无法放置随从");
+            Debug.Log("战场空间不足,无法放置随从");
             return false;
         }
         

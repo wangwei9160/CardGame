@@ -1,13 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
+// 每个触发器在这里注册事件的监听
 
-// 事件中心
-public static class EventCenter
+// 流程：使用卡牌 -> 卡牌主动效果对应事件分发 -> 触发器（生效条件判定） -> 实体生效条件处理
+// -> 条件处理完毕 -> 事件分发 -> 触发器（技能使用） 
+
+public static class SkillEventCenter
 {
-    private static Dictionary<EventDefine, Delegate> m_Event = new Dictionary<EventDefine, Delegate>();
+    private static Dictionary<SkillEvent, Delegate> m_Event = new Dictionary<SkillEvent, Delegate>();
 
-    private static void OnListenerAdding(EventDefine eventType, Delegate del)
+    public static void Clear()
+    {
+        m_Event.Clear();
+    }
+
+    private static void OnListenerAdding(SkillEvent eventType, Delegate del)
     {
         if (!m_Event.ContainsKey(eventType))
         {
@@ -20,7 +27,7 @@ public static class EventCenter
         }
     }
 
-    private static void OnListenerRemoving(EventDefine eventType, Delegate del)
+    private static void OnListenerRemoving(SkillEvent eventType, Delegate del)
     {
         if (m_Event.ContainsKey(eventType))
         {
@@ -40,7 +47,7 @@ public static class EventCenter
         }
     }
 
-    private static void OnEventRemove(EventDefine eventType)
+    private static void OnEventRemove(SkillEvent eventType)
     {
         if (m_Event[eventType] == null)
         {
@@ -49,57 +56,57 @@ public static class EventCenter
     }
 
 
-    public static void AddListener(EventDefine eventType, CallBack callback)
+    public static void AddListener(SkillEvent eventType, CallBack callback)
     {
         OnListenerAdding(eventType, callback);
         m_Event[eventType] = (CallBack)m_Event[eventType] + callback;
     }
 
-    public static void AddListener<T>(EventDefine eventType, CallBack<T> callback)
+    public static void AddListener<T>(SkillEvent eventType, CallBack<T> callback)
     {
         OnListenerAdding(eventType, callback);
         m_Event[eventType] = (CallBack<T>)m_Event[eventType] + callback;
     }
 
-    public static void AddListener<T, U>(EventDefine eventType, CallBack<T, U> callback)
+    public static void AddListener<T, U>(SkillEvent eventType, CallBack<T, U> callback)
     {
         OnListenerAdding(eventType, callback);
         m_Event[eventType] = (CallBack<T, U>)m_Event[eventType] + callback;
     }
-    public static void AddListener<T, U, V>(EventDefine eventType, CallBack<T, U, V> callback)
+    public static void AddListener<T, U, V>(SkillEvent eventType, CallBack<T, U, V> callback)
     {
         OnListenerAdding(eventType, callback);
         m_Event[eventType] = (CallBack<T, U, V>)m_Event[eventType] + callback;
     }
 
-    public static void RemoveListener(EventDefine eventType, CallBack callback)
+    public static void RemoveListener(SkillEvent eventType, CallBack callback)
     {
         OnListenerRemoving(eventType, callback);
         m_Event[eventType] = (CallBack)m_Event[eventType] - callback;
         OnEventRemove(eventType);
     }
 
-    public static void RemoveListener<T>(EventDefine eventType, CallBack<T> callback)
+    public static void RemoveListener<T>(SkillEvent eventType, CallBack<T> callback)
     {
         OnListenerRemoving(eventType, callback);
         m_Event[eventType] = (CallBack<T>)m_Event[eventType] - callback;
         OnEventRemove(eventType);
     }
 
-    public static void RemoveListener<T, U>(EventDefine eventType, CallBack<T, U> callback)
+    public static void RemoveListener<T, U>(SkillEvent eventType, CallBack<T, U> callback)
     {
         OnListenerRemoving(eventType, callback);
         m_Event[eventType] = (CallBack<T, U>)m_Event[eventType] - callback;
         OnEventRemove(eventType);
     }
-    public static void RemoveListener<T, U, V>(EventDefine eventType, CallBack<T, U,V> callback)
+    public static void RemoveListener<T, U, V>(SkillEvent eventType, CallBack<T, U,V> callback)
     {
         OnListenerRemoving(eventType, callback);
         m_Event[eventType] = (CallBack<T, U, V>)m_Event[eventType] - callback;
         OnEventRemove(eventType);
     }
 
-    public static void Broadcast(EventDefine eventType)
+    public static void Broadcast(SkillEvent eventType)
     {
         Delegate d;
         if (m_Event.TryGetValue(eventType, out d))
@@ -116,7 +123,7 @@ public static class EventCenter
         }
     }
 
-    public static void Broadcast<T>(EventDefine eventType, T arg)
+    public static void Broadcast<T>(SkillEvent eventType, T arg)
     {
         Delegate d;
         if (m_Event.TryGetValue(eventType, out d))
@@ -133,7 +140,7 @@ public static class EventCenter
         }
     }
 
-    public static void Broadcast<T, U>(EventDefine eventType, T arg1, U arg2)
+    public static void Broadcast<T, U>(SkillEvent eventType, T arg1, U arg2)
     {
         Delegate d;
         if (m_Event.TryGetValue(eventType, out d))
@@ -150,7 +157,7 @@ public static class EventCenter
         }
     }
 
-    public static void Broadcast<T, U , V>(EventDefine eventType, T arg1, U arg2 , V arg3)
+    public static void Broadcast<T, U , V>(SkillEvent eventType, T arg1, U arg2 , V arg3)
     {
         Delegate d;
         if (m_Event.TryGetValue(eventType, out d))
@@ -166,5 +173,6 @@ public static class EventCenter
             }
         }
     }
+
 
 }

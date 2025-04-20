@@ -73,7 +73,10 @@ public class GMUI : UIViewBase
                 }
                 break;
             case "GetCard" :
-                if (parts.Length > 1 && int.TryParse(parts[1], out int cardId))
+                if (parts.Length >= 1 && int.TryParse(parts[1], out int cardId))
+                {
+                    BattleManager.Instance.GetHandCardByID(cardId);
+                }else
                 {
                     // 为角色添加一张卡牌
                     BattleManager.Instance.GetHandCard();

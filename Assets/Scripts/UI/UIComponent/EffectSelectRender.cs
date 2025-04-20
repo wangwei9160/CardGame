@@ -90,13 +90,13 @@ public class EffectSelectRender : MonoBehaviour
         Debug.Log("OnEnterTrade");
         if(effectClass.op_ids == 41) 
         {
-            //op_name = "买个苹果", effect_ids = 116, effect_types = "trade", effect = "花费20金币，恢复1/3的生命值" 
+            //op_name = "买个苹果", effect_ids = 116, effect_types = "trade", effect = "花费20金币,恢复1/3的生命值" 
             int maxHp = GameManager.Instance.GetPlayerMaxHP();
             GameManager.Instance.OnPlayerGetHp(maxHp / 3);
         }
         else if(effectClass.op_ids == 42) 
         {
-            // op_name = "买点装备", effect_ids = 116, effect_types = "trade", effect = "花费20金币，获得两个随机卡"
+            // op_name = "买点装备", effect_ids = 116, effect_types = "trade", effect = "花费20金币,获得两个随机卡"
             
         }
         EventCenter.Broadcast(EventDefine.OnMergePanelShow);

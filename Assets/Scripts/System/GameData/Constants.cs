@@ -1,4 +1,4 @@
-﻿// 一些常量，游戏加载后不会修改的内容
+﻿// 一些常量,游戏加载后不会修改的内容
 
 using System.Collections.Generic;
 

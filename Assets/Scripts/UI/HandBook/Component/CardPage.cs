@@ -21,7 +21,7 @@ public class CardPage : UIViewBase
         // 添加GridLayoutGroup组件
         GridLayoutGroup grid = content.gameObject.AddComponent<GridLayoutGroup>();
         grid.cellSize = new Vector2(321, 441); // 卡牌尺寸
-        grid.spacing = new Vector2(40, 0); // 卡牌之间的水平间距为40，垂直间距为0
+        grid.spacing = new Vector2(40, 0); // 卡牌之间的水平间距为40,垂直间距为0
         grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
         grid.constraintCount = 4; // 每行4个
         grid.padding = new RectOffset(0, 0, 50, 0); // 顶部间距50

@@ -154,7 +154,7 @@ public class UIManager : ManagerBase<UIManager>
         }
 
         var ui = CreatePrefabByName(uiName);
-        Index = m_MultipDicCnt[uiName]++;   // 自增赋值，需要注意多线程环境
+        Index = m_MultipDicCnt[uiName]++;   // 自增赋值,需要注意多线程环境
         ui.ResetIndex(Index);
         ui.Init(uiName, parent , data);
         m_MultipDic[uiName].Add(ui);

@@ -37,4 +37,10 @@ public class BaseEnemy : BaseCharacter
         EventCenter.Broadcast<int, int>(EventDefine.OnHpChangeByName, hp, HpUIIndex);
     }
 
+    public void OnHurt(int damage)
+    {
+        hp -= damage;
+        EventCenter.Broadcast<int, int>(EventDefine.OnHpChangeByName, hp, HpUIIndex);
+    }
+
 }
