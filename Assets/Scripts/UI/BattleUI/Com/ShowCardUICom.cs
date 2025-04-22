@@ -86,13 +86,21 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         float halfHeight = rectTransform.rect.height * 0.5f;
         
         rectTransform.anchoredPosition =  eventData.position + new Vector2(0, halfHeight);
+        if(eventData.position.y >= 500f)
+        {
+            rectTransform.anchoredPosition = eventData.position + new Vector2(1920f, 1080f);
+            SkillManager.Instance.PreExecuteSelecte((SkillSelectorType)1);
+        }else
+        {
+            SkillManager.Instance.PreExecuteSelecteClose((SkillSelectorType)1);
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         isDrag = false;
         EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_STOP);
-        if(eventData.position.y >= 600f) 
+        if(eventData.position.y >= 500f) 
         {
             EventCenter.Broadcast(EventDefine.OnDeleteCardByIndex , Index);
             int rd = RandomUtil.RandomInt(0,1 + 1);
@@ -105,6 +113,7 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         else {
             EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);
         }
+        SkillManager.Instance.PreExecuteSelecteClose((SkillSelectorType)1);
         Hide();
     }
 

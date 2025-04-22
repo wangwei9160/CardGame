@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEditor;
+using Unity.VisualScripting.FullSerializer;
 
 public enum SkillType
 {
@@ -12,10 +13,16 @@ public enum SkillType
     GAIN = 4,
 }
 
+public enum SkillSelectorType
+{
+    ONE = 1,
+}
+
 public class SkillManager : ManagerBase<SkillManager>
 {
     // 主动效果 or 被动效果
     private Dictionary<SkillType, SkillHandlerBase> skillHandlers;
+    private Dictionary<SkillSelectorType, SkillSelectorBase> skillSelectors;
 
     private void Start()
     {
@@ -26,6 +33,36 @@ public class SkillManager : ManagerBase<SkillManager>
             {SkillType.DRAW , new DrawCardSkillHandler() },
             {SkillType.GAIN , new GainSkillHandler() },
         };
+        skillSelectors = new Dictionary<SkillSelectorType, SkillSelectorBase>
+        {
+            {SkillSelectorType.ONE , new OneSelector() },
+        };
+    }
+
+    public void PreExecuteSelecte(SkillSelectorType tp)
+    {
+        if (skillSelectors.TryGetValue(tp, out var handler))
+        {
+            handler.CreateSelector();
+            return;
+        }
+        else
+        {
+            Debug.Log($"当前不存在 Type={tp} 的技能选择器");
+        }
+    }
+
+    public void PreExecuteSelecteClose(SkillSelectorType tp)
+    {
+        if (skillSelectors.TryGetValue(tp, out var handler))
+        {
+            handler.CloseSelector();
+            return;
+        }
+        else
+        {
+            Debug.Log($"当前不存在 Type={tp} 的技能选择器");
+        }
     }
 
     public void ExecuteEffect(SkillType tp , string config)

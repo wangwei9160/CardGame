@@ -52,6 +52,8 @@ public class UIViewBase : MonoBehaviour
     // 所有权归属,owner
     public virtual void Init(string str ,GameObject obj , string data) { Init(str , data); }
 
+    public virtual void Init(string str, SkillSelectorBase obj, string data) { Init(str, data); }
+
     public virtual void Show()
     {
         gameObject.SetActive(true);

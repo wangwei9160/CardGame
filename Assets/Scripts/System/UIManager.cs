@@ -136,6 +136,28 @@ public class UIManager : ManagerBase<UIManager>
         m_SingleDic[uiName].Show();
     }
 
+    public void Show(string uiName, SkillSelectorBase parent, string data = "{}")
+    {
+        UiConfig cfg = UIConfigManager.Configs[uiName];
+        if (!m_SingleDic.ContainsKey(uiName))
+        {
+            if (cfg.BindScene != "")
+            {
+                // 通过prefab 创建场景相关内容
+                var obj = CreatePrefabByPath(cfg.BindScene);
+                obj.name = cfg.BindScene;
+            }
+
+            var uiObj = CreatePrefabByPath(cfg.uiPath);
+            uiObj.name = uiName;
+            UIViewBase ui = uiObj.GetComponent<UIViewBase>();
+            uiObj.transform.SetParent(m_LayerTransform[(int)ui.Layer]);
+            m_SingleDic[uiName] = ui;
+            m_SingleDic[uiName].Init(uiName, parent, data);
+        }
+        m_SingleDic[uiName].Show();
+    }
+
     public void Show(string uiName , GameObject parent, ref int Index , string data = "{}")
     {
         if (!m_MultipDic.ContainsKey(uiName))

@@ -40,6 +40,8 @@ public class UIConfigManager
         {"HandBookUI" , new UiConfig("HandBookUI" , UILAYER.M_TIP_LAYER , "UI/HandBookUI" , "") },
         {"StoreUI" , new UiConfig("StoreUI" , UILAYER.M_NORMAL_LAYER , "UI/StoreUI" , "") },
         {"SettingUI" , new UiConfig("SettingUI" , UILAYER.M_TIP_LAYER , "UI/SettingUI" , "") },
+        {"OneSelecteUI" , new UiConfig("OneSelecteUI" , UILAYER.M_TIP_LAYER , "UI/OneSelecteUI" , "") },
         
+
     };
 }
