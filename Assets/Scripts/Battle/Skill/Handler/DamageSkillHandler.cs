@@ -7,6 +7,15 @@ public class DamageSkillHandler : SkillHandlerBase
         ONE = 1,
     }
 
+    public override void Execute(SkillSelectorBase selector)
+    {
+        List<BaseCharacter> select = selector.GetUnits();
+        for(int i = 0 ; i < select.Count ; i++)
+        {
+            select[i].OnHurt(10);
+        }
+    }
+
     public override void Execute(string cfg)
     {
         List<BaseEnemy> enemies = BattleManager.Instance.getAllEnemy();
@@ -19,4 +28,6 @@ public class DamageSkillHandler : SkillHandlerBase
     {
         return "";
     }
+
+    
 }

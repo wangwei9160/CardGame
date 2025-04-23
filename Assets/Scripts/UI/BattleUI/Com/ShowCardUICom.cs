@@ -39,7 +39,7 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
 
     public void SetData(int idx , Vector3 pos , int id)
     {
-        if(Index != idx) 
+        if(Index != idx && Index != -1) 
         {
             EventCenter.Broadcast<int>(EventDefine.ON_CARD_UNSELECT , Index);
         }
@@ -49,6 +49,7 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         transform.position = pos;
         CardClass cfg = CardConfig.GetCardClassByKey(id);
         cardName.text = cfg.name;
+        cardType = idx % MaxType;
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -80,6 +81,9 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_START);
     }
 
+    public int MaxType = 2;
+    public int cardType;
+
     public void OnDrag(PointerEventData eventData)
     {
         RectTransform rectTransform = transform.GetComponent<RectTransform>();
@@ -88,11 +92,11 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         rectTransform.anchoredPosition =  eventData.position + new Vector2(0, halfHeight);
         if(eventData.position.y >= 500f)
         {
-            rectTransform.anchoredPosition = eventData.position + new Vector2(1920f, 1080f);
-            SkillManager.Instance.PreExecuteSelecte((SkillSelectorType)1);
+            if(cardType != 0) rectTransform.anchoredPosition = eventData.position + new Vector2(1920f, 1080f);
+            SkillManager.Instance.PreExecuteSelecte((SkillSelectorType)cardType);
         }else
         {
-            SkillManager.Instance.PreExecuteSelecteClose((SkillSelectorType)1);
+            SkillManager.Instance.PreExecuteSelecteClose((SkillSelectorType)cardType);
         }
     }
 
@@ -102,13 +106,24 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_STOP);
         if(eventData.position.y >= 500f) 
         {
-            EventCenter.Broadcast(EventDefine.OnDeleteCardByIndex , Index);
-            int rd = RandomUtil.RandomInt(0,1 + 1);
-            if(rd == 0){
-                SkillManager.Instance.ExecuteEffect(SkillType.DAMAGE , "");
+            if(cardType == 0){
+                if(SkillManager.Instance.checkTypeAndSelect(SkillType.HEAL , (SkillSelectorType)cardType)){
+                    EventCenter.Broadcast(EventDefine.OnDeleteCardByIndex , Index);
+                    Index = -1;
+                    SkillManager.Instance.ExecuteEffect(SkillType.HEAL , (SkillSelectorType)cardType , "");
+                }else {
+                    EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);
+                }
             }else {
-                SkillManager.Instance.ExecuteEffect(SkillType.HEAL , "");
+                if(SkillManager.Instance.checkTypeAndSelect(SkillType.DAMAGE , (SkillSelectorType)cardType)){
+                    EventCenter.Broadcast(EventDefine.OnDeleteCardByIndex , Index);
+                    Index = -1;
+                    SkillManager.Instance.ExecuteEffect(SkillType.DAMAGE , (SkillSelectorType)cardType , "");
+                }else {
+                    EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);
+                }
             }
+            
         }
         else {
             EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);

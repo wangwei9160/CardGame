@@ -9,4 +9,9 @@ public class GainSkillHandler : SkillHandlerBase
     {
         throw new System.NotImplementedException();
     }
+
+    public override void Execute(SkillSelectorBase selector)
+    {
+        throw new System.NotImplementedException();
+    }
 }

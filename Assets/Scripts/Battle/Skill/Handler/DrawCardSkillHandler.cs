@@ -10,4 +10,9 @@ public class DrawCardSkillHandler : SkillHandlerBase
     {
         BattleManager.Instance.GetHandCard();
     }
+
+    public override void Execute(SkillSelectorBase selector)
+    {
+        throw new System.NotImplementedException();
+    }
 }

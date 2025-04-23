@@ -14,4 +14,13 @@ public class HeadlSkillHandler : SkillHandlerBase
             obj.OnHeal(10);
         }
     }
+
+    public override void Execute(SkillSelectorBase selector)
+    {
+        var playerTeam = BattleManager.Instance.getAllPlayerTeam();
+        foreach (var obj in playerTeam)
+        {
+            obj.OnHeal(10);
+        }
+    }
 }

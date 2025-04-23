@@ -35,7 +35,10 @@ public class OneSelector : SkillSelectorBase
 
     public override List<BaseCharacter> GetUnits()
     {
-        throw new System.NotImplementedException();
+        BaseCharacter unit = GetUnit();
+        if(unit == null) return null;
+        List<BaseCharacter> _list = new List<BaseCharacter>{_unit};
+        return _list;
     }
 
 }

@@ -15,6 +15,7 @@ public enum SkillType
 
 public enum SkillSelectorType
 {
+    NONE = 0,
     ONE = 1,
 }
 
@@ -36,6 +37,7 @@ public class SkillManager : ManagerBase<SkillManager>
         skillSelectors = new Dictionary<SkillSelectorType, SkillSelectorBase>
         {
             {SkillSelectorType.ONE , new OneSelector() },
+            {SkillSelectorType.NONE , new NoneSelector() },
         };
     }
 
@@ -65,11 +67,29 @@ public class SkillManager : ManagerBase<SkillManager>
         }
     }
 
-    public void ExecuteEffect(SkillType tp , string config)
+    public bool checkTypeAndSelect(SkillType tp , SkillSelectorType stp)
+    {
+        if(stp == SkillSelectorType.ONE) 
+        {
+            if (skillSelectors.TryGetValue(stp, out var handler))
+            {
+                return handler.GetUnits() != null;
+            }
+            else
+            {
+                Debug.Log($"当前不存在 Type={tp} 的技能选择器");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void ExecuteEffect(SkillType tp , SkillSelectorType stp , string config)
     {
         if (skillHandlers.TryGetValue(tp , out var handler))
         {
-            handler.Execute(config);
+            if(skillSelectors.TryGetValue(stp , out var selector))
+            handler.Execute(selector);
             return ;
         }else
         {
