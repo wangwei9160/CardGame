@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -6,11 +7,13 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler
 {
     private int Index;
     private Text cardName;
+    private Text description;
     private CardClass config;
 
     private void Awake()
     {
         cardName = transform.Find("name").GetComponent<Text>();
+        description = transform.Find("description").GetComponent<Text>();
     }
 
     public void SetIndex(int idx)
@@ -23,6 +26,15 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler
         SetIndex(idx);
         config = CardConfig.GetCardClassByKey(id);
         cardName.text = config.name;
+        description.text = SkillManager.Instance.GetSkillDescription(id);
+    }
+
+    public void SetData(int idx , CardClass cfg)
+    {
+        SetIndex(idx);
+        config = cfg;
+        cardName.text = config.name;
+        description.text = SkillManager.Instance.GetSkillDescription(cfg);
     }
 
     public void Hide() {gameObject.SetActive(false);}

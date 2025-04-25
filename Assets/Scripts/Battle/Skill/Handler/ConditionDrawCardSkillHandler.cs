@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-public class DrawCardSkillHandler : SkillHandlerBase
+public class ConditionDrawCardSkillHandler : SkillHandlerBase
 {
     public override string Description(List<int> resource)
     {
-        return DescriptionByAllInt(resource);
+        return Description(resource[0]);
     }
 
     public override void Execute(List<int> resource)

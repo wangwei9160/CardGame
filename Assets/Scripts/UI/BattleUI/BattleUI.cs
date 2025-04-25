@@ -140,8 +140,10 @@ public class BattleUI : UIViewBase
         GameObject card = ResourceUtil.GetCard();
         var go = Instantiate(card , cardArea);
         CardUI cardUI = go.GetComponent<CardUI>();
-        CardClass cfg = CardConfig.GetCardClassByKey(100001);
-        cardUI.SetData(cardArea.childCount, 100001);
+        // 随机获得一张卡牌
+        List<CardClass> cards = CardConfig.GetAll();
+        CardClass cfg = RandomUtil.GetRandomValueInList(cards);
+        cardUI.SetData(cardArea.childCount, cfg);
         card.name = $"卡牌-{ID}-{cfg.name}";
         ID++;
         AdjustCardPosition();
@@ -155,7 +157,7 @@ public class BattleUI : UIViewBase
         CardUI cardUI = go.GetComponent<CardUI>();
         CardClass cfg = CardConfig.GetCardClassByKey(id);
         card.name = $"卡牌-{ID}-{cfg.name}";
-        cardUI.SetData(cardArea.childCount, id);
+        cardUI.SetData(cardArea.childCount, cfg);
         ID++;
         AdjustCardPosition();
     }

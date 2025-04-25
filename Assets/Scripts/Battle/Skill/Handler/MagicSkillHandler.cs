@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 
-public class GainSkillHandler : SkillHandlerBase
+public class MagicSkillHandler : SkillHandlerBase
 {
     public override string Description(List<int> resource)
     {
-        return DescriptionCommon(resource);
+        return DescriptionByAllInt(resource);
     }
 
 }

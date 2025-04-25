@@ -7,12 +7,14 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
 {
     public int Index;
     public Text cardName;
+    private Text description;
     public int ID;
 
     private void Awake()
     {
         Index = -1;
         cardName = transform.Find("name").GetComponent<Text>();
+        description = transform.Find("description").GetComponent<Text>();
     }
 
     public void Hide() 
@@ -49,7 +51,7 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         transform.position = pos;
         CardClass cfg = CardConfig.GetCardClassByKey(id);
         cardName.text = cfg.name;
-        cardType = idx % MaxType;
+        description.text = SkillManager.Instance.GetSkillDescription(id);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -81,9 +83,6 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_START);
     }
 
-    public int MaxType = 2;
-    public int cardType;
-
     public void OnDrag(PointerEventData eventData)
     {
         RectTransform rectTransform = transform.GetComponent<RectTransform>();
@@ -92,11 +91,11 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         rectTransform.anchoredPosition =  eventData.position + new Vector2(0, halfHeight);
         if(eventData.position.y >= 500f)
         {
-            if(cardType != 0) rectTransform.anchoredPosition = eventData.position + new Vector2(1920f, 1080f);
-            SkillManager.Instance.PreExecuteSelecte((SkillSelectorType)cardType);
+            // if(cardType != 0) rectTransform.anchoredPosition = eventData.position + new Vector2(1920f, 1080f);
+            // SkillManager.Instance.PreExecuteSelecte((SkillSelectorType)cardType);
         }else
         {
-            SkillManager.Instance.PreExecuteSelecteClose((SkillSelectorType)cardType);
+            // SkillManager.Instance.PreExecuteSelecteClose((SkillSelectorType)cardType);
         }
     }
 
@@ -106,24 +105,13 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_STOP);
         if(eventData.position.y >= 500f) 
         {
-            if(cardType == 0){
-                if(SkillManager.Instance.checkTypeAndSelect(SkillType.HEAL , (SkillSelectorType)cardType)){
-                    EventCenter.Broadcast(EventDefine.OnDeleteCardByIndex , Index);
-                    Index = -1;
-                    SkillManager.Instance.ExecuteEffect(SkillType.HEAL , (SkillSelectorType)cardType , "");
-                }else {
-                    EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);
-                }
+            if(SkillManager.Instance.checkTypeAndSelect(SkillType.ATTACK , (SkillSelectorType)0)){
+                EventCenter.Broadcast(EventDefine.OnDeleteCardByIndex , Index);
+                Index = -1;
+                SkillManager.Instance.ExecuteEffect(SkillType.ATTACK , (SkillSelectorType)0 , "");
             }else {
-                if(SkillManager.Instance.checkTypeAndSelect(SkillType.DAMAGE , (SkillSelectorType)cardType)){
-                    EventCenter.Broadcast(EventDefine.OnDeleteCardByIndex , Index);
-                    Index = -1;
-                    SkillManager.Instance.ExecuteEffect(SkillType.DAMAGE , (SkillSelectorType)cardType , "");
-                }else {
-                    EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);
-                }
+                EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);
             }
-            
         }
         else {
             EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);

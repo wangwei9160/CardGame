@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-public class HeadlSkillHandler : SkillHandlerBase
+public class HealSkillHandler : SkillHandlerBase
 {
-    public override string Description()
+    public override string Description(List<int> resource)
     {
-        return "";
+        return DescriptionCommon(resource);
     }
 
-    public override void Execute(string cfg)
+    public override void Execute(List<int> resource)
     {
         var playerTeam = BattleManager.Instance.getAllPlayerTeam();
         foreach (var obj in playerTeam)

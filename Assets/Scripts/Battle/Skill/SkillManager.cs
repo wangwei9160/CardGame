@@ -1,38 +1,46 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
-using UnityEditor;
-using Unity.VisualScripting.FullSerializer;
-
-public enum SkillType
-{
-    DAMAGE = 1,
-    HEAL = 2,
-    DRAW = 3,
-    GAIN = 4,
-}
-
-public enum SkillSelectorType
-{
-    NONE = 0,
-    ONE = 1,
-}
 
 public class SkillManager : ManagerBase<SkillManager>
 {
     // 主动效果 or 被动效果
+    private Dictionary<int , SkillType> id2SkillType;
     private Dictionary<SkillType, SkillHandlerBase> skillHandlers;
     private Dictionary<SkillSelectorType, SkillSelectorBase> skillSelectors;
 
     private void Start()
     {
+        id2SkillType = new Dictionary<int, SkillType>()
+        {
+            {1,SkillType.ATTACK},
+            {2,SkillType.HEAL},
+            {3,SkillType.GAIN},
+            {4,SkillType.REDUCE},
+            {5,SkillType.DRAW},
+            {6,SkillType.GET},
+            {7,SkillType.GET},
+            {8,SkillType.CONDITION_DRAW},
+            {9,SkillType.CONDITION_ATTACK},
+            {10,SkillType.SUMMON},
+            {11,SkillType.BUFF},
+            {12,SkillType.BACK},
+            {13,SkillType.SUMMON},
+            {14,SkillType.SUMMON},
+        };
         skillHandlers = new Dictionary<SkillType, SkillHandlerBase>()
         {
-            {SkillType.DAMAGE , new DamageSkillHandler() },
-            {SkillType.HEAL , new HeadlSkillHandler() },
-            {SkillType.DRAW , new DrawCardSkillHandler() },
+            {SkillType.ATTACK , new AttackSkillHandler() },
+            {SkillType.HEAL , new HealSkillHandler() },
             {SkillType.GAIN , new GainSkillHandler() },
+            {SkillType.REDUCE , new ReduceSkillHandler() },
+            {SkillType.DRAW , new DrawCardSkillHandler() },
+            {SkillType.MAGIC , new MagicSkillHandler() },
+            {SkillType.GET , new GetSkillHandler() },
+            {SkillType.CONDITION_DRAW , new ConditionDrawCardSkillHandler() },
+            {SkillType.CONDITION_ATTACK , new ConditionAttackSkillHandler() },
+            {SkillType.SUMMON , new SummonSkillHandler() },
+            {SkillType.BUFF , new BuffSkillHandler() },
+            {SkillType.BACK , new BackSkillHandler() },
         };
         skillSelectors = new Dictionary<SkillSelectorType, SkillSelectorBase>
         {
@@ -97,11 +105,37 @@ public class SkillManager : ManagerBase<SkillManager>
         }
     }
 
-    public string GetSkillDescription(SkillType tp)
+    public string GetSkillDescription(int id)
     {
-        if (skillHandlers.TryGetValue(tp , out var handler))
+        CardClass cfg = CardConfig.GetCardClassByKey(id);
+        List<string> ret = new List<string>();
+        var _list = cfg.active_id;
+        for(int i = 0 ; i < _list.Count ; i++)
         {
-            return handler.Description();
+            ret.Add(GetSkillDescriptionByType(_list[i]));
+        }
+        string ans = string.Join("\n", ret);
+        return ans;
+    }
+
+    public string GetSkillDescription(CardClass cfg)
+    {
+        List<string> ret = new List<string>();
+        var _list = cfg.active_id;
+        for(int i = 0 ; i < _list.Count ; i++)
+        {
+            ret.Add(GetSkillDescriptionByType(_list[i]));
+        }
+        string ans = string.Join("\n", ret);
+        return ans;
+    }
+
+    public string GetSkillDescriptionByType(List<int> args)
+    {
+        SkillType tp = id2SkillType[args[0]];
+        if (skillHandlers.TryGetValue(tp, out var handler))
+        {
+            return handler.Description(args);
         }else
         {
             Debug.LogWarning($"当前不存在 Type={tp} 的技能类型处理器");
@@ -110,6 +144,3 @@ public class SkillManager : ManagerBase<SkillManager>
     }
 
 }
-
-// 卡牌效果显示,找到效果表,显示效果
-// 卡牌使用（对敌人造成伤害）,找效果表,skillManager内效果找到触发器,传参,触发事件,事件下发 or 直接触发

@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 
-public class DamageSkillHandler : SkillHandlerBase
+public class AttackSkillHandler : SkillHandlerBase
 {
-    public enum Type{
-        ALL = 0,
-        ONE = 1,
+    // 1 
+    public override string Description(List<int> resource)
+    {
+        return DescriptionCommon(resource);
     }
-
     public override void Execute(SkillSelectorBase selector)
     {
         List<BaseCharacter> select = selector.GetUnits();
@@ -16,7 +16,7 @@ public class DamageSkillHandler : SkillHandlerBase
         }
     }
 
-    public override void Execute(string cfg)
+    public override void Execute(List<int> resource)
     {
         List<BaseEnemy> enemies = BattleManager.Instance.getAllEnemy();
         foreach(BaseEnemy enemy in  enemies)
@@ -24,10 +24,5 @@ public class DamageSkillHandler : SkillHandlerBase
             enemy.OnHurt(10);
         }
     }
-    public override string Description()
-    {
-        return "";
-    }
-
     
 }
