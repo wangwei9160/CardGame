@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -6,16 +7,34 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler
 {
     private int Index;
     private Text cardName;
+    private Text description;
+    private CardClass config;
 
     private void Awake()
     {
         cardName = transform.Find("name").GetComponent<Text>();
+        description = transform.Find("description").GetComponent<Text>();
     }
 
-    public void SetData(int idx)
+    public void SetIndex(int idx)
     {
         Index = idx;
-        cardName.text = $"卡牌-{idx}";
+    }
+
+    public void SetData(int idx , int id)
+    {
+        SetIndex(idx);
+        config = CardConfig.GetCardClassByKey(id);
+        cardName.text = config.name;
+        description.text = SkillManager.Instance.GetSkillDescription(id);
+    }
+
+    public void SetData(int idx , CardClass cfg)
+    {
+        SetIndex(idx);
+        config = cfg;
+        cardName.text = config.name;
+        description.text = SkillManager.Instance.GetSkillDescription(cfg);
     }
 
     public void Hide() {gameObject.SetActive(false);}
@@ -23,7 +42,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        EventCenter.Broadcast(EventDefine.ON_CARD_SELECT , Index);
+        EventCenter.Broadcast(EventDefine.ON_CARD_SELECT , Index , config.id);
         Hide();
     }
 

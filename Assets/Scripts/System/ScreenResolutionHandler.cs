@@ -18,7 +18,7 @@ public class ScreenResolutionHandler : MonoBehaviour
         // 检查屏幕分辨率是否发生变化
         if (lastScreenSize.x != Screen.width || lastScreenSize.y != Screen.height)
         {
-            // 分辨率发生变化，更新位置
+            // 分辨率发生变化,更新位置
             lastScreenSize = new Vector2(Screen.width, Screen.height);
             StartCoroutine(FAdjustPosition());
         }

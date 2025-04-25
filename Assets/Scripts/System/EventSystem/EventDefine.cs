@@ -11,8 +11,8 @@
     OnMoneyChange,          // 金币数量修正
 
     AfterEffectShowReward,  // 奖励界面动画结束后提供奖励
-    SelectMoneyReward,      // 是否拿取钱的奖励，提前点前往将放弃奖励
-    SelectCardReward,       // 是否拿取卡牌的奖励，提前点前往将放弃奖励
+    SelectMoneyReward,      // 是否拿取钱的奖励,提前点前往将放弃奖励
+    SelectCardReward,       // 是否拿取卡牌的奖励,提前点前往将放弃奖励
 
     // 游戏进程相关
     OnBattleStart,          // 进入战斗
@@ -25,12 +25,13 @@
     // 卡牌ui展示相关
 
     OnGetCard,              // 获得一张卡牌
+    OnGetCardByID,          // 获得指定id的卡牌
     OnDeleteCard,            // 删除一张卡牌
     OnDeleteCardByIndex,            // 删除一张卡牌
 
     AdjustCardPosition,     // 调整手牌里的布局
 
-    // 调整分辨率，修改布局
+    // 调整分辨率,修改布局
     AdjustPosition,
 
     // ui事件

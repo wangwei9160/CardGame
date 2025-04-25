@@ -61,10 +61,16 @@ public class EventUI : UIViewBase
     {
         dialogClass = JsonUtility.FromJson<DialogClass>(data);
         fullText = dialogClass.content;
-        for (int i = 0; i < dialogClass.op_ids.Count; i++)
+        for(int i = 0 ; i < effectBtns.Length ; i++)
         {
-            var effectClass = EffectConfig.GetEffectClassByKey(dialogClass.op_ids[i]);
-            effectBtns[i].GetComponent<EffectSelectRender>().SetData(effectClass);
+            if(i < dialogClass.op_ids.Count)
+            {
+                var effectClass = EffectConfig.GetEffectClassByKey(dialogClass.op_ids[i]);
+                effectBtns[i].gameObject.SetActive(true);
+                effectBtns[i].GetComponent<EffectSelectRender>().SetData(effectClass);
+            }else {
+                effectBtns[i].gameObject.SetActive(false);
+            }
         }
         StartCoroutine(TypeText());
     }

@@ -143,7 +143,7 @@ public class MinionCard : HandCard
             // 检查战场空间
             if (!CardBattleManager.Instance.HasAvailableSpace())
             {
-                Debug.Log("战场空间不足，无法放置随从");
+                Debug.Log("战场空间不足,无法放置随从");
                 return false;
             }
             

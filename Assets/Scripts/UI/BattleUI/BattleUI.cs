@@ -30,11 +30,12 @@ public class BattleUI : UIViewBase
         EventCenter.AddListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
         EventCenter.AddListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
         EventCenter.AddListener(EventDefine.OnGetCard, OnGetCard);
+        EventCenter.AddListener<int>(EventDefine.OnGetCardByID, OnGetCardByID);
         EventCenter.AddListener(EventDefine.OnDeleteCard, OnDeleteCard);
         EventCenter.AddListener(EventDefine.ON_CARD_DRAG_START, ON_CARD_DRAG_START);
         EventCenter.AddListener(EventDefine.ON_CARD_DRAG_STOP, ON_CARD_DRAG_STOP);
         EventCenter.AddListener<int>(EventDefine.OnDeleteCardByIndex, OnDeleteCardByIndex);
-        EventCenter.AddListener<int>(EventDefine.ON_CARD_SELECT, ON_CARD_SELECT);
+        EventCenter.AddListener<int,int>(EventDefine.ON_CARD_SELECT, ON_CARD_SELECT);
         EventCenter.AddListener<int>(EventDefine.ON_CARD_UNSELECT, ON_CARD_UNSELECT);
         EventCenter.AddListener(EventDefine.AdjustCardPosition, StartAdjustCard);
         EventCenter.AddListener<int , int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
@@ -46,11 +47,12 @@ public class BattleUI : UIViewBase
         EventCenter.RemoveListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
         EventCenter.RemoveListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
         EventCenter.RemoveListener(EventDefine.OnGetCard, OnGetCard);
+        EventCenter.RemoveListener<int>(EventDefine.OnGetCardByID, OnGetCardByID);
         EventCenter.RemoveListener(EventDefine.OnDeleteCard, OnDeleteCard);
         EventCenter.RemoveListener(EventDefine.ON_CARD_DRAG_START, ON_CARD_DRAG_START);
         EventCenter.RemoveListener(EventDefine.ON_CARD_DRAG_STOP, ON_CARD_DRAG_STOP);
         EventCenter.RemoveListener<int>(EventDefine.OnDeleteCardByIndex, OnDeleteCardByIndex);
-        EventCenter.RemoveListener<int>(EventDefine.ON_CARD_SELECT, ON_CARD_SELECT);
+        EventCenter.RemoveListener<int,int>(EventDefine.ON_CARD_SELECT, ON_CARD_SELECT);
         EventCenter.RemoveListener<int>(EventDefine.ON_CARD_UNSELECT, ON_CARD_UNSELECT);
         EventCenter.RemoveListener(EventDefine.AdjustCardPosition, StartAdjustCard);
         EventCenter.RemoveListener<int , int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
@@ -136,9 +138,27 @@ public class BattleUI : UIViewBase
     {
         if(cardArea.childCount == maxCardCount) return;
         GameObject card = ResourceUtil.GetCard();
-        card.name = $"Card_{ID}";
+        var go = Instantiate(card , cardArea);
+        CardUI cardUI = go.GetComponent<CardUI>();
+        // 随机获得一张卡牌
+        List<CardClass> cards = CardConfig.GetAll();
+        CardClass cfg = RandomUtil.GetRandomValueInList(cards);
+        cardUI.SetData(cardArea.childCount, cfg);
+        card.name = $"卡牌-{ID}-{cfg.name}";
         ID++;
-        Instantiate(card , cardArea);
+        AdjustCardPosition();
+    }
+
+    public void OnGetCardByID(int id)
+    {
+        if (cardArea.childCount == maxCardCount) return;
+        GameObject card = ResourceUtil.GetCard();
+        var go = Instantiate(card, cardArea);
+        CardUI cardUI = go.GetComponent<CardUI>();
+        CardClass cfg = CardConfig.GetCardClassByKey(id);
+        card.name = $"卡牌-{ID}-{cfg.name}";
+        cardUI.SetData(cardArea.childCount, cfg);
+        ID++;
         AdjustCardPosition();
     }
 
@@ -155,18 +175,18 @@ public class BattleUI : UIViewBase
         StartCoroutine(AdjustCardIEnumerator());
     }
 
-    public void ON_CARD_SELECT(int id)
+    public void ON_CARD_SELECT(int pos , int id)
     {
         int cardCount = cardArea.childCount;
         bool applyRotation = cardCount >= applyRotationTime;
         float middleOffset = (cardCount - 1) / 2f;
-        float offset = id - middleOffset;
+        float offset = pos - middleOffset;
         float spacing = spacingXposList[cardCount];
         float spacingY = spacingYposList[cardCount];
         float fixPos = Mathf.Abs(offset) * spacingY;
-        Vector3 pos = cardArea.GetChild(id).position + new Vector3(0 , 50f + fixPos , 0);
-        showCard.SetData(id , pos );
-        AdjustCardPositionWhenCardSelect(id);
+        Vector3 posistion = cardArea.GetChild(pos).position + new Vector3(0 , 50f + fixPos , 0);
+        showCard.SetData(pos, posistion , id);
+        AdjustCardPositionWhenCardSelect(pos);
     }
 
     public void ON_CARD_UNSELECT(int id)
@@ -217,7 +237,7 @@ public class BattleUI : UIViewBase
             card.anchoredPosition = Vector2.zero;
             card.localRotation = Quaternion.Euler(0, 0, 0);
             card.localScale = Vector3.one;
-            card.GetComponent<CardUI>().SetData(0);
+            card.GetComponent<CardUI>().SetIndex(0);
             return;
         }
 
@@ -240,7 +260,7 @@ public class BattleUI : UIViewBase
             Vector2 position = new Vector2(xPos, yPos);
             
             RectTransform card = cardArea.GetChild(i) as RectTransform;
-            card.GetComponent<CardUI>().SetData(i);
+            card.GetComponent<CardUI>().SetIndex(i);
             // 使用anchoredPosition而不是localPosition
             card.anchoredPosition = position;
             float rotationZ = applyRotation ? -offset * rot : 0f;

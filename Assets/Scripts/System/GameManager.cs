@@ -238,7 +238,7 @@ public class GameManager : ManagerBase<GameManager>
         }
         if (IsGameState(GameState.Battle))
         {
-            // 如果仍然是战斗回合 ， 则进入玩家回合
+            // 如果仍然是战斗回合 , 则进入玩家回合
             EventCenter.Broadcast(EventDefine.OnPlayerTurnStart); // 进入玩家可操作回合事件广播
         }
     }
@@ -260,7 +260,7 @@ public class GameManager : ManagerBase<GameManager>
         }
         if (IsGameState(GameState.Battle))
         {
-            // 如果仍然是战斗回合 ， 则进入新的回合开始效果
+            // 如果仍然是战斗回合 , 则进入新的回合开始效果
             BeforeTurn();
         }
     }

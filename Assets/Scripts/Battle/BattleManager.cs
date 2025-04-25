@@ -71,7 +71,7 @@ public class BattleManager : ManagerBase<BattleManager>
         AddEnemy(enemyNum);
     }
 
-    // 临时使用，用于初始化时添加我方角色
+    // 临时使用,用于初始化时添加我方角色
     private void AddPlayer(int PlayerNum, int CardNum)
     {
         PlayerNum = Math.Min(PlayerNum, 1);
@@ -87,20 +87,26 @@ public class BattleManager : ManagerBase<BattleManager>
             Instantiate(enemy, ContainerManager.Instance.Players[i + PlayerNum]);
         }
     }
-    // 临时使用，用于初始化时添加敌方角色
+    // 临时使用,用于初始化时添加敌方角色
     private void AddEnemy(int num)
     {
         num = Math.Min(num, 3);
         for (int i = 0; i < num; i++)
         {
-            var obj = Instantiate(enemy, ContainerManager.Instance.Enemies[i]);
-            obj.GetComponent<BaseEnemy>().Index = i;
+            var go = Instantiate(enemy, ContainerManager.Instance.Enemies[i]);
+            BaseEnemy obj = go.GetComponent<BaseEnemy>();
+            obj.Index = i;
+            battleData.enemies.Add(obj);
         }
     }
 
     public void GetHandCard()
     {
         EventCenter.Broadcast(EventDefine.OnGetCard);
+    }
+    public void GetHandCardByID(int id)
+    {
+        EventCenter.Broadcast(EventDefine.OnGetCardByID , id);
     }
 
     // 临时使用删除一张卡
@@ -124,6 +130,34 @@ public class BattleManager : ManagerBase<BattleManager>
     {
         return battleData.playerTeam.Count;
     }
+
+    #region 外部接口,提供数据
+
+    // 获取所有敌方目标
+    public List<BaseEnemy> getAllEnemy()
+    {
+        return battleData.enemies;
+    }
+
+    public BaseCharacter getEnemyByIndex(int pos)
+    {
+        if(pos < 0 || pos >= battleData.enemies.Count) return null;
+        return battleData.enemies[pos];
+    }
+
+    // 获取所有敌方目标
+    public List<BaseCharacter> getAllPlayerTeam()
+    {
+        return battleData.playerTeam;
+    }
+
+    public BaseCharacter getPlayerTeamByIndex(int pos)
+    {
+        if(pos < 0 || pos >= battleData.playerTeam.Count) return null;
+        return battleData.playerTeam[pos];
+    }
+
+    #endregion
 
     private int currentSelectCard = -1; // 使用私有字段作为后备存储
 

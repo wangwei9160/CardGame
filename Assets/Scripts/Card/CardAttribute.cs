@@ -95,7 +95,7 @@ public class CardAttribute : MonoBehaviour
     // 处理伤害
     public void TakeDamage(int damage, bool isSwordDamage, bool isMagicDamage)
     {
-        // 如果有防御属性，先计算防御减伤
+        // 如果有防御属性,先计算防御减伤
         if (isSwordDamage)
         {
             int defense = GetAttributeTotal(AttributeType.Defense);
@@ -149,7 +149,7 @@ public class CardAttribute : MonoBehaviour
         // 优先移除临时玻璃属性
         RemoveAttributeValue(AttributeType.Glass, 1, false);
         
-        // 如果没有临时属性，则移除固有属性
+        // 如果没有临时属性,则移除固有属性
         if (GetAttributeTotal(AttributeType.Glass) > 0)
         {
             RemoveAttributeValue(AttributeType.Glass, 1, true);
@@ -162,14 +162,14 @@ public class CardAttribute : MonoBehaviour
         // 优先移除临时活力属性
         int remainingDamage = RemoveAttributeValue(AttributeType.Vitality, damage, false);
         
-        // 如果还有剩余伤害，则移除固有属性
+        // 如果还有剩余伤害,则移除固有属性
         if (remainingDamage > 0)
         {
             RemoveAttributeValue(AttributeType.Vitality, remainingDamage, true);
         }
     }
     
-    // 移除指定数量的属性值，返回未能移除的数量
+    // 移除指定数量的属性值,返回未能移除的数量
     private int RemoveAttributeValue(AttributeType type, int amount, bool removeInherent)
     {
         if (!attributes.ContainsKey(type)) return amount;
