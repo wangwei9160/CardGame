@@ -1,7 +1,7 @@
-// SummonSkillHandler
 using System.Collections.Generic;
 public class SummonSkillHandler : SkillHandlerBase
 {
+    public override string SkillHandlerName(){ return "SummonSkillHandler"; }
     public override string Description(List<int> resource)
     {
         return Description(resource[0]);

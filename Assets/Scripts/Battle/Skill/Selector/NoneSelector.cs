@@ -12,6 +12,9 @@ public class NoneSelector : SkillSelectorBase
 
     public override BaseCharacter GetUnit(){return null;}
 
-    public override List<BaseCharacter> GetUnits() {return null;}
+    public override List<BaseCharacter> GetUnits() 
+    {
+        return BattleManager.Instance.getAllEnemy();
+    }
 
 }

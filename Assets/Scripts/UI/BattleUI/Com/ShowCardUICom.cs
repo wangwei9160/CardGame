@@ -6,15 +6,15 @@ using UnityEngine.UI;
 public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHandler, IDragHandler, IEndDragHandler 
 {
     public int Index;
-    public Text cardName;
-    private Text description;
-    public int ID;
+    public CardUI showCard;
+    public int cardID;
 
     private void Awake()
     {
         Index = -1;
-        cardName = transform.Find("name").GetComponent<Text>();
-        description = transform.Find("description").GetComponent<Text>();
+        showCard = transform.Find("Card").GetComponent<CardUI>();
+        showCard.gameObject.SetActive(true);
+        showCard.SetShowOnly(true);
     }
 
     public void Hide() 
@@ -25,7 +25,7 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
     public void Show() 
     {
         gameObject.SetActive(true);
-        // transform.localScale = new Vector3(1.2f,1.2f,1.2f);
+        showCard.gameObject.SetActive(true);
     }
 
     public void TryHide(int id) 
@@ -47,11 +47,10 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         }
         Show();
         Index = idx;
-        ID = id;
+        cardID = id;
         transform.position = pos;
         CardClass cfg = CardConfig.GetCardClassByKey(id);
-        cardName.text = cfg.name;
-        description.text = SkillManager.Instance.GetSkillDescription(id);
+        showCard.SetData(cfg.id);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -91,11 +90,15 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         rectTransform.anchoredPosition =  eventData.position + new Vector2(0, halfHeight);
         if(eventData.position.y >= 500f)
         {
-            // if(cardType != 0) rectTransform.anchoredPosition = eventData.position + new Vector2(1920f, 1080f);
-            // SkillManager.Instance.PreExecuteSelecte((SkillSelectorType)cardType);
+            if(SkillManager.Instance.CheckNeedHideCard(cardID))
+            {
+                showCard.gameObject.SetActive(false);
+                SkillManager.Instance.PreExecuteSelecte(cardID);
+            }
         }else
         {
-            // SkillManager.Instance.PreExecuteSelecteClose((SkillSelectorType)cardType);
+            showCard.gameObject.SetActive(true);
+            SkillManager.Instance.PreExecuteSelecteClose(cardID);
         }
     }
 
@@ -105,10 +108,10 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_STOP);
         if(eventData.position.y >= 500f) 
         {
-            if(SkillManager.Instance.checkTypeAndSelect(SkillType.ATTACK , (SkillSelectorType)0)){
+            if(SkillManager.Instance.CheckTypeAndSelect(cardID)){
                 EventCenter.Broadcast(EventDefine.OnDeleteCardByIndex , Index);
                 Index = -1;
-                SkillManager.Instance.ExecuteEffect(SkillType.ATTACK , (SkillSelectorType)0 , "");
+                SkillManager.Instance.ExecuteEffect(cardID);
             }else {
                 EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);
             }
@@ -116,7 +119,7 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         else {
             EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);
         }
-        SkillManager.Instance.PreExecuteSelecteClose((SkillSelectorType)1);
+        SkillManager.Instance.PreExecuteSelecteClose(cardID);
         Hide();
     }
 

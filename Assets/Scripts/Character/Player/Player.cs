@@ -27,4 +27,10 @@ public class Player : BaseCharacter
         EventCenter.Broadcast(EventDefine.OnPlayerAttributeChange, hp , maxHp, HpUIIndex);
     }
 
+    public override void OnHurt(int val)
+    {
+        hp = Math.Max(hp - val , 0);
+        EventCenter.Broadcast(EventDefine.OnPlayerAttributeChange, hp , maxHp, HpUIIndex);
+    }
+
 }

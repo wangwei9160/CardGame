@@ -7,6 +7,11 @@ public class ResourceUtil
         return Resources.Load<GameObject>("Arts/Card/UI/Card");
     }
 
+    public static GameObject GetEnemy(string name)
+    {
+        return Resources.Load<GameObject>("Prefabs/Character/Character_" + name);
+    }
+
     public static Sprite GetTreasureByID(int id)
     {
         TreasureBase treasure = TreasureFactory.GetTreasure(id);

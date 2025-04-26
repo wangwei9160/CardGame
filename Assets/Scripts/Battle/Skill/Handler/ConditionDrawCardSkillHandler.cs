@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 public class ConditionDrawCardSkillHandler : SkillHandlerBase
 {
+    public override string SkillHandlerName(){ return "ConditionDrawCardSkillHandler"; }
     public override string Description(List<int> resource)
     {
         return Description(resource[0]);

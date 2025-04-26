@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 public class BackSkillHandler : SkillHandlerBase
 {
+    public override string SkillHandlerName(){ return "BackSkillHandler"; }
     public override string Description(List<int> resource)
     {
         return Description(resource[0]);
