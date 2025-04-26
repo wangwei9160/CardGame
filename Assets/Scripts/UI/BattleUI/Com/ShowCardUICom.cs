@@ -90,7 +90,7 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         rectTransform.anchoredPosition =  eventData.position + new Vector2(0, halfHeight);
         if(eventData.position.y >= 500f)
         {
-            if(SkillManager.Instance.OpenSelector(cardID) != SkillSelectorType.NONE)
+            if(SkillManager.Instance.CheckNeedHideCard(cardID))
             {
                 showCard.gameObject.SetActive(false);
                 SkillManager.Instance.PreExecuteSelecte(cardID);
@@ -108,7 +108,7 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_STOP);
         if(eventData.position.y >= 500f) 
         {
-            if(SkillManager.Instance.checkTypeAndSelect(cardID)){
+            if(SkillManager.Instance.CheckTypeAndSelect(cardID)){
                 EventCenter.Broadcast(EventDefine.OnDeleteCardByIndex , Index);
                 Index = -1;
                 SkillManager.Instance.ExecuteEffect(cardID);

@@ -139,7 +139,18 @@ public class SkillManager : ManagerBase<SkillManager>
         }
     }
 
-    public bool checkTypeAndSelect(int cardID)
+    #region CHECK
+
+    public bool CheckNeedHideCard(int cardID)
+    {
+        var stp = OpenSelector(cardID);
+        if(stp == SkillSelectorType.ONE) {
+            return true;
+        }
+        return false;
+    }
+
+    public bool CheckTypeAndSelect(int cardID)
     {
         CardClass cfg = CardConfig.GetCardClassByKey(cardID);
         return checkTypeAndSelect(cfg);
@@ -159,6 +170,7 @@ public class SkillManager : ManagerBase<SkillManager>
         }
         return ok;
     }
+    #endregion
 
     public void ExecuteEffect(int id)
     {
