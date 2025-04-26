@@ -16,25 +16,35 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler
         description = transform.Find("description").GetComponent<Text>();
     }
 
+    public bool isShowOnly = false;
+
+    public void SetShowOnly(bool _isShowOnly)
+    {
+        isShowOnly = _isShowOnly;
+    }
+
     public void SetIndex(int idx)
     {
         Index = idx;
     }
 
-    public void SetData(int idx , int id)
+    public void SetData(int id)
     {
-        SetIndex(idx);
         config = CardConfig.GetCardClassByKey(id);
         cardName.text = config.name;
         description.text = SkillManager.Instance.GetSkillDescription(id);
     }
 
+    public void SetData(int idx , int id)
+    {
+        SetIndex(idx);
+        SetData(id);
+    }
+
     public void SetData(int idx , CardClass cfg)
     {
         SetIndex(idx);
-        config = cfg;
-        cardName.text = config.name;
-        description.text = SkillManager.Instance.GetSkillDescription(cfg);
+        SetData(cfg.id);
     }
 
     public void Hide() {gameObject.SetActive(false);}
@@ -42,6 +52,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if(isShowOnly) return ;
         EventCenter.Broadcast(EventDefine.ON_CARD_SELECT , Index , config.id);
         Hide();
     }

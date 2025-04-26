@@ -4,11 +4,62 @@ using UnityEngine;
 // 技能效果触发器基类
 public abstract class SkillHandlerBase
 {
+    public abstract string SkillHandlerName();
     public delegate string DescriptionMethod(List<int> resource);
     public Dictionary<int , DescriptionMethod> typeHandler;
-    public List<List<int>> _list;
+    public Dictionary<SkillSelectorType , List<int>> needOneSelector = new();
+    public List<List<int>> _list = new();
+
+    public virtual SkillSelectorType NeedOpenSelector(List<int> active_id)
+    {
+        foreach (var item in needOneSelector)
+        {
+            SkillSelectorType key = item.Key;
+            List<int> _list = item.Value;
+            for(int i = 0 ; i < _list.Count ; i++)
+            {
+                if(_list[i] == active_id[1]) 
+                {
+                    return key;
+                }
+            }
+        }
+        return SkillSelectorType.NONE;
+    }
+
+    public virtual bool CheckCanUse(List<int> active_id)
+    {
+        foreach (var item in needOneSelector)
+        {
+            SkillSelectorType key = item.Key;
+            List<int> _list = item.Value;
+            for(int i = 0 ; i < _list.Count ; i++)
+            {
+                if(_list[i] == active_id[1]) 
+                {
+                    var _select = SkillManager.Instance.GetSkillSelectorBase(key);
+                    var _unit_list = _select.GetUnits();
+                    return _unit_list.Count >= 1;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void CommonSelector()
+    {
+        needOneSelector[SkillSelectorType.ONE] = new List<int>{1};
+        needOneSelector[SkillSelectorType.PLAYER] = new List<int>{4};
+    }
+
     public virtual void Execute(SkillSelectorBase selector){}
+    
     public virtual void Execute(List<int> resource){}
+
+    public virtual void Execute(SkillSelectorBase selector , List<int> resource)
+    {
+        Debug.Log(SkillHandlerName());
+    }
 
     public abstract string Description(List<int> resource);
 

@@ -8,15 +8,15 @@ public class BattleData
     public int id;
     public int maxEnemyNum;
     public int maxPlayerTeamNum;
-    public List<BaseEnemy> enemies;
+    public List<BaseCharacter> enemies;
     public List<BaseCharacter> playerTeam;
-
+    public BaseCharacter player;
     public BattleData()
     {
         id = 0;
         maxEnemyNum = 3;
         maxPlayerTeamNum = 5;
-        enemies = new List<BaseEnemy>();
+        enemies = new List<BaseCharacter>();
         playerTeam = new List<BaseCharacter>();
     }
 
@@ -80,6 +80,7 @@ public class BattleManager : ManagerBase<BattleManager>
             if (ContainerManager.Instance.Players[i].childCount > 0) continue;  // 防止重复添加Player
             var go = Instantiate(player, ContainerManager.Instance.Players[i]);
             battleData.playerTeam.Add(go.GetComponent<BaseCharacter>());
+            battleData.player = go.GetComponent<BaseCharacter>();
         }
         CardNum = Math.Min(CardNum, 5 - PlayerNum);
         for (int i = 0; i < CardNum; i++)
@@ -134,7 +135,7 @@ public class BattleManager : ManagerBase<BattleManager>
     #region 外部接口,提供数据
 
     // 获取所有敌方目标
-    public List<BaseEnemy> getAllEnemy()
+    public List<BaseCharacter> getAllEnemy()
     {
         return battleData.enemies;
     }
@@ -145,10 +146,16 @@ public class BattleManager : ManagerBase<BattleManager>
         return battleData.enemies[pos];
     }
 
-    // 获取所有敌方目标
+    // 获取所有我方目标
     public List<BaseCharacter> getAllPlayerTeam()
     {
         return battleData.playerTeam;
+    }
+
+    // 获取巫真
+    public BaseCharacter getPlayer()
+    {
+        return battleData.player;
     }
 
     public BaseCharacter getPlayerTeamByIndex(int pos)

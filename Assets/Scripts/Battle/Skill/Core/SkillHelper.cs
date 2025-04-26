@@ -18,10 +18,14 @@ public enum SkillType
     
 }
 
+// 选择器类型和优先级
 public enum SkillSelectorType
 {
     NONE = 0,
-    ONE = 1,
+    ONE = 100,
+    RANDOM = 2,
+    SELF = 3,
+    PLAYER = 4,
 }
 
 // 0所有敌人，1目标，2随机敌人，3自身，4巫真。

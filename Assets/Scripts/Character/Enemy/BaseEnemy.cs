@@ -39,6 +39,13 @@ public class BaseEnemy : BaseCharacter
         EventCenter.Broadcast<int, int>(EventDefine.OnHpChangeByName, hp, HpUIIndex);
     }
 
+    public override void OnHeal(int val)
+    {
+        base.OnHeal(val);
+        hp += val;
+        EventCenter.Broadcast<int, int>(EventDefine.OnHpChangeByName, hp, HpUIIndex);
+    }
+
     public override void OnDeadCheck()
     {
         if(hp <= 0)

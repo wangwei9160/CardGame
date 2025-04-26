@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class GetSkillHandler : SkillHandlerBase
 {
+    public override string SkillHandlerName(){ return "GetSkillHandler"; }
     public GetSkillHandler()
     {
         _list = new List<List<int>>(){

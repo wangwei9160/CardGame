@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.Mathematics;
 
 public class SkillManager : ManagerBase<SkillManager>
 {
@@ -46,11 +47,67 @@ public class SkillManager : ManagerBase<SkillManager>
         {
             {SkillSelectorType.ONE , new OneSelector() },
             {SkillSelectorType.NONE , new NoneSelector() },
+            {SkillSelectorType.RANDOM , new RandomSelector() },
+            {SkillSelectorType.SELF , new RandomSelector() },
+            {SkillSelectorType.PLAYER , new TroopSelector(1,1) },
         };
     }
 
-    public void PreExecuteSelecte(SkillSelectorType tp)
+    public SkillSelectorType OpenSelector(List<int> _list)
     {
+        SkillSelectorType stp = SkillSelectorType.NONE;
+        if (skillHandlers.TryGetValue((SkillType)_list[0], out var handler))
+        {
+            var ntp = handler.NeedOpenSelector(_list);
+            if(stp.CompareTo(ntp) < 0)
+            {
+                stp = ntp;
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"当前不存在 Type={_list[0]} 的技能选择器");
+        }
+        return stp;
+    }
+
+    public SkillSelectorType OpenSelector(List<List<int>> _list)
+    {
+        SkillSelectorType stp = SkillSelectorType.NONE;
+        for(int i = 0 ; i < _list.Count ; i++)
+        {
+            var active_id = _list[i];
+            if (skillHandlers.TryGetValue((SkillType)active_id[0], out var handler))
+            {
+                var ntp = handler.NeedOpenSelector(active_id);
+                if(stp.CompareTo(ntp) < 0)
+                {
+                    stp = ntp;
+                }
+            }
+            else
+            {
+                Debug.Log($"当前不存在 Type={active_id[0]} 的技能选择器");
+            }
+        }
+        return stp;
+    }
+
+    public SkillSelectorType OpenSelector(int cardID)
+    {
+        CardClass cfg = CardConfig.GetCardClassByKey(cardID);
+        return OpenSelector(cfg.active_id);
+    }
+
+    public void PreExecuteSelecte(int id)
+    {
+        CardClass cfg = CardConfig.GetCardClassByKey(id);
+        PreExecuteSelecte(cfg);
+    }
+
+    public void PreExecuteSelecte(CardClass cfg)
+    {
+        SkillSelectorType tp = OpenSelector(cfg.active_id);
         if (skillSelectors.TryGetValue(tp, out var handler))
         {
             handler.CreateSelector();
@@ -62,8 +119,15 @@ public class SkillManager : ManagerBase<SkillManager>
         }
     }
 
-    public void PreExecuteSelecteClose(SkillSelectorType tp)
+    public void PreExecuteSelecteClose(int id)
     {
+        CardClass cfg = CardConfig.GetCardClassByKey(id);
+        PreExecuteSelecteClose(cfg);
+    }
+
+    public void PreExecuteSelecteClose(CardClass cfg)
+    {
+        SkillSelectorType tp = OpenSelector(cfg.active_id);
         if (skillSelectors.TryGetValue(tp, out var handler))
         {
             handler.CloseSelector();
@@ -75,47 +139,58 @@ public class SkillManager : ManagerBase<SkillManager>
         }
     }
 
-    public bool checkTypeAndSelect(SkillType tp , SkillSelectorType stp)
+    public bool checkTypeAndSelect(int cardID)
     {
-        if(stp == SkillSelectorType.ONE) 
-        {
-            if (skillSelectors.TryGetValue(stp, out var handler))
-            {
-                return handler.GetUnits() != null;
-            }
-            else
-            {
-                Debug.Log($"当前不存在 Type={tp} 的技能选择器");
-                return false;
-            }
-        }
-        return true;
+        CardClass cfg = CardConfig.GetCardClassByKey(cardID);
+        return checkTypeAndSelect(cfg);
     }
 
-    public void ExecuteEffect(SkillType tp , SkillSelectorType stp , string config)
+    public bool checkTypeAndSelect(CardClass cfg)
     {
-        if (skillHandlers.TryGetValue(tp , out var handler))
+        var active_ids = cfg.active_id;
+        bool ok = true;
+        for(int i = 0 ; i < active_ids.Count && ok ; i++)
         {
-            if(skillSelectors.TryGetValue(stp , out var selector))
-            handler.Execute(selector);
-            return ;
-        }else
+            var _list = active_ids[i];
+            if(skillHandlers.TryGetValue((SkillType)_list[0] , out var handler))
+            {
+                 ok = ok & (handler.CheckCanUse(_list));
+            }
+        }
+        return ok;
+    }
+
+    public void ExecuteEffect(int id)
+    {
+        CardClass cfg = CardConfig.GetCardClassByKey(id);
+        ExecuteEffect(cfg);
+    }
+
+    public void ExecuteEffect(CardClass cfg)
+    {
+        var active_ids = cfg.active_id;
+        for(int i = 0 ; i < active_ids.Count ; i++)
         {
-            Debug.Log($"当前不存在 Type={tp} 的技能类型处理器");
+            var _list = active_ids[i];
+            SkillType tp = (SkillType)_list[0];
+            if (skillHandlers.TryGetValue(tp , out var handler))
+            {
+                SkillSelectorType stp = OpenSelector(_list);
+                if(skillSelectors.TryGetValue(stp , out var selector))
+                {
+                    handler.Execute(_list);
+                }
+            }else
+            {
+                Debug.Log($"当前不存在 Type={tp} 的技能类型处理器");
+            }
         }
     }
 
     public string GetSkillDescription(int id)
     {
         CardClass cfg = CardConfig.GetCardClassByKey(id);
-        List<string> ret = new List<string>();
-        var _list = cfg.active_id;
-        for(int i = 0 ; i < _list.Count ; i++)
-        {
-            ret.Add(GetSkillDescriptionByType(_list[i]));
-        }
-        string ans = string.Join("\n", ret);
-        return ans;
+        return GetSkillDescription(cfg);
     }
 
     public string GetSkillDescription(CardClass cfg)
@@ -142,5 +217,35 @@ public class SkillManager : ManagerBase<SkillManager>
         }
         return "";
     }
+
+    #region Get Map
+
+    public SkillType GetSkillType(List<int> resource)
+    {
+        if (id2SkillType.TryGetValue(resource[0], out var type))
+        {
+            return type;
+        }
+        else
+        {
+            Debug.Log($"当前不存在 Type={resource[0]} 的技能类型");
+        }
+        return SkillType.ATTACK;
+    }
+
+    public SkillSelectorBase GetSkillSelectorBase(SkillSelectorType stp)
+    {
+        if (skillSelectors.TryGetValue(stp, out var handler))
+        {
+            return handler;
+        }
+        else
+        {
+            Debug.Log($"当前不存在 Type={stp} 的技能选择器");
+        }
+        return null;
+    }
+
+    #endregion
 
 }

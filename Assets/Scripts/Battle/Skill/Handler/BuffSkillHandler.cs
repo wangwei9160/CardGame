@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 public class BuffSkillHandler : SkillHandlerBase
 {
+    public override string SkillHandlerName(){ return "BuffSkillHandler"; }
     public override string Description(List<int> resource)
     {
         return Description(resource[0]);
