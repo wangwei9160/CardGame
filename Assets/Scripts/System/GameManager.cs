@@ -114,7 +114,7 @@ public class GameManager : ManagerBase<GameManager>
         gameData.CardReward.Add(1);
         gameData.CardReward.Add(2);
         gameData.CardReward.Add(3);
-        UIManager.Instance.Show("RewardPanelUI", ContainerManager.Instance.Enemies[id].gameObject);
+        UIManager.Instance.Show("RewardPanelUI", ContainerManager.Instance.Enemies.GetChild(id).gameObject);
         UIManager.Instance.Close(GameString.BATTLEUI);   // 隐藏战斗ui
     }
 

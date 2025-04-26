@@ -32,7 +32,7 @@ public class BattleData
 public class BattleManager : ManagerBase<BattleManager>
 {
     [Tooltip("角色预制体")] public GameObject player;
-    [Tooltip("敌方预制体")] public GameObject enemy;
+    
     // [Tooltip("卡牌预制体")] public GameObject handcard;
     public BattleData battleData;
     public bool isBattle = false;
@@ -77,15 +77,9 @@ public class BattleManager : ManagerBase<BattleManager>
         PlayerNum = Math.Min(PlayerNum, 1);
         for (int i = 0; i < PlayerNum; i++)
         {
-            if (ContainerManager.Instance.Players[i].childCount > 0) continue;  // 防止重复添加Player
-            var go = Instantiate(player, ContainerManager.Instance.Players[i]);
-            battleData.playerTeam.Add(go.GetComponent<BaseCharacter>());
-            battleData.player = go.GetComponent<BaseCharacter>();
-        }
-        CardNum = Math.Min(CardNum, 5 - PlayerNum);
-        for (int i = 0; i < CardNum; i++)
-        {
-            Instantiate(enemy, ContainerManager.Instance.Players[i + PlayerNum]);
+            var go = ContainerManager.Instance.AddPlayer();
+            battleData.playerTeam.Add(go);
+            battleData.player = go;
         }
     }
     // 临时使用,用于初始化时添加敌方角色
@@ -94,9 +88,7 @@ public class BattleManager : ManagerBase<BattleManager>
         num = Math.Min(num, 3);
         for (int i = 0; i < num; i++)
         {
-            var go = Instantiate(enemy, ContainerManager.Instance.Enemies[i]);
-            BaseEnemy obj = go.GetComponent<BaseEnemy>();
-            obj.Index = i;
+            var obj = ContainerManager.Instance.AddEnemy();
             battleData.enemies.Add(obj);
         }
     }
