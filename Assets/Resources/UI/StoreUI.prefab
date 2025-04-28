@@ -2130,8 +2130,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6199700674968045048}
+  - component: {fileID: 6994172370387512487}
   m_Layer: 5
-  m_Name: StoreTreasure (2)
+  m_Name: GetTreasure_T
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2158,6 +2159,19 @@ RectTransform:
   m_AnchoredPosition: {x: 152, y: 31}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6994172370387512487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5414503117973536517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6896e35cb3667904a90dec60efb960f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  treasureImageReference: {fileID: 0}
 --- !u!1 &5704131053014862998
 GameObject:
   m_ObjectHideFlags: 0
@@ -2484,8 +2498,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2412237497229005205}
+  - component: {fileID: 5673251440387192030}
   m_Layer: 5
-  m_Name: StoreTreasure
+  m_Name: GetTreasure_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2512,6 +2527,19 @@ RectTransform:
   m_AnchoredPosition: {x: -598, y: 179}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5673251440387192030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6438180963772052243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc44e2fd400979a48931e231e5956e78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  treasureImageReference: {fileID: 0}
 --- !u!1 &6510487773398759868
 GameObject:
   m_ObjectHideFlags: 0
@@ -2640,6 +2668,7 @@ GameObject:
   - component: {fileID: 7855654057565524536}
   - component: {fileID: 6421698091228266273}
   - component: {fileID: 2640772130099667900}
+  - component: {fileID: 8882156489096618682}
   m_Layer: 5
   m_Name: refreshBtn
   m_TagString: Untagged
@@ -2749,6 +2778,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8882156489096618682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6603008734622622372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c105524faf103a34784796c2061cf284, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7043748400047984439
 GameObject:
   m_ObjectHideFlags: 0
@@ -2892,8 +2933,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2421834843957480491}
+  - component: {fileID: 4132305202884681556}
   m_Layer: 5
-  m_Name: StoreTreasure (1)
+  m_Name: GetTreasure_S
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2920,6 +2962,19 @@ RectTransform:
   m_AnchoredPosition: {x: -191, y: 114}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4132305202884681556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8050126861600624326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfa8b87fc084bb940b71ff1004d09c77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  treasureImageReference: {fileID: 0}
 --- !u!1 &8511440292790093524
 GameObject:
   m_ObjectHideFlags: 0

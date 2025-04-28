@@ -42,7 +42,7 @@ public class CardPage : UIViewBase
 
     public void updateCard()
     {
-        List<Test0Class> _list = Test0Manager.GetAllCard();
+        List<CardClass> _list = CardConfig.GetAll();
         for(int i = 0; i < MaxSize; i++)
         {
             int idx = baseIndex + i;
@@ -61,7 +61,7 @@ public class CardPage : UIViewBase
     {
         int nxtIndex = baseIndex + op * MaxSize; 
         
-        if (nxtIndex >= Test0Manager.m_Dic.Count || nxtIndex < 0)
+        if (nxtIndex >= CardConfig.m_Dic.Count || nxtIndex < 0)
         {
             return;
         }

@@ -41,7 +41,7 @@ public class Card : MonoBehaviour
     // 属性系统
     protected CardAttribute attributes;
     public virtual int ID { get; protected set; } = 1;
-    public Test0Class cardCfg => Test0Manager.GetTest0ClassByKey(ID);
+    public Test0Class cardCfg => Test0Config.GetTest0ClassByKey(ID);
     
     void Awake()
     {
