@@ -23,7 +23,7 @@ public class GameData
     public int magicPower;      // 法力值
     public int maxMagicPower;   // 最大法力值
 
-    // 关卡通关奖励，在没有或者选择后应该为空; 暂时使用这种方式实现，后续看是否由策划表统一
+    // 关卡通关奖励,在没有或者选择后应该为空; 暂时使用这种方式实现,后续看是否由策划表统一
     public int MoneyReward;             // 金币奖励
     public List<int> CardReward;        // 卡牌奖励
     public List<TreasureBase> treasureList;
@@ -46,7 +46,7 @@ public class GameData
         CurrentStage = 0;
         money = 0;
         maxHp = 100;
-        hp = maxHp;
+        hp = 50;
         magicPower = 0;
         CardReward = new List<int>();
         EchoEventType = EchoEventType.FightEvent;

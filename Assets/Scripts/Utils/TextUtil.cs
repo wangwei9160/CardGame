@@ -81,7 +81,7 @@ public static class TextUtil
                 lines[i - 1] += line[0];
                 line = line.Length > 1 ? line.Substring(1) : "";
 
-                // 如果移除了字符后当前行为空，则跳过
+                // 如果移除了字符后当前行为空,则跳过
                 if (string.IsNullOrEmpty(line)) continue;
             }
             lines[i] = line;

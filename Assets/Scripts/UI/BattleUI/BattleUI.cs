@@ -9,7 +9,6 @@ public class BattleUI : UIViewBase
     [Header("按钮")]
     [Tooltip("结束按钮")] public Button endTurnBtn;   // 回合结束按钮
     private bool isLock = false;                    // 回合结束锁
-    public Transform CardsTransform;    // 临时存放所有卡牌的位置
 
     [Header("文本")]
     [Tooltip("回合计数")] public Text turnInfo;   // 回合计数
@@ -18,8 +17,7 @@ public class BattleUI : UIViewBase
     public Transform cardArea;
 
     public List<GameObject> Cards;
-    //private EchoEventConfig cfg;
-
+    public ShowCardUICom showCard;
     public override void Init(string str, string data)
     {
         base.Init(str, data);
@@ -32,10 +30,14 @@ public class BattleUI : UIViewBase
         EventCenter.AddListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
         EventCenter.AddListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
         EventCenter.AddListener(EventDefine.OnGetCard, OnGetCard);
+        EventCenter.AddListener<int>(EventDefine.OnGetCardByID, OnGetCardByID);
         EventCenter.AddListener(EventDefine.OnDeleteCard, OnDeleteCard);
-        EventCenter.AddListener(EventDefine.AdjustCardPosition, StartAdjustCard);
-        EventCenter.AddListener<int>(EventDefine.ON_CARD_SELECT, ON_CARD_SELECT);
+        EventCenter.AddListener(EventDefine.ON_CARD_DRAG_START, ON_CARD_DRAG_START);
+        EventCenter.AddListener(EventDefine.ON_CARD_DRAG_STOP, ON_CARD_DRAG_STOP);
+        EventCenter.AddListener<int>(EventDefine.OnDeleteCardByIndex, OnDeleteCardByIndex);
+        EventCenter.AddListener<int,int>(EventDefine.ON_CARD_SELECT, ON_CARD_SELECT);
         EventCenter.AddListener<int>(EventDefine.ON_CARD_UNSELECT, ON_CARD_UNSELECT);
+        EventCenter.AddListener(EventDefine.AdjustCardPosition, StartAdjustCard);
         EventCenter.AddListener<int , int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
     }
 
@@ -45,25 +47,35 @@ public class BattleUI : UIViewBase
         EventCenter.RemoveListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
         EventCenter.RemoveListener(EventDefine.OnPlayerTurnStart, OnPlayerTurn);
         EventCenter.RemoveListener(EventDefine.OnGetCard, OnGetCard);
+        EventCenter.RemoveListener<int>(EventDefine.OnGetCardByID, OnGetCardByID);
         EventCenter.RemoveListener(EventDefine.OnDeleteCard, OnDeleteCard);
+        EventCenter.RemoveListener(EventDefine.ON_CARD_DRAG_START, ON_CARD_DRAG_START);
+        EventCenter.RemoveListener(EventDefine.ON_CARD_DRAG_STOP, ON_CARD_DRAG_STOP);
+        EventCenter.RemoveListener<int>(EventDefine.OnDeleteCardByIndex, OnDeleteCardByIndex);
+        EventCenter.RemoveListener<int,int>(EventDefine.ON_CARD_SELECT, ON_CARD_SELECT);
+        EventCenter.RemoveListener<int>(EventDefine.ON_CARD_UNSELECT, ON_CARD_UNSELECT);
         EventCenter.RemoveListener(EventDefine.AdjustCardPosition, StartAdjustCard);
-        EventCenter.AddListener<int>(EventDefine.ON_CARD_SELECT, ON_CARD_SELECT);
-        EventCenter.AddListener<int>(EventDefine.ON_CARD_UNSELECT, ON_CARD_UNSELECT);
         EventCenter.RemoveListener<int , int>(EventDefine.OnMagicPowerChange, OnMagicPowerChange);
     }
 
     protected override void Awake()
     {
         base.Awake();
-        spacingList = new float[] {0f,0f,300f,300f,300f,200f,160f,140f,120f};
-        applyRotationTime = 2;
+        // spacingList = new float[] {0f,0f,300f,300f,300f,200f,160f,140f,120f};
+        // applyRotationTime = 2;
+        showCard = transform.Find("HandCard/ShowCard").GetComponent<ShowCardUICom>();
+        showCard.Hide();
+        endTurnBtn = transform.Find("MiddleCanvas/Middle/EndTurnBtn").GetComponent<Button>();
+        turnInfo = transform.Find("TopCanvas/Top/LevelInfo/currentTurn").GetComponent<Text>();
+        magicPowerInfo = transform.Find("MiddleCanvas/Middle/EndTurnBtn/Info/MagicPowerText").GetComponent<Text>();
+        cardArea = transform.Find("HandCard/HandCardArea");
+        MASK = transform.Find("HandCard/Mask");
+        MASK.gameObject.SetActive(false);
     }
 
     protected override void Start()
     {
         base.Start();
-        Cards = new List<GameObject>();
-        cardArea = transform.Find("HandCard/HandCardArea");
         
         endTurnBtn.GetComponent<EndTurnBtnHover>().OnChange(0.6f);
         endTurnBtn.onClick.AddListener(() =>
@@ -124,11 +136,29 @@ public class BattleUI : UIViewBase
     public int ID = 1;
     public void OnGetCard()
     {
-        if(cardArea.childCount == 8) return;
+        if(cardArea.childCount == maxCardCount) return;
         GameObject card = ResourceUtil.GetCard();
-        card.name = $"Card_{ID}";
+        var go = Instantiate(card , cardArea);
+        CardUI cardUI = go.GetComponent<CardUI>();
+        // 随机获得一张卡牌
+        List<CardClass> cards = CardConfig.GetAll();
+        CardClass cfg = RandomUtil.GetRandomValueInList(cards);
+        cardUI.SetData(cardArea.childCount, cfg);
+        card.name = $"卡牌-{ID}-{cfg.name}";
         ID++;
-        Instantiate(card , cardArea);
+        AdjustCardPosition();
+    }
+
+    public void OnGetCardByID(int id)
+    {
+        if (cardArea.childCount == maxCardCount) return;
+        GameObject card = ResourceUtil.GetCard();
+        var go = Instantiate(card, cardArea);
+        CardUI cardUI = go.GetComponent<CardUI>();
+        CardClass cfg = CardConfig.GetCardClassByKey(id);
+        card.name = $"卡牌-{ID}-{cfg.name}";
+        cardUI.SetData(cardArea.childCount, cfg);
+        ID++;
         AdjustCardPosition();
     }
 
@@ -139,22 +169,34 @@ public class BattleUI : UIViewBase
         StartCoroutine(AdjustCardIEnumerator());
     }
 
-    public void ON_CARD_SELECT(int id)
+    public void OnDeleteCardByIndex(int id)
     {
-        Debug.Log("Enter -> ON_CARD_DRAG_START");
-        // 无人选中才可以选中
-        if(BattleManager.Instance.CURRENT_SELECT_CARD == -1)
-        {
-            BattleManager.Instance.CURRENT_SELECT_CARD = id;
-        }
+        Destroy(cardArea.GetChild(id).gameObject);
+        StartCoroutine(AdjustCardIEnumerator());
+    }
+
+    public void ON_CARD_SELECT(int pos , int id)
+    {
+        int cardCount = cardArea.childCount;
+        bool applyRotation = cardCount >= applyRotationTime;
+        float middleOffset = (cardCount - 1) / 2f;
+        float offset = pos - middleOffset;
+        float spacing = spacingXposList[cardCount];
+        float spacingY = spacingYposList[cardCount];
+        float fixPos = Mathf.Abs(offset) * spacingY;
+        Vector3 posistion = cardArea.GetChild(pos).position + new Vector3(0 , 50f + fixPos , 0);
+        showCard.SetData(pos, posistion , id);
+        AdjustCardPositionWhenCardSelect(pos);
     }
 
     public void ON_CARD_UNSELECT(int id)
     {
-        if(BattleManager.Instance.CURRENT_SELECT_CARD == id) 
+        if(id == -1) return ;
+        showCard.TryHide(id);
+        cardArea.GetChild(id).GetComponent<CardUI>().Show();
+        if(!showCard.IsSomethingSlect())
         {
-            BattleManager.Instance.CURRENT_SELECT_CARD = -1;
-            StartAdjustCard();
+            AdjustCardPosition();
         }
     }
 
@@ -169,18 +211,25 @@ public class BattleUI : UIViewBase
         AdjustCardPosition();
     }
 
-    [Tooltip("持有不同数量卡牌时的间隔(类型:float)[数量0-8]")]
-    public float[] spacingList = {0f,0f,300f,300f,300f,200f,160f,140f,120f};
-    [Tooltip("持有多少张卡牌时需要携带一点旋转(类型:int)")]
+    [Header("持有卡牌上限")]
+    public int maxCardCount = 8;
+
+    [Header("持有不同数量时的x坐标间隔(类型:float)")]
+    public float[] spacingXposList = {0f,0f,300f,300f,300f,200f,160f,140f,120f};
+    [Header("持有不同数量时的y坐标间隔(类型:float)")]
+    public float[] spacingYposList = {0f,0f,60f,60f,60f,40f,32f,28f,24f};
+    
+    [Header("持有多少张卡牌时需要携带一点旋转(类型:int)")]
     public int applyRotationTime = 2;
+    [Header("持有不通数量卡牌时统一两卡之间旋转幅度(类型:float)[数量0-8]")]
+    public float[] rotationList = {0f,0f,10f,10f,10f,10f,10f,10f,10f};
+    [Header("有选中卡牌时左右偏移量")]
+    public int spaceWhenSelect = 100;
 
     public void AdjustCardPosition()
     {
         int cardCount = cardArea.childCount;
         if(cardCount == 0) return;
-        
-        // 获取父容器的RectTransform
-        RectTransform handCardRect = cardArea as RectTransform;
         
         if(cardCount == 1) 
         {
@@ -194,17 +243,19 @@ public class BattleUI : UIViewBase
 
         // 计算中间偏移量
         float middleOffset = (cardCount - 1) / 2f;
-        float spacing = spacingList[cardCount];
+        float spacingX = spacingXposList[cardCount];
+        float spacingY = spacingYposList[cardCount];
         bool applyRotation = cardCount >= applyRotationTime;
+        float rot = rotationList[cardCount];
         
         for(int i = 0; i < cardCount; i++)
         {
             float offset = i - middleOffset;
-            float xPos = (i - (cardCount - 1) / 2f) * spacing;
+            float xPos = (i - (cardCount - 1) / 2f) * spacingX;
             float yPos = 0f;
             
             if(applyRotation) 
-                yPos = -Mathf.Abs(offset) * 0.2f * spacing; 
+                yPos = -Mathf.Abs(offset) * spacingY; 
             
             Vector2 position = new Vector2(xPos, yPos);
             
@@ -212,11 +263,44 @@ public class BattleUI : UIViewBase
             card.GetComponent<CardUI>().SetIndex(i);
             // 使用anchoredPosition而不是localPosition
             card.anchoredPosition = position;
-            
-            float rotationZ = applyRotation ? -offset * 10f : 0f;
+            float rotationZ = applyRotation ? -offset * rot : 0f;
             card.localRotation = Quaternion.Euler(0, 0, rotationZ);
             
         }
     }
+
+    public void AdjustCardPositionWhenCardSelect(int id)
+    {
+        int cardCount = cardArea.childCount;
+        if(cardCount <= 1) return;
+        AdjustCardPosition();
+        
+        for(int i = 0; i < cardCount; i++)
+        {
+            if(id == i) continue;
+
+            float op = i <= id ? -1 : 1;
+            float xPos = op * spaceWhenSelect;
+            Vector2 position = new Vector2(xPos, 0);
+            RectTransform card = cardArea.GetChild(i) as RectTransform;
+            card.anchoredPosition += position;
+        }
+    }
+
+    #region Drag Event Mask
+
+    private Transform MASK;
+
+    public void ON_CARD_DRAG_START()
+    {
+        MASK.gameObject.SetActive(true);
+    }
+
+    public void ON_CARD_DRAG_STOP()
+    {
+        MASK.gameObject.SetActive(false);
+    }
+
+    #endregion
 
 }

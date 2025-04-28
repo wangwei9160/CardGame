@@ -252,7 +252,7 @@ public class Card : MonoBehaviour
     // 死亡处理
     protected virtual void OnDeath()
     {
-        Debug.Log($"卡牌 {cardName} 已死亡，进入墓地");
+        Debug.Log($"卡牌 {cardName} 已死亡,进入墓地");
         // TODO: 实现进入墓地的具体逻辑
     }
 } 

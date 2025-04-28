@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,18 +18,19 @@ public class Player : BaseCharacter
 
     private void OnDestroy()
     {
-        // UIManager.Instance.Close("HpUI" , HpUIIndex);
+        UIManager.Instance.Close("HpUI" , HpUIIndex);
     }
 
-    private void Update()
+    public override void OnHeal(int val)
     {
-        // f += Time.deltaTime;
-        // if(f > 1f)
-        // {
-        //     EventCenter.Broadcast(EventDefine.OnPlayerAttributeChange, hp , maxHp, HpUIIndex);
-        //     f = 0f;
-        //     hp = (hp + 10) % maxHp; 
-        // }
+        hp = Math.Min(hp + val , maxHp);
+        EventCenter.Broadcast(EventDefine.OnPlayerAttributeChange, hp , maxHp, HpUIIndex);
+    }
+
+    public override void OnHurt(int val)
+    {
+        hp = Math.Max(hp - val , 0);
+        EventCenter.Broadcast(EventDefine.OnPlayerAttributeChange, hp , maxHp, HpUIIndex);
     }
 
 }

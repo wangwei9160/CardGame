@@ -266,7 +266,7 @@ public class ExcelToClassGenerator
         }
 
         string listType = GetListType(depth - 1, baseType);
-        return $"new List<{listType}>() {{ {string.Join(", ", parts)} }}";
+        return $"new List<{listType}>() {{ {string.Join(",", parts)} }}";
     }
 
     private static string GetListType(int depth, string baseType)
@@ -291,7 +291,7 @@ public class ExcelToClassGenerator
         if (words.Length == 0)
             return input;
 
-        // 首个单词首字母大写，其余单词首字母大写
+        // 首个单词首字母大写,其余单词首字母大写
         string result = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words[0].ToLower());
         for (int i = 1; i < words.Length; i++)
         {

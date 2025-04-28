@@ -16,7 +16,7 @@ public static class EventCenter
         Delegate d = m_Event[eventType];
         if (d != null && d.GetType() != del.GetType())
         {
-            throw new Exception(string.Format("尝试为事件{0}[添加]不同类型的委托，{1}和{2}", eventType, d.GetType(), del.GetType()));
+            throw new Exception(string.Format("尝试为事件{0}[添加]不同类型的委托,{1}和{2}", eventType, d.GetType(), del.GetType()));
         }
     }
 
@@ -31,7 +31,7 @@ public static class EventCenter
             }
             else if (d.GetType() != del.GetType())
             {
-                throw new Exception(string.Format("尝试为事件{0}[移除]不同类型的委托，{1}和{2}", eventType, d.GetType(), del.GetType()));
+                throw new Exception(string.Format("尝试为事件{0}[移除]不同类型的委托,{1}和{2}", eventType, d.GetType(), del.GetType()));
             }
         }
         else
