@@ -6,15 +6,8 @@ using UnityEngine.UI;
 public class CardUI : MonoBehaviour, IPointerEnterHandler
 {
     private int Index;
-    private Text cardName;
-    private Text description;
-    private CardClass config;
 
-    private void Awake()
-    {
-        cardName = transform.Find("name").GetComponent<Text>();
-        description = transform.Find("description").GetComponent<Text>();
-    }
+    private CardClass config;
 
     public bool isShowOnly = false;
 
@@ -31,8 +24,6 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler
     public void SetData(int id)
     {
         config = CardConfig.GetCardClassByKey(id);
-        cardName.text = config.name;
-        description.text = SkillManager.Instance.GetSkillDescription(id);
     }
 
     public void SetData(int idx , int id)

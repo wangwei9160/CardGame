@@ -2,6 +2,22 @@ using UnityEngine;
 
 public class ResourceUtil
 {
+    public static string GetCardTypeName(int tp)
+    {
+        return EnumHelper.GetTypeName((CARD_TYPE)tp);
+    }
+
+    public static Sprite GetCardAttributeTypeImage(int tp)
+    {
+        string name = EnumHelper.GetAttributeName((CARD_ATTRIBUTE_TYPE)tp);
+        return Resources.Load<Sprite>($"Arts/Card/Type/{name}");
+    }
+
+    public static Sprite GetWhiteCostImage(int cost)
+    {
+        return Resources.Load<Sprite>($"Arts/Cost/White/cost{cost}");
+    }
+
     public static GameObject GetCard()
     {
         return Resources.Load<GameObject>("Arts/Card/UI/Card");

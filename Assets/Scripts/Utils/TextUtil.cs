@@ -15,6 +15,12 @@ public static class TextUtil
         ProcessTextContent(textCom.text , textCom);
     }
 
+/// <summary>
+/// 调整Text组件文本描述
+/// </summary>
+/// <param name="textCom">Text组件</param>
+/// <param name="_maxLineLength">最大单行字数</param>
+/// <param name="_maxLineNum">最大行数</param>
     public static void AdjustTextComBySelf(Text textCom , float _maxLineLength , float _maxLineNum)
     {
         float maxCol = _maxLineLength * (textCom.fontSize + 1) ;

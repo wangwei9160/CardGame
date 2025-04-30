@@ -18,7 +18,10 @@ public class Player : BaseCharacter
 
     private void OnDestroy()
     {
-        UIManager.Instance.Close("HpUI" , HpUIIndex);
+        if(UIManager.Instance != null)
+        {
+            UIManager.Instance.Close("HpUI" , HpUIIndex);
+        }
     }
 
     public override void OnHeal(int val)

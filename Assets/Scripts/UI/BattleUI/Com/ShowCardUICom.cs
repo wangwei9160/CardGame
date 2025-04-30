@@ -7,12 +7,14 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
 {
     public int Index;
     public CardUI showCard;
+    public CardShow cardShow;
     public int cardID;
 
     private void Awake()
     {
         Index = -1;
         showCard = transform.Find("Card").GetComponent<CardUI>();
+        cardShow = transform.Find("Card").GetComponent<CardShow>();
         showCard.gameObject.SetActive(true);
         showCard.SetShowOnly(true);
     }
@@ -51,6 +53,7 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         transform.position = pos;
         CardClass cfg = CardConfig.GetCardClassByKey(id);
         showCard.SetData(cfg.id);
+        cardShow.SetData(cfg.id);
     }
 
     public void OnPointerExit(PointerEventData eventData)
