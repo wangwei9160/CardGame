@@ -4,6 +4,9 @@
     OnHpChangeByName,           // 卡牌变化
     OnPlayerAttributeChange,    // 角色属性变化
 
+    OnHpReSetPostion,           // 角色血条位置修改
+    OnFollowerHpReSetPostion,   // 随从血条位置修改
+
     
     OnEnemyDeath,   // 敌方随从死亡
     // 法力值修正
@@ -43,6 +46,11 @@
 
     ON_CARD_SELECT,         // 卡牌选中
     ON_CARD_UNSELECT,       // 卡牌取消选中
+
+    // 随从交互
+    ON_FOLLOWER_DRAG,       // 拖拽随从
+    ON_FOLLOWER_DRAG_END,       // 拖拽随从结束
+    ON_FOLLOWER_SET,        // 随从放置
 
 
     // 启示事件

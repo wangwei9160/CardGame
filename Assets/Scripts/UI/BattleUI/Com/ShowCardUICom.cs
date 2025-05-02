@@ -10,9 +10,12 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
     public CardShow cardShow;
     public int cardID;
 
+    public bool isFollower;
+
     private void Awake()
     {
         Index = -1;
+        isFollower = false;
         showCard = transform.Find("Card").GetComponent<CardUI>();
         cardShow = transform.Find("Card").GetComponent<CardShow>();
         showCard.gameObject.SetActive(true);
@@ -52,6 +55,7 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         cardID = id;
         transform.position = pos;
         CardClass cfg = CardConfig.GetCardClassByKey(id);
+        isFollower = (CARD_TYPE)cfg.type == CARD_TYPE.FOLLOWER;
         showCard.SetData(cfg.id);
         cardShow.SetData(cfg.id);
     }
@@ -62,10 +66,10 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         int lastIndex = Index;
         Index = -1;
         if(lastIndex != -1) EventCenter.Broadcast<int>(EventDefine.ON_CARD_UNSELECT , lastIndex);
-        StartCoroutine(waitTimeForHide());
+        StartCoroutine(WaitTimeForHide());
     }
 
-    IEnumerator waitTimeForHide()
+    IEnumerator WaitTimeForHide()
     {
         // 等待这一帧结束,防止因为原物体的旋转导致卡牌的区域变化
         yield return new WaitForEndOfFrame();
@@ -91,17 +95,31 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         float halfHeight = rectTransform.rect.height * 0.5f;
         
         rectTransform.anchoredPosition =  eventData.position + new Vector2(0, halfHeight);
-        if(eventData.position.y >= 500f)
+        // 流程需要重新调整，临时处理不通用
+        if(isFollower) 
         {
-            if(SkillManager.Instance.CheckNeedHideCard(cardID))
+            if(eventData.position.y >= 500f)
             {
                 showCard.gameObject.SetActive(false);
-                SkillManager.Instance.PreExecuteSelecte(cardID);
+                EventCenter.Broadcast(EventDefine.ON_FOLLOWER_DRAG , eventData.position);
+            }else 
+            {
+                showCard.gameObject.SetActive(true);
+                EventCenter.Broadcast(EventDefine.ON_FOLLOWER_DRAG_END);
             }
-        }else
-        {
-            showCard.gameObject.SetActive(true);
-            SkillManager.Instance.PreExecuteSelecteClose(cardID);
+        }else {
+            if(eventData.position.y >= 500f)
+            {
+                if(SkillManager.Instance.CheckNeedHideCard(cardID))
+                {
+                    showCard.gameObject.SetActive(false);
+                    SkillManager.Instance.PreExecuteSelecte(cardID);
+                }
+            }else
+            {
+                showCard.gameObject.SetActive(true);
+                SkillManager.Instance.PreExecuteSelecteClose(cardID);
+            }
         }
     }
 
@@ -109,18 +127,34 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
     {
         isDrag = false;
         EventCenter.Broadcast(EventDefine.ON_CARD_DRAG_STOP);
-        if(eventData.position.y >= 500f) 
+        if(isFollower) 
         {
-            if(SkillManager.Instance.CheckTypeAndSelect(cardID)){
+            if(eventData.position.y >= 500f) 
+            {
+                EventCenter.Broadcast(EventDefine.ON_FOLLOWER_SET);
                 EventCenter.Broadcast(EventDefine.OnDeleteCardByIndex , Index);
                 Index = -1;
-                SkillManager.Instance.ExecuteEffect(cardID);
             }else {
+                showCard.gameObject.SetActive(false);
+                EventCenter.Broadcast(EventDefine.ON_FOLLOWER_DRAG_END);
                 EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);
             }
-        }
-        else {
-            EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);
+            
+        }else 
+        {
+            if(eventData.position.y >= 500f) 
+            {
+                if(SkillManager.Instance.CheckTypeAndSelect(cardID)){
+                    EventCenter.Broadcast(EventDefine.OnDeleteCardByIndex , Index);
+                    Index = -1;
+                    SkillManager.Instance.ExecuteEffect(cardID);
+                }else {
+                    EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);
+                }
+            }
+            else {
+                EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);
+            }
         }
         SkillManager.Instance.PreExecuteSelecteClose(cardID);
         Hide();

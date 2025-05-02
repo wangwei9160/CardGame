@@ -56,4 +56,9 @@ public class BaseEnemy : BaseCharacter
         }
     }
 
+    public override void ReSetPosition()
+    {
+        EventCenter.Broadcast(EventDefine.OnFollowerHpReSetPostion , HpUIIndex);
+    }
+
 }

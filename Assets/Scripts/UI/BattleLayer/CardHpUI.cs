@@ -21,12 +21,14 @@ public class CardHpUI : UIViewBase
     {
         base.OnAddlistening();
         EventCenter.AddListener<int, int>(EventDefine.OnHpChangeByName, OnHpChange);
+        EventCenter.AddListener<int>(EventDefine.OnFollowerHpReSetPostion, ReSetPostion);
     }
 
     public override void OnRemovelistening()
     {
         base.OnRemovelistening();   
         EventCenter.RemoveListener<int, int>(EventDefine.OnHpChangeByName, OnHpChange);
+        EventCenter.RemoveListener<int>(EventDefine.OnFollowerHpReSetPostion, ReSetPostion);
     }
 
     protected override void Start()
@@ -58,4 +60,12 @@ public class CardHpUI : UIViewBase
         pos.transform.position = Camera.main.WorldToScreenPoint(Owner.transform.Find("HP").transform.position);
         Debug.Log(pos.transform.position);
     }
+
+    public void ReSetPostion(int id)
+    {
+        if(id == Index)
+        {
+            AdjustPosition();
+        }
+    }    
 }

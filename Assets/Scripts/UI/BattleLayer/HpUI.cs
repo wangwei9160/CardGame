@@ -23,12 +23,14 @@ public class HpUI : UIViewBase
     {
         base.OnAddlistening();
         EventCenter.AddListener<int,int,int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
+        EventCenter.AddListener<int>(EventDefine.OnHpReSetPostion, ReSetPostion);
     }
 
     public override void OnRemovelistening()
     {
         base.OnRemovelistening();
         EventCenter.RemoveListener<int, int, int>(EventDefine.OnPlayerAttributeChange, OnHpChange);
+        EventCenter.RemoveListener<int>(EventDefine.OnHpReSetPostion, ReSetPostion);
     }
 
     protected override void Start()
@@ -39,6 +41,14 @@ public class HpUI : UIViewBase
             slider.transform.position = Camera.main.WorldToScreenPoint(Owner.transform.Find("HP").transform.position);
             BaseCharacter character = Owner.GetComponent<BaseCharacter>();
             slider.value = 1.0f * character.hp / character.maxHp;
+        }
+    }
+
+    private void ReSetPostion(int id)
+    {
+        if(id == Index)
+        {
+            slider.transform.position = Camera.main.WorldToScreenPoint(Owner.transform.Find("HP").transform.position);
         }
     }
 

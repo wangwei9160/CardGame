@@ -36,4 +36,9 @@ public class Player : BaseCharacter
         EventCenter.Broadcast(EventDefine.OnPlayerAttributeChange, hp , maxHp, HpUIIndex);
     }
 
+    public override void ReSetPosition()
+    {
+        EventCenter.Broadcast<int>(EventDefine.OnHpReSetPostion , HpUIIndex);
+    }
+
 }

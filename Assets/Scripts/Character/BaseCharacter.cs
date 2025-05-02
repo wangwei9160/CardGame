@@ -22,5 +22,5 @@ public class BaseCharacter : MonoBehaviour
     public virtual void OnHeal(int val){}
     public virtual void OnHurt(int val){}
     public virtual void OnDeadCheck(){}
-
+    public virtual void ReSetPosition(){}
 }
