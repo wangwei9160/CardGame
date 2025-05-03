@@ -8,6 +8,11 @@ public class RandomUtil
         return Random.Range(mi, mx);    // 返回 [mi , mx)
     }
 
+    public static int RandomInt(int mx)
+    {
+        return Random.Range(0, mx);    // 返回 [0 , mx)
+    }
+
     public static float RandomFloat(float range , bool neg = true)
     {
         if(neg) return RandomFloat(-range, range);
@@ -40,5 +45,16 @@ public class RandomUtil
         int idx = RandomInt(0, list.Count);
         return list[idx];
     }
-
+    
+    public static void Shuffle<T>(IList<T> list)
+    {
+        int n = list.Count;
+        for (int i = n - 1; i > 0; i--)
+        {
+            int j = RandomInt(i + 1);
+            T temp = list[j];
+            list[j] = list[i];
+            list[i] = temp;
+        }
+    }
 }

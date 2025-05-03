@@ -14,6 +14,8 @@ public class GameData
     public int maxHp;           // 最大生命值
     public int money;           // 当前持有金币数量
 
+    public List<int> hasCard;   // 玩家持有的所有卡
+
     public int Money
     {
         get { return money; } 
@@ -51,6 +53,9 @@ public class GameData
         CardReward = new List<int>();
         EchoEventType = EchoEventType.FightEvent;
         treasureList = new List<TreasureBase>();
+        hasCard = new List<int>(){
+            100001,200001,300002,300003,300004,300005,300006,400001,400002,400003,400004,400005,400006,
+        };
     }
     
 }

@@ -445,6 +445,50 @@ MonoBehaviour:
   targetWidth: 1920
   targetHeight: 1080
   letterbox: 1
+--- !u!1 &949260863
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 949260865}
+  - component: {fileID: 949260864}
+  m_Layer: 0
+  m_Name: SkillManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &949260864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949260863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b226f7b136ae94468079235ecc27e03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &949260865
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949260863}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1060953899
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,7 +519,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 839685021123685854, guid: 7f53395240165a740aed6c2331f69af1, type: 3}
-  enemy: {fileID: 952095489147001320, guid: edad7f912aa41ac4c999a183576be8a3, type: 3}
   isBattle: 0
 --- !u!4 &1060953901
 Transform:
@@ -631,3 +674,4 @@ SceneRoots:
   - {fileID: 6449508157083368904}
   - {fileID: 493371654}
   - {fileID: 1060953901}
+  - {fileID: 949260865}

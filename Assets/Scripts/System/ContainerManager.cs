@@ -121,20 +121,15 @@ public class ContainerManager : Singleton<ContainerManager>
             if(i == 0) 
             {
                 var left = Players.GetChild(i).position;
+                Debug.Log($"{i} -- {left.x} -- {ghostPos.x}");
                 if(ghostPos.x <= left.x) 
                 {
                     return 0;
                 }
-            }else if(i == num - 1)
-            {
-                var left = Players.GetChild(i).position;
-                if(ghostPos.x >= left.x) 
-                {
-                    return num;
-                }
             }else {
-                var left = Players.GetChild(i).position;
-                var right = Players.GetChild(i + 1).position;
+                var left = Players.GetChild(i - 1).position;
+                var right = Players.GetChild(i).position;
+                Debug.Log($"{i} -- {left.x} -- {ghostPos.x} -- {right.x}");
                 if(ghostPos.x >= left.x && ghostPos.x <= right.x) 
                 {
                     return i;

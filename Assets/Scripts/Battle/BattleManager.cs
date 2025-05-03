@@ -8,25 +8,45 @@ public class BattleData
     public int id;
     public int maxEnemyNum;
     public int maxPlayerTeamNum;
-    public List<BaseCharacter> enemies;
-    public List<BaseCharacter> playerTeam;
-    public BaseCharacter player;
+    public List<BaseCharacter> enemies;     // 敌方
+    public List<BaseCharacter> playerTeam;  // 我方
+    public BaseCharacter player;            // 巫真
+    public int maxCardCount;                // 手牌上限
+    public List<int> handCards;             // 手牌
+    public List<int> deckCards;             // 牌堆
+    public List<int> discardPile;           // 弃牌堆
+    public List<int> grave;                 // 墓地
     public BattleData()
     {
         id = 0;
         maxEnemyNum = 3;
         maxPlayerTeamNum = 5;
+        maxCardCount = 8;
         enemies = new List<BaseCharacter>();
         playerTeam = new List<BaseCharacter>();
+        handCards = new List<int>();
+        deckCards = new List<int>();
+        discardPile = new List<int>();
+        grave = new List<int>();
     }
 
     public void Init()
     {
         id = 0;
+        maxEnemyNum = 3;
+        maxPlayerTeamNum = 5;
+        maxCardCount = 8;
         enemies.Clear();
         playerTeam.Clear();
+        handCards.Clear();
+        deckCards.Clear();
+        foreach(var id in GameManager.Instance.Data.hasCard)
+        {
+            deckCards.Add(id);
+        }
+        discardPile.Clear();
+        grave.Clear();
     }
-
 } 
 
 public class BattleManager : ManagerBase<BattleManager>
@@ -49,12 +69,14 @@ public class BattleManager : ManagerBase<BattleManager>
         battleData = new BattleData();
         EventCenter.AddListener(EventDefine.OnBattleStart, OnBattleStart);    // 战斗开始
         EventCenter.AddListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 敌人死亡
+        EventCenter.AddListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
     }
 
     private void OnDestroy()
     {
         EventCenter.RemoveListener(EventDefine.OnBattleStart, OnBattleStart);    // 移除
         EventCenter.RemoveListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 移除监听
+        EventCenter.RemoveListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
     }
 
     public bool IsInBattle()
@@ -117,6 +139,48 @@ public class BattleManager : ManagerBase<BattleManager>
             GameManager.Instance.BettleWin(id);
             isBattle = false;
         }
+    }
+
+    public void OnBeforePlayerTurn()
+    {
+        if(battleData.deckCards.Count == 0 && battleData.discardPile.Count == 0)
+        {
+            OnEnterFirstTurn();
+        }
+        int getCardNum = 2;
+        int canGetCardNum = Math.Min(getCardNum, battleData.deckCards.Count);
+        for (int i = 0; i < getCardNum && i < battleData.deckCards.Count; i++)
+        {
+            EventCenter.Broadcast(EventDefine.OnGetCardByID, battleData.deckCards[i]);
+        }
+        battleData.deckCards.RemoveRange(0, canGetCardNum);
+
+        if (canGetCardNum < getCardNum)
+        {
+            RandomUtil.Shuffle(battleData.discardPile);
+            battleData.deckCards = new List<int>(battleData.discardPile);
+            battleData.discardPile.Clear();
+
+            canGetCardNum = getCardNum - canGetCardNum;
+            for (int i = 0; i < canGetCardNum && i < battleData.deckCards.Count; i++)
+            {
+                EventCenter.Broadcast(EventDefine.OnGetCardByID, battleData.deckCards[i]);
+            }
+            battleData.deckCards.RemoveRange(0, canGetCardNum);
+        }
+    }
+
+    public void OnEnterFirstTurn()
+    {
+        battleData.deckCards = new List<int>(GameManager.Instance.Data.hasCard);
+        RandomUtil.Shuffle(battleData.deckCards);
+        int getCardNum = 2;
+        int canGetCardNum = Math.Min(getCardNum , battleData.deckCards.Count);
+        for(int i = 0 ; i < getCardNum && i < battleData.deckCards.Count ; i++)
+        {
+            EventCenter.Broadcast(EventDefine.OnGetCardByID , battleData.deckCards[i]);
+        }
+        battleData.deckCards.RemoveRange(0,canGetCardNum);
     }
 
     public int getPlayerTeamNum()
