@@ -9,8 +9,9 @@ public class SkillManager : ManagerBase<SkillManager>
     private Dictionary<SkillType, SkillHandlerBase> skillHandlers;
     private Dictionary<SkillSelectorType, SkillSelectorBase> skillSelectors;
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
         id2SkillType = new Dictionary<int, SkillType>()
         {
             {1,SkillType.ATTACK},
@@ -219,13 +220,18 @@ public class SkillManager : ManagerBase<SkillManager>
 
     public string GetSkillDescriptionByType(List<int> args)
     {
-        SkillType tp = id2SkillType[args[0]];
-        if (skillHandlers.TryGetValue(tp, out var handler))
+        if(id2SkillType.TryGetValue(args[0] , out var tp))
         {
-            return handler.Description(args);
+            if (skillHandlers.TryGetValue(tp, out var handler))
+            {
+                return handler.Description(args);
+            }else
+            {
+                Debug.LogWarning($"当前不存在 Type={tp} 的技能类型处理器");
+            }
         }else
         {
-            Debug.LogWarning($"当前不存在 Type={tp} 的技能类型处理器");
+            Debug.LogWarning($"当前不存在 Type={args[0]} 的技能类型");
         }
         return "";
     }

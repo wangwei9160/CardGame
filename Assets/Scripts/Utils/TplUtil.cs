@@ -29,6 +29,15 @@ public class TplUtil
         return (singletons[typeof(T)] as T).Dic;
     }
 
-
+    public static void VDebug<T>(List<T> _list)
+    {
+        string outString = "List = ";
+        foreach(var item in _list)
+        {
+            outString += item.ToString();
+            outString += " ";
+        }
+        Debug.Log(outString);
+    }
 
 }
