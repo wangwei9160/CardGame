@@ -22,6 +22,7 @@ public class CardHpUI : UIViewBase
         base.OnAddlistening();
         EventCenter.AddListener<int, int>(EventDefine.OnHpChangeByName, OnHpChange);
         EventCenter.AddListener<int>(EventDefine.OnFollowerHpReSetPostion, ReSetPostion);
+        EventCenter.AddListener(EventDefine.OnMergePanelShow, OnMergePanelShow);
     }
 
     public override void OnRemovelistening()
@@ -29,6 +30,7 @@ public class CardHpUI : UIViewBase
         base.OnRemovelistening();   
         EventCenter.RemoveListener<int, int>(EventDefine.OnHpChangeByName, OnHpChange);
         EventCenter.RemoveListener<int>(EventDefine.OnFollowerHpReSetPostion, ReSetPostion);
+        EventCenter.RemoveListener(EventDefine.OnMergePanelShow, OnMergePanelShow);
     }
 
     protected override void Start()
@@ -68,4 +70,9 @@ public class CardHpUI : UIViewBase
             AdjustPosition();
         }
     }    
+
+    public void OnMergePanelShow()
+    {
+        Destroy(gameObject);
+    }
 }

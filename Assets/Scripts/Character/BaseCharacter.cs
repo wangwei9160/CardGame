@@ -7,12 +7,15 @@ public enum CharacterType
 {
     Unknown = 0,
     Player,
-    Card
+    Card,
+    Enemy,
 }
 
 public class BaseCharacter : MonoBehaviour
 {
-    public virtual CharacterType Type => CharacterType.Unknown;
+    public CharacterType type = CharacterType.Unknown;
+    public virtual CharacterType Type => type;
+    public void ResetCharacterType(CharacterType tp) {type = tp;}
 
     public int HpUIIndex = -1;
     public int maxHp = 100;

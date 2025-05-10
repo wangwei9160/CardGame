@@ -3,18 +3,21 @@ using UnityEngine;
 
 public class BaseEnemy : BaseCharacter
 {
-    public override CharacterType Type => CharacterType.Card;
-    
     public int Index { get; set; }
 
     private void Awake()
     {
         EventCenter.AddListener(EventDefine.OnFinishPlayerTurn, OnEnemyTurn);
+        ResetCharacterType(CharacterType.Enemy);
     }
 
     private void OnDestroy()
     {
         EventCenter.RemoveListener(EventDefine.OnFinishPlayerTurn, OnEnemyTurn);
+        if(HpUIIndex != -1)
+        {
+            EventCenter.Broadcast(EventDefine.OnEnemyDeath , Index , Type);
+        }
     }
 
     protected override void Start()
@@ -51,8 +54,10 @@ public class BaseEnemy : BaseCharacter
         if(hp <= 0)
         {
             hp = 0;
+            EventCenter.Broadcast(EventDefine.OnHpChangeByName, hp, HpUIIndex);
+            EventCenter.Broadcast(EventDefine.OnEnemyDeath , Index , Type);
+            HpUIIndex = -1;
             Destroy(gameObject , 0.3f); // 延迟死亡 可以用于创建协程触发死亡动画
-            EventCenter.Broadcast(EventDefine.OnEnemyDeath , Index);
         }
     }
 

@@ -91,7 +91,29 @@ public class UIManager : ManagerBase<UIManager>
         GameObject obj = Instantiate(prefab);
         return obj;
     }
+    // Show 优化参数为Oject，装箱拆箱（需要考虑性能优化）。传递任意参数，ui内部自行按照组装解析需要的数据
+    public void Show(string uiName, params object[] args)
+    {
+        UiConfig cfg = UIConfigManager.Configs[uiName];
+        if (!m_SingleDic.ContainsKey(uiName))
+        {
+            if (cfg.BindScene != "")
+            {
+                // 通过prefab 创建场景相关内容
+                var obj = CreatePrefabByPath(cfg.BindScene);
+                obj.name = cfg.BindScene;
+            }
 
+            var uiObj = CreatePrefabByPath(cfg.uiPath);
+            uiObj.name = uiName;
+            UIViewBase ui = uiObj.GetComponent<UIViewBase>();Push(ui);
+            
+            uiObj.transform.SetParent(m_LayerTransform[(int)ui.Layer]);
+            m_SingleDic[uiName] = ui;
+            m_SingleDic[uiName].Init(uiName, args);
+        }
+        m_SingleDic[uiName].Show();
+    }
     public void Show(string uiName , string data = "{}")
     {
         UiConfig cfg = UIConfigManager.Configs[uiName];

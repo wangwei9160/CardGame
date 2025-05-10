@@ -111,10 +111,14 @@ public class GameManager : ManagerBase<GameManager>
         Debug.Log("进入奖励结算");
         System.Random rd = new System.Random();
         gameData.MoneyReward = rd.Next(50, 100);
-        gameData.CardReward.Add(1);
-        gameData.CardReward.Add(2);
-        gameData.CardReward.Add(3);
-        UIManager.Instance.Show("RewardPanelUI", ContainerManager.Instance.Enemies.GetChild(id).gameObject);
+        int rewardCardNum = 3;
+        for(int i = 0 ; i < rewardCardNum ; i++)
+        {
+            CardClass rewardCard = RandomUtil.GetRandomValueInList(CardConfig.GetAll());
+            gameData.CardReward.Add(rewardCard.id);
+        }
+        object[] objects = {ContainerManager.Instance.Enemies.GetChild(0).gameObject,gameData.CardReward};
+        UIManager.Instance.Show("RewardPanelUI", objects);
         UIManager.Instance.Close(GameString.BATTLEUI);   // 隐藏战斗ui
     }
 
@@ -166,6 +170,9 @@ public class GameManager : ManagerBase<GameManager>
         if(0 < _select && _select < gameData.CardReward.Count)
         {
             // 获得对应的卡牌
+            gameData.hasCard.Add(gameData.CardReward[_select]);
+            Debug.Log($"获得卡牌{gameData.CardReward[_select]}");
+            Debug.Log($"卡牌数量{gameData.hasCard.Count}");
         }else
         {
             OnMoneyChange(_select);

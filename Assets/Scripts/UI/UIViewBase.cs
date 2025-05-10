@@ -47,6 +47,8 @@ public class UIViewBase : MonoBehaviour
     // ui的名称
     public void Init(string str) { _name = str; }   // 不可修改的基础初始化方法
 
+    public virtual void Init(string str , object[] args) { Init(str); }
+
     // 传递json数据进来
     public virtual void Init(string str , string data) { Init(str); }
     // 所有权归属,owner

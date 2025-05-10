@@ -44,6 +44,7 @@ public class ContainerManager : Singleton<ContainerManager>
     {
         GameObject enemy = ResourceUtil.GetEnemy("Enemy");
         var go = Instantiate(enemy, Players);
+        go.GetComponent<BaseCharacter>().ResetCharacterType(CharacterType.Card);
         go.transform.SetSiblingIndex(pos);
     }
 

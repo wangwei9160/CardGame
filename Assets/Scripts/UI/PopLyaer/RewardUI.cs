@@ -71,6 +71,7 @@ public class RewardUI : UIViewBase
             Cards.GetChild(i).Find("ConfirmBtn").GetComponent<Button>().onClick.AddListener(() =>
             {
                 EventCenter.Broadcast(EventDefine.SelectCardReward, idx);
+                ShowPanel(0);
             });
         }
     }
@@ -90,6 +91,33 @@ public class RewardUI : UIViewBase
         base.Init(str);
 
         reward.transform.position = Camera.main.WorldToScreenPoint(obj.transform.position); // 设置奖励的初始位置为最后一个死亡的角色的位置
+        Debug.Log(reward.transform.position);
+    }
+
+    public override void Init(string str, object[] data)
+    {
+        base.Init(str);
+        if(data[0] is GameObject obj)
+        {
+            reward.transform.position = Camera.main.WorldToScreenPoint(obj.transform.position); // 设置奖励的初始位置为最后一个死亡的角色的位置
+        }
+        if(data[1] is List<int> _list)
+        {
+            for (int i = 0; i < Cards.childCount; i++)
+            {
+                var card = Cards.GetChild(i);
+                int idx = i + 1;
+                if(i < _list.Count)
+                {
+                    card.gameObject.SetActive(true);
+                    card.Find("Card").GetComponent<CardUI>().SetShowOnly(true);
+                    card.Find("Card").GetComponent<CardShow>().SetData(_list[i]);
+                }else {
+                    card.gameObject.SetActive(false);
+                }
+                
+            }
+        }
         Debug.Log(reward.transform.position);
     }
 

@@ -40,10 +40,6 @@ public class BattleData
         playerTeam.Clear();
         handCards.Clear();
         deckCards.Clear();
-        foreach(var id in GameManager.Instance.Data.hasCard)
-        {
-            deckCards.Add(id);
-        }
         discardPile.Clear();
         grave.Clear();
     }
@@ -68,14 +64,14 @@ public class BattleManager : ManagerBase<BattleManager>
         base.Awake();
         battleData = new BattleData();
         EventCenter.AddListener(EventDefine.OnBattleStart, OnBattleStart);    // 战斗开始
-        EventCenter.AddListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 敌人死亡
+        EventCenter.AddListener<int,CharacterType>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 敌人死亡
         EventCenter.AddListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
     }
 
     private void OnDestroy()
     {
         EventCenter.RemoveListener(EventDefine.OnBattleStart, OnBattleStart);    // 移除
-        EventCenter.RemoveListener<int>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 移除监听
+        EventCenter.RemoveListener<int,CharacterType>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 移除监听
         EventCenter.RemoveListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
     }
 
@@ -130,19 +126,24 @@ public class BattleManager : ManagerBase<BattleManager>
         EventCenter.Broadcast(EventDefine.OnDeleteCard);
     }
 
-    public void OnEnemyDeath(int id)
+    public void OnEnemyDeath(int id , CharacterType tp)
     {
-        enemyNum--;
-        Debug.Log($"敌人{id} 死亡");
-        if (enemyNum == 0)
+        Debug.Log(tp);
+        if(tp == CharacterType.Enemy) 
         {
-            GameManager.Instance.BettleWin(id);
-            isBattle = false;
+            enemyNum--;
+            if (enemyNum == 0)
+            {
+                GameManager.Instance.BettleWin(id);
+                isBattle = false;
+                battleData.Init();
+            }
         }
     }
 
     public void OnBeforePlayerTurn()
     {
+        Debug.Log($"牌堆卡牌数量{battleData.deckCards.Count}");
         if(battleData.deckCards.Count == 0 && battleData.discardPile.Count == 0)
         {
             OnEnterFirstTurn();
