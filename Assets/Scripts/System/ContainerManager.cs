@@ -12,6 +12,9 @@ public class ContainerManager : Singleton<ContainerManager>
     // 随从交互用的幽灵角色
     public Transform ghostFollower;
 
+    [Tooltip("角色间隔")]
+    public float spacing = 2f;
+
     protected override void Awake()
     {
         base.Awake();
@@ -64,7 +67,7 @@ public class ContainerManager : Singleton<ContainerManager>
         float middleOffset = (num - 1) / 2f;
         for(int i = 0 ; i < num ; i++)
         {
-            float xPos = (i - middleOffset) * 3f;
+            float xPos = (i - middleOffset) * spacing;
             Vector2 position = new Vector2(xPos, 0);
             Players.GetChild(i).localPosition = position;
             Players.GetChild(i).GetComponent<BaseCharacter>().ReSetPosition();
@@ -77,7 +80,7 @@ public class ContainerManager : Singleton<ContainerManager>
         float middleOffset = (num - 1) / 2f;
         for(int i = 0 ; i < num ; i++)
         {
-            float xPos = (i - middleOffset) * 3f;
+            float xPos = (i - middleOffset) * spacing;
             Vector2 position = new Vector2(xPos, 0);
             Enemies.GetChild(i).localPosition = position;
         }
@@ -150,14 +153,14 @@ public class ContainerManager : Singleton<ContainerManager>
         {
             int curPos = i;
             if(i == pos) {
-                float gPos = (curPos - middleOffset) * 3f;
+                float gPos = (curPos - middleOffset) * spacing;
                 ghostFollower.gameObject.SetActive(true);
                 Vector3 ghostPos = new(Players.position.x + gPos, Players.position.y , 0);
                 ghostFollower.localPosition = ghostPos;
                 continue;
             }
             if (i > pos) curPos--;
-            float xPos = (i - middleOffset) * 3f;
+            float xPos = (i - middleOffset) * spacing;
             Vector2 position = new Vector2(xPos, 0);
             Players.GetChild(curPos).localPosition = position;
             Players.GetChild(curPos).GetComponent<BaseCharacter>().ReSetPosition();

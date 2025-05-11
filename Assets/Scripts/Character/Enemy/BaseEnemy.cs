@@ -37,6 +37,7 @@ public class BaseEnemy : BaseCharacter
 
     public override void OnHurt(int damage)
     {
+        if(hp <= 0) return ;
         hp -= damage;
         OnDeadCheck();
         EventCenter.Broadcast<int, int>(EventDefine.OnHpChangeByName, hp, HpUIIndex);

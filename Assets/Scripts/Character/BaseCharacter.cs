@@ -17,6 +17,9 @@ public class BaseCharacter : MonoBehaviour
     public virtual CharacterType Type => type;
     public void ResetCharacterType(CharacterType tp) {type = tp;}
 
+    public int ID;
+    public void ResetID(int _id) {ID = _id;}
+
     public int HpUIIndex = -1;
     public int maxHp = 100;
     public int hp = 50;
