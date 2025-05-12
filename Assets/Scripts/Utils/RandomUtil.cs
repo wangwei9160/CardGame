@@ -57,4 +57,18 @@ public class RandomUtil
             list[i] = temp;
         }
     }
+
+    public static T Min<T>(params T[] values) where T : System.IComparable<T>
+    {
+        if (values == null || values.Length == 0)
+            throw new System.ArgumentException("至少需要提供一个值");
+        
+        T min = values[0];
+        for (int i = 1; i < values.Length; i++)
+        {
+            if (values[i].CompareTo(min) < 0)
+                min = values[i];
+        }
+        return min;
+    }
 }

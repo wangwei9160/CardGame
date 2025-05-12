@@ -83,6 +83,7 @@ public class ContainerManager : Singleton<ContainerManager>
             float xPos = (i - middleOffset) * spacing;
             Vector2 position = new Vector2(xPos, 0);
             Enemies.GetChild(i).localPosition = position;
+            Enemies.GetChild(i).GetComponent<BaseCharacter>().ReSetPosition();
         }
     }
 

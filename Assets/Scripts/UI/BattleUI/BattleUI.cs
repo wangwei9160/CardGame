@@ -188,7 +188,7 @@ public class BattleUI : UIViewBase
         float spacing = spacingXposList[cardCount];
         float spacingY = spacingYposList[cardCount];
         float fixPos = Mathf.Abs(offset) * spacingY;
-        Vector3 posistion = cardArea.GetChild(pos).position + new Vector3(0 , 50f + fixPos , 0);
+        Vector3 posistion = cardArea.GetChild(pos).position + new Vector3(0 , 100f + fixPos , 0);
         showCard.SetData(pos, posistion , id);
         AdjustCardPositionWhenCardSelect(pos);
     }
@@ -219,16 +219,16 @@ public class BattleUI : UIViewBase
     public int maxCardCount = 8;
 
     [Header("持有不同数量时的x坐标间隔(类型:float)")]
-    public float[] spacingXposList = {0f,0f,300f,300f,300f,200f,160f,140f,120f};
+    public float[] spacingXposList = {0f,0f,300f,280,260f,240f,200f,160f,150f};
     [Header("持有不同数量时的y坐标间隔(类型:float)")]
-    public float[] spacingYposList = {0f,0f,60f,60f,60f,40f,32f,28f,24f};
+    public float[] spacingYposList = {0f,0f,60f,50f,50f,40f,32f,28f,26f};
     
     [Header("持有多少张卡牌时需要携带一点旋转(类型:int)")]
     public int applyRotationTime = 2;
     [Header("持有不通数量卡牌时统一两卡之间旋转幅度(类型:float)[数量0-8]")]
-    public float[] rotationList = {0f,0f,10f,10f,10f,10f,10f,10f,10f};
+    public float[] rotationList = {0f,0f,10f,10f,10f,8f,8f,8f,9f};
     [Header("有选中卡牌时左右偏移量")]
-    public int spaceWhenSelect = 100;
+    public int spaceWhenSelect = 30;
 
     public void AdjustCardPosition()
     {

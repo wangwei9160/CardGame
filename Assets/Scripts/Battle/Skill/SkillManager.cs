@@ -100,18 +100,18 @@ public class SkillManager : ManagerBase<SkillManager>
         return OpenSelector(cfg.active_id);
     }
 
-    public void PreExecuteSelecte(int id)
+    public void PreExecuteSelecte(int id , bool isForce = false)
     {
         CardClass cfg = CardConfig.GetCardClassByKey(id);
-        PreExecuteSelecte(cfg);
+        PreExecuteSelecte(cfg , isForce);
     }
 
-    public void PreExecuteSelecte(CardClass cfg)
+    public void PreExecuteSelecte(CardClass cfg , bool isForce)
     {
         SkillSelectorType tp = OpenSelector(cfg.active_id);
         if (skillSelectors.TryGetValue(tp, out var handler))
         {
-            handler.CreateSelector();
+            handler.CreateSelector(isForce);
             return;
         }
         else

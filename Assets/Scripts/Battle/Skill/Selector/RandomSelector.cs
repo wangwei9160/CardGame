@@ -8,7 +8,7 @@ public class RandomSelector : SkillSelectorBase
 
     public override void CloseSelector(){}
 
-    public override void CreateSelector(){}
+    public override void CreateSelector(bool isForce = false){}
 
     public override void UpdateSelector(BaseCharacter u)
     {

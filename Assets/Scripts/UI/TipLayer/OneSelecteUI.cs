@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class OneSelecteUI : UIViewBase
     public Image select;
     
     public bool isSelect;
+    public bool isForceSelect;
 
     SkillSelectorBase curParent;
 
@@ -20,9 +22,16 @@ public class OneSelecteUI : UIViewBase
         isSelect = false;
     }
 
-    public override void Init(string _name, SkillSelectorBase parent , string data)
+    public override void Init(string _name, object[] args)
     {
-        curParent = parent;
+        if(args[0] is SkillSelectorBase parent)
+        {
+            curParent = parent;
+        }
+        if(args[1] is bool isForce)
+        {
+            isForceSelect = isForce;
+        }
     }
 
     private void Update()
@@ -31,6 +40,16 @@ public class OneSelecteUI : UIViewBase
         if (select != null && !isSelect)
         {
             select.rectTransform.anchoredPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        }
+        if(isForceSelect)
+        {
+            if(Input.GetMouseButtonDown(0))
+            {
+                if(select != null && !isSelect)
+                {
+                    EventCenter.Broadcast(EventDefine.ON_FOLLOWER_SKILL_SELECT_FINISH);
+                }
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -20,6 +21,12 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
         cardShow = transform.Find("Card").GetComponent<CardShow>();
         showCard.gameObject.SetActive(true);
         showCard.SetShowOnly(true);
+        EventCenter.AddListener(EventDefine.ON_FOLLOWER_SKILL_SELECT_FINISH , ON_FOLLOWER_SKILL_SELECT_FINISH);
+    }
+
+    public void OnDestroy()
+    {
+        EventCenter.RemoveListener(EventDefine.ON_FOLLOWER_SKILL_SELECT_FINISH , ON_FOLLOWER_SKILL_SELECT_FINISH);
     }
 
     public void Hide() 
@@ -133,11 +140,20 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
             {
                 EventCenter.Broadcast(EventDefine.ON_FOLLOWER_SET);
                 EventCenter.Broadcast(EventDefine.OnDeleteCardByIndex , Index);
+                if(SkillManager.Instance.CheckNeedHideCard(cardID))
+                {
+                    StartCoroutine(WaitForCondition(cardID));
+                }else 
+                {
+                    SkillManager.Instance.ExecuteEffect(cardID);
+                    SkillManager.Instance.PreExecuteSelecteClose(cardID);
+                }
                 Index = -1;
             }else {
                 showCard.gameObject.SetActive(false);
                 EventCenter.Broadcast(EventDefine.ON_FOLLOWER_DRAG_END);
                 EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);
+                SkillManager.Instance.PreExecuteSelecteClose(cardID);
             }
             
         }else 
@@ -155,9 +171,26 @@ public class ShowCardUICom : MonoBehaviour , IPointerExitHandler , IBeginDragHan
             else {
                 EventCenter.Broadcast(EventDefine.ON_CARD_UNSELECT , Index);
             }
+            SkillManager.Instance.PreExecuteSelecteClose(cardID);
         }
-        SkillManager.Instance.PreExecuteSelecteClose(cardID);
         Hide();
+    }
+
+    private bool _isFollowerSelectConditionMet = false;
+
+    public void ON_FOLLOWER_SKILL_SELECT_FINISH()
+    {
+        _isFollowerSelectConditionMet = true;
+    }
+
+    IEnumerator WaitForCondition(int cardID)
+    {
+        SkillManager.Instance.PreExecuteSelecte(cardID , true);
+        // 等待直到条件满足
+        yield return new WaitUntil(() => _isFollowerSelectConditionMet);
+        SkillManager.Instance.PreExecuteSelecteClose(cardID);
+        _isFollowerSelectConditionMet = false;
+        SkillManager.Instance.ExecuteEffect(cardID);
     }
 
     #endregion Drag operate

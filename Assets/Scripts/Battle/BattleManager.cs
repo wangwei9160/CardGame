@@ -79,6 +79,8 @@ public class BattleManager : ManagerBase<BattleManager>
         EventCenter.AddListener(EventDefine.OnFinishPlayerTurn, OnFinishPlayerTurn);    // 战斗开始
         EventCenter.AddListener<int,CharacterType>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 敌人死亡
         EventCenter.AddListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
+        EventCenter.AddListener<int>(EventDefine.OnGetCardByID, OnGetCardByID);
+        EventCenter.AddListener<int>(EventDefine.OnDeleteCardByIndex, OnDeleteCardByIndex);
     }
 
     private void OnDestroy()
@@ -87,6 +89,8 @@ public class BattleManager : ManagerBase<BattleManager>
         EventCenter.RemoveListener(EventDefine.OnFinishPlayerTurn, OnFinishPlayerTurn);    // 移除
         EventCenter.RemoveListener<int,CharacterType>(EventDefine.OnEnemyDeath, OnEnemyDeath);    // 移除监听
         EventCenter.RemoveListener(EventDefine.OnBeforePlayerTurn, OnBeforePlayerTurn);
+        EventCenter.RemoveListener<int>(EventDefine.OnGetCardByID, OnGetCardByID);
+        EventCenter.RemoveListener<int>(EventDefine.OnDeleteCardByIndex, OnDeleteCardByIndex);
     }
 
     public bool IsInBattle()
@@ -140,6 +144,16 @@ public class BattleManager : ManagerBase<BattleManager>
         EventCenter.Broadcast(EventDefine.OnGetCardByID , id);
     }
 
+    public void OnGetCardByID(int id)
+    {
+        battleData.handCards.Add(id);
+    }
+
+    public void OnDeleteCardByIndex(int idx)
+    {
+        battleData.handCards.Remove(idx);
+    }
+
     // 临时使用删除一张卡
     public void RemoveOneHandCard()
     {
@@ -170,14 +184,17 @@ public class BattleManager : ManagerBase<BattleManager>
             OnEnterFirstTurn();
         }
         int getCardNum = 2;
-        int canGetCardNum = Math.Min(getCardNum, battleData.deckCards.Count);
+        int cardChangeNum = battleData.maxCardCount - battleData.handCards.Count;
+        if(cardChangeNum <= 0) cardChangeNum = 0;
+        int canGetCardNum = RandomUtil.Min(getCardNum, battleData.deckCards.Count,cardChangeNum);
         for (int i = 0; i < getCardNum && i < battleData.deckCards.Count; i++)
         {
             EventCenter.Broadcast(EventDefine.OnGetCardByID, battleData.deckCards[i]);
         }
+        Debug.Log($"牌堆卡牌数量[{battleData.deckCards.Count}]，移除数量[{canGetCardNum}]");
         battleData.deckCards.RemoveRange(0, canGetCardNum);
 
-        if (canGetCardNum < getCardNum)
+        if (canGetCardNum < getCardNum && cardChangeNum > canGetCardNum)
         {
             RandomUtil.Shuffle(battleData.discardPile);
             battleData.deckCards = new List<int>(battleData.discardPile);
@@ -188,6 +205,7 @@ public class BattleManager : ManagerBase<BattleManager>
             {
                 EventCenter.Broadcast(EventDefine.OnGetCardByID, battleData.deckCards[i]);
             }
+            Debug.Log($"牌堆卡牌数量[{battleData.deckCards.Count}]，移除数量[{canGetCardNum}]");
             battleData.deckCards.RemoveRange(0, canGetCardNum);
         }
         Debug.Log($"{battleData.current_turn} --- {battleData.Cfg.enemy_id.Count}");

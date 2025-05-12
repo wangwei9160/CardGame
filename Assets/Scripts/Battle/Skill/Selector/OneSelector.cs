@@ -8,11 +8,12 @@ public class OneSelector : SkillSelectorBase
 
     public bool isUse;
 
-    public override void CreateSelector()
+    public override void CreateSelector(bool isForce = false)
     {
         isUse = true;
         _unit = null;
-        UIManager.Instance.Show("OneSelecteUI", this);
+        object[] objs = {this,isForce};
+        UIManager.Instance.Show("OneSelecteUI", objs);
     }
 
     public override void CloseSelector()

@@ -14,7 +14,7 @@ public abstract class SkillSelectorBase
     }
     public abstract void UpdateSelector(BaseCharacter u);
 
-    public abstract void CreateSelector();
+    public abstract void CreateSelector(bool isForce = false);
     public abstract void CloseSelector();
     public abstract BaseCharacter GetUnit();
     public abstract List<BaseCharacter> GetUnits();

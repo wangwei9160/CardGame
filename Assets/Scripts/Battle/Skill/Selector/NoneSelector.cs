@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NoneSelector : SkillSelectorBase
 {
-    public override void CreateSelector(){}
+    public override void CreateSelector(bool isForce = false){}
 
     public override void CloseSelector(){}
 

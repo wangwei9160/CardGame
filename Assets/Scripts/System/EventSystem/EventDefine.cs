@@ -51,6 +51,7 @@
     ON_FOLLOWER_DRAG,       // 拖拽随从
     ON_FOLLOWER_DRAG_END,       // 拖拽随从结束
     ON_FOLLOWER_SET,        // 随从放置
+    ON_FOLLOWER_SKILL_SELECT_FINISH,    //随从技能选择器生效
 
 
     // 启示事件

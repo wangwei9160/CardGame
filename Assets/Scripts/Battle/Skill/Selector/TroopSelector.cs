@@ -18,7 +18,7 @@ public class TroopSelector : SkillSelectorBase
 
     public override void CloseSelector(){}
 
-    public override void CreateSelector()
+    public override void CreateSelector(bool isForce = false)
     {
         // 巫真
         if(troop == CharacterType.Player && condition == 1)
