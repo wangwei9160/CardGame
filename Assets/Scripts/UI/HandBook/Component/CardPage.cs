@@ -15,7 +15,7 @@ public class CardPage : UIViewBase
     protected override void Start()
     {
         base.Start();
-        card = Resources.Load<GameObject>("UI/HandBook/Component/Card");
+        card = Resources.Load<GameObject>("Arts/Card/UI/Card");
         content = transform.Find("Scroll View/Viewport/Content");
         
         // 添加GridLayoutGroup组件
@@ -54,6 +54,7 @@ public class CardPage : UIViewBase
             {
                 content.GetChild(i).GetComponent<CardShow>().Hide();
             }
+            content.GetChild(i).GetComponent<CardUI>().SetShowOnly(true);
         }
     }
 

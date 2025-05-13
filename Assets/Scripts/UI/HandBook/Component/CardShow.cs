@@ -11,13 +11,13 @@ public class CardShow : MonoBehaviour
     public Image r_u;
     public Image r_d;
     public Image l_d;
-    public Image r_d_cost;
-    public Image l_d_cost;
+    public Text cost;
+    public Text r_d_cost;
+    public Text l_d_cost;
     public Text title;
     public Text description;
     public Text Type;
     public Action action;
-    public Image cost;
     public RectTransform r_uRectTransform;
 
     private void Awake()
@@ -31,9 +31,9 @@ public class CardShow : MonoBehaviour
         r_uRectTransform = r_u.GetComponent<RectTransform>();
         r_uRectTransform.sizeDelta = new Vector3(80f, 80f);
         Type = transform.Find("Type").GetComponent<Text>();
-        cost = transform.Find("cost").GetComponent<Image>();
-        r_d_cost = transform.Find("r_d_cost").GetComponent<Image>();
-        l_d_cost = transform.Find("l_d_cost").GetComponent<Image>();
+        cost = transform.Find("cost").GetComponent<Text>();
+        r_d_cost = transform.Find("r_d_cost").GetComponent<Text>();
+        l_d_cost = transform.Find("l_d_cost").GetComponent<Text>();
     }
 
     public void SetData(int card_id)
@@ -51,7 +51,7 @@ public class CardShow : MonoBehaviour
         description.text = SkillManager.Instance.GetSkillDescription(cfg);
         TextUtil.AdjustTextComBySelf(description , 9 , 9);
         Type.text = ResourceUtil.GetCardTypeName(cfg.type);
-        cost.sprite = ResourceUtil.GetWhiteCostImage(cfg.cost);
+        cost.text = cfg.cost.ToString();
         if(cfg.leftAttribute != cfg.rightAttribute) 
         {
             l_d.gameObject.SetActive(true);
@@ -63,8 +63,8 @@ public class CardShow : MonoBehaviour
             l_d_cost.gameObject.SetActive(false);
             r_d.sprite = ResourceUtil.GetCardAttributeTypeImage(cfg.rightAttribute);
         }
-        l_d_cost.sprite = ResourceUtil.GetWhiteCostImage(cfg.attribute[cfg.leftAttribute - 1]);
-        r_d_cost.sprite = ResourceUtil.GetWhiteCostImage(cfg.attribute[cfg.rightAttribute - 1]);
+        l_d_cost.text = cfg.attribute[cfg.leftAttribute - 1].ToString();
+        r_d_cost.text = cfg.attribute[cfg.rightAttribute - 1].ToString();
     }
 
     public void Hide()
