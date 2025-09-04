@@ -1,0 +1,8 @@
+﻿1、需要当前战斗单元 --> 条件检测 --> skill.OnFire
+
+上下文 context
+
+
+BTroot
+
+sequence1

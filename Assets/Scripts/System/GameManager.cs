@@ -49,7 +49,7 @@ public class GameManager : ManagerBase<GameManager>
 
     private void Start()
     {
-        EventCenter.Broadcast(EventDefine.ON_ENTER_ECHOEVENT, Data.EchoEventType);// 临时使用用于默认进入战斗
+        // EventCenter.Broadcast(EventDefine.ON_ENTER_ECHOEVENT, Data.EchoEventType);// 临时使用用于默认进入战斗
         UIManager.Instance.Show("TopInfo");
     }
 
@@ -219,36 +219,36 @@ public class GameManager : ManagerBase<GameManager>
         gameData.MaxMagicPower = 0; // 先增加最大的
         gameData.MagicPower = 0;
         gameState = GameState.Battle;   // 暂时初始化为战斗开始
-        BeforeTurn(); // 代替状态机的切换
+        //BeforeTurn(); // 
     }
 
     // 回合开始
     public void BeforeTurn()
     {
-        UIManager.Instance.Show("PlayerTurnTip");   // 新的回合
-        EventCenter.Broadcast(EventDefine.OnBeforePlayerTurn); // 进入一个新的回合
-        StartCoroutine(BeforePlayerTurn());
+        //UIManager.Instance.Show("PlayerTurnTip");   // 新的回合
+        //EventCenter.Broadcast(EventDefine.OnBeforePlayerTurn); // 进入一个新的回合
+        //StartCoroutine(BeforePlayerTurn());
     }
 
-    private IEnumerator BeforePlayerTurn()
-    {
-        List<TreasureBase> allTreasure = GetAllTreasure();
-        foreach (var treasure in allTreasure)
-        {
-            treasure.OnTurnStart();
-        }
-        // 提前预留卡牌的动画效果
-        for(int i = 0; i < 2; i++)
-        {
-            Debug.Log(string.Format("Card{0} 回合开始效果触发中..........." , i));
-            yield return new WaitForSeconds(0.2f);
-        }
-        if (IsGameState(GameState.Battle))
-        {
-            // 如果仍然是战斗回合 , 则进入玩家回合
-            EventCenter.Broadcast(EventDefine.OnPlayerTurnStart); // 进入玩家可操作回合事件广播
-        }
-    }
+    //private IEnumerator BeforePlayerTurn()
+    //{
+    //    List<TreasureBase> allTreasure = GetAllTreasure();
+    //    foreach (var treasure in allTreasure)
+    //    {
+    //        treasure.OnTurnStart();
+    //    }
+    //    // 提前预留卡牌的动画效果
+    //    for(int i = 0; i < 2; i++)
+    //    {
+    //        Debug.Log(string.Format("Card{0} 回合开始效果触发中..........." , i));
+    //        yield return new WaitForSeconds(0.2f);
+    //    }
+    //    if (IsGameState(GameState.Battle))
+    //    {
+    //        // 如果仍然是战斗回合 , 则进入玩家回合
+    //        EventCenter.Broadcast(EventDefine.OnPlayerTurnStart); // 进入玩家可操作回合事件广播
+    //    }
+    //}
 
     // 回合结束
     public void FinishTurn()

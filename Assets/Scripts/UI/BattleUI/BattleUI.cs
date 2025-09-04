@@ -85,7 +85,7 @@ public class BattleUI : UIViewBase
             isLock = true;      // 防止连点异常
             StartCoroutine(WaitTimeUnLock());   // 定时解锁
             endTurnBtn.GetComponent<EndTurnBtnHover>().OnChange(0.6f);
-            GameManager.Instance.FinishTurn();
+            BattleManager.Instance.BaseBattlePlayer.ChangeState(BattleEvent.FinishPlayerTurn);
         });
     }
 
@@ -93,7 +93,6 @@ public class BattleUI : UIViewBase
     {
         base.Show();
         isLock = true;
-        EventCenter.Broadcast(EventDefine.OnBattleStart);   // 进入战斗准备
         OnMagicPowerChange(GameManager.Instance.Data.MagicPower , GameManager.Instance.Data.MaxMagicPower);// 法力值信息的更新
     }
 

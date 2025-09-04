@@ -30,7 +30,8 @@ public class UIConfigManager
     public static Dictionary<string, UiConfig> Configs = new Dictionary<string, UiConfig>
     {
         {"GMUI" , new UiConfig("GMUI" , UILAYER.M_TIP_LAYER , "UI/GMUI" , "") },
-        {"BattleUI" , new UiConfig("BattleUI" , UILAYER.M_NORMAL_LAYER ,"UI/BattleUI" ,"Prefabs/EchoEvent/FightEvent")},
+        // {"BattleUI" , new UiConfig("BattleUI" , UILAYER.M_NORMAL_LAYER ,"UI/BattleUI" ,"Prefabs/EchoEvent/FightEvent")},
+        {"BattleUI" , new UiConfig("BattleUI" , UILAYER.M_NORMAL_LAYER ,"UI/BattleUI" ,"")},
         {"PlayerTurnTip" , new UiConfig("PlayerTurnTip" , UILAYER.M_BATTLE_LAYER , "UI/PlayerTurnTip" , "")},
         {"TopInfo" , new UiConfig("TopInfo" , UILAYER.M_BATTLE_LAYER , "UI/TopInfo" , "") },
         { "RewardPanelUI", new UiConfig("RewardPanelUI", UILAYER.M_BATTLE_LAYER, "UI/RewardPanelUI", "") },
