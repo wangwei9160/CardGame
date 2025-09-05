@@ -7,19 +7,10 @@
         Parent = parent;
     }   
 
-    public virtual void OnEnter()
-    {
+    public virtual void OnEnter() { }
 
-    }
+    public virtual void OnUpdate() { }
 
-    public virtual void OnUpdate()
-    {
-
-    }
-
-    public virtual void OnExit()
-    {
-
-    }
+    public virtual void OnExit() { }
 
 }

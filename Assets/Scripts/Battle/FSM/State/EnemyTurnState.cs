@@ -7,8 +7,7 @@ public class EnemyTurnState : IBaseState
     public override void OnEnter()
     {
         Debug.Log("EnemyTurnState Enter");
-
-        Parent.ChangeState(BattleEvent.FinishEnemyTurn);
+        Parent.OnEnemyTurnStart();
     }
 
     public override void OnUpdate()

@@ -43,7 +43,7 @@ public class CardBattleManager : MonoBehaviour
         // 检查战场空间
         if (playerMinions.Count >= maxBattlefieldSize)
         {
-            Debug.Log("战场空间不足,无法放置随从");
+            //Debug.Log("战场空间不足,无法放置随从");
             return;
         }
         

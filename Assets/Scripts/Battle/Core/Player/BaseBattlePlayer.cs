@@ -9,6 +9,7 @@ public class BaseBattlePlayer
     public PerformModule performModule;
 
     public FiniteStateMachine fsm;
+    public BTRoot root;
 
     public BaseBattlePlayer()
     {
@@ -17,12 +18,14 @@ public class BaseBattlePlayer
         performModule = new PerformModule();
         fsm = new FiniteStateMachine();
         InitFsm();
+        InitBTree();
     }
 
     public virtual void ChangeState(BattleEvent battleEvent) { }
 
     public void SetBattleTeam(BattleTeam left, BattleTeam right)
     {
+        battleTeams.Clear();
         battleTeams.Add(left);
         battleTeams.Add(right);
     }
@@ -36,5 +39,8 @@ public class BaseBattlePlayer
     public virtual void OnEnter() { }
 
     public virtual void InitFsm() { }
+    public virtual void InitBTree() { }
 
+    public int enemyActionNum = 0;
+    public virtual void OnEnemyTurnStart() { }
 }

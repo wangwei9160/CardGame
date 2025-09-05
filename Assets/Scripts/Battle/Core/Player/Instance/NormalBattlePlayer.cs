@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEditor.UI;
+using UnityEngine;
 public class NormalBattlePlayer : BaseBattlePlayer
 {
     public NormalBattlePlayer()
     {
         Debug.Log("NormalBattlePlayer");
     }
+
+    // ===================FSM===================
 
     public WaitingForStartState waitingForStartState;
     public BigRoundChangeState bigRoundChangeState;
@@ -36,6 +40,26 @@ public class NormalBattlePlayer : BaseBattlePlayer
         }
     }
 
+    // ===================END FSM===================
+
+    // ===================UNIT BT===================
+
+    public override void InitBTree()
+    {
+        BTBlackboard bTBlackboard = new();
+        BTSequence sequence1 = new();
+        root = new BTRoot(sequence1, bTBlackboard);
+        // sequence1
+        BattleStateCheck condition1 = new();
+        sequence1.AddChildrens(condition1);
+        UnitSkillFireAction unitSkillFireAction = new();
+        sequence1.AddChildrens(unitSkillFireAction);
+
+        // End sequence1
+    }
+
+    // ===================END UNIT BT===============
+
     public override void OnEnter()
     {
         base.LoadSceneByName("Prefabs/EchoEvent/FightEvent");
@@ -44,9 +68,23 @@ public class NormalBattlePlayer : BaseBattlePlayer
     }
 
     /* Enemy Turn */
-    public void OnEnemyTurnStart()
+    public override void OnEnemyTurnStart()
     {
-
+        root.ClearParameter();
+        OneEnemyAction(enemyActionNum = 0);
     }
 
+    public void OneEnemyAction(int index)
+    {
+        if (index == battleTeams[1].BattleUnits.Count)
+        {
+            ChangeState(BattleEvent.FinishEnemyTurn);
+            return;
+        }
+        BattleUnit curActionEnemyUnit = battleTeams[1].BattleUnits[index];        
+        root.SetParameter("Unit", curActionEnemyUnit);
+        enemyActionNum++;
+        root.OnUpdate();
+        OneEnemyAction(index + 1);    
+    }
 }

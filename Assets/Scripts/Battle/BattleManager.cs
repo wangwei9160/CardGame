@@ -154,7 +154,7 @@ public class BattleManager : ManagerBase<BattleManager>
 
     public void OnEnemyDeath(int id , CharacterType tp)
     {
-        Debug.Log(tp);
+        //Debug.Log(tp);
         if(tp == CharacterType.Enemy) 
         {
             //if (enemyNum == 0)
@@ -168,7 +168,7 @@ public class BattleManager : ManagerBase<BattleManager>
 
     public void OnBeforePlayerTurn()
     {
-        Debug.Log($"牌堆卡牌数量{battleData.deckCards.Count}");
+        //Debug.Log($"牌堆卡牌数量{battleData.deckCards.Count}");
         battleData.current_turn++;
         if(battleData.current_turn == 1)
         {
@@ -182,7 +182,7 @@ public class BattleManager : ManagerBase<BattleManager>
         {
             EventCenter.Broadcast(EventDefine.OnGetCardByID, battleData.deckCards[i]);
         }
-        Debug.Log($"牌堆卡牌数量[{battleData.deckCards.Count}]，移除数量[{canGetCardNum}]");
+        //Debug.Log($"牌堆卡牌数量[{battleData.deckCards.Count}]，移除数量[{canGetCardNum}]");
         battleData.deckCards.RemoveRange(0, canGetCardNum);
 
         if (canGetCardNum < getCardNum && cardChangeNum > canGetCardNum)
@@ -196,10 +196,10 @@ public class BattleManager : ManagerBase<BattleManager>
             {
                 EventCenter.Broadcast(EventDefine.OnGetCardByID, battleData.deckCards[i]);
             }
-            Debug.Log($"牌堆卡牌数量[{battleData.deckCards.Count}]，移除数量[{canGetCardNum}]");
+            //Debug.Log($"牌堆卡牌数量[{battleData.deckCards.Count}]，移除数量[{canGetCardNum}]");
             battleData.deckCards.RemoveRange(0, canGetCardNum);
         }
-        Debug.Log($"{battleData.current_turn} --- {battleData.Cfg.enemy_id.Count}");
+        //Debug.Log($"{battleData.current_turn} --- {battleData.Cfg.enemy_id.Count}");
         if(battleData.current_turn <= battleData.Cfg.enemy_id.Count)
         {
             AddEnemyById(battleData.Cfg.enemy_id[battleData.current_turn - 1][0]);
@@ -208,7 +208,7 @@ public class BattleManager : ManagerBase<BattleManager>
 
     public void OnFinishPlayerTurn()
     {
-        Debug.Log($"{battleData.current_turn} -- {battleData.Cfg.enemy_id.Count}");
+        //Debug.Log($"{battleData.current_turn} -- {battleData.Cfg.enemy_id.Count}");
         if(battleData.current_turn <= battleData.Cfg.enemy_id.Count)
         {
             AddEnemyById(battleData.Cfg.enemy_id[battleData.current_turn - 1][1]);
@@ -278,7 +278,7 @@ public class BattleManager : ManagerBase<BattleManager>
             {
                 int previousCard = currentSelectCard;
                 currentSelectCard = value; // 更新实际值
-                Debug.Log($"Selected card changed from {previousCard} to {currentSelectCard}");
+                //Debug.Log($"Selected card changed from {previousCard} to {currentSelectCard}");
             }
         }
     }
