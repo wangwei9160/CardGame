@@ -44,6 +44,16 @@ public class NormalBattlePlayer : BaseBattlePlayer
 
     // ===================UNIT BT===================
 
+    /* 战斗通用行为树
+     1、一阶段重复节点 （所有节点都为false，则）
+        a. 战斗状态检测
+        b. 技能消耗（花费、一回合内最大次数......）
+        c. 技能目标选择（我方单位需要拉起选择器，敌方由配置决定）
+        d. 技能释放（拿到技能释放的目标）
+    2、二阶段重复节点
+        
+     */
+
     public override void InitBTree()
     {
         BTBlackboard bTBlackboard = new();
@@ -52,6 +62,10 @@ public class NormalBattlePlayer : BaseBattlePlayer
         // sequence1
         BattleStateCheck condition1 = new();
         sequence1.AddChildrens(condition1);
+        UnitSkillCostCheck condition2 = new();
+        sequence1.AddChildrens(condition2);
+        UnitSkillChooseTarget unitSkillChooseTarget = new();
+        sequence1.AddChildrens(unitSkillChooseTarget);
         UnitSkillFireAction unitSkillFireAction = new();
         sequence1.AddChildrens(unitSkillFireAction);
 

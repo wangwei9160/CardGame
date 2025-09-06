@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using static BTConditionalHelper;
 
+// 所有战斗内行为树优先判断战斗状态
 public class BattleStateCheck : BTConditional
 {
     public override BTNodeState OnUpdate()

@@ -52,6 +52,7 @@ public class BTRoot
     public BTRoot(BTNode root, BTBlackboard blackboard)
     {
         _root = root;
+        _root.parent = this;
         Blackboard = blackboard;
     }
 
@@ -65,9 +66,9 @@ public class BTRoot
         Blackboard.Set(key, value);
     }
 
-    public object GetParameter<T>(string key, T value)
+    public T GetParameter<T>(string key, T value)
     {
-        return Blackboard.Get(key, value);
+        return Blackboard.Get<T>(key, value);
     }
 
     public void ClearParameter()

@@ -15,9 +15,9 @@ public enum UnitAttribute
     COUNT, // 在这个上面加类型
 }
 
-public enum UnitTeam
+public enum UnitTeamType
 {
-    OWNER = 1,
-    ENEMY = 2,
+    OWNER = 0,
+    ENEMY = 1,
     COUNT,
 }

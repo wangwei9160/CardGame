@@ -17,7 +17,7 @@ public class BTNode
         parent = null;
     }
 
-    public virtual object GetParameter<T>(string key, T value)
+    public virtual T GetParameter<T>(string key, T value)
     {
         return parent.GetParameter(key, value);
     }

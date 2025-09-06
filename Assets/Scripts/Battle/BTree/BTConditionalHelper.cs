@@ -16,7 +16,7 @@ public class BTConditionalHelper
         [ConditionType.BattleEnd] = IsBattleEnd,
     };
 
-    public static ConditionFunc GetConditionFunc(ConditionType conditionType , params object[] parameters)
+    public static ConditionFunc GetConditionFunc(ConditionType conditionType)
     {
         if(Type2Func.TryGetValue(conditionType , out var baseFunc) )
         {

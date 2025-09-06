@@ -115,7 +115,7 @@ public class BattleManager : ManagerBase<BattleManager>
     {
         for (int i = 0; i < right.BattleUnits.Count; i++)
         {
-            AddEnemyById(1001);
+            AddEnemyById(right.BattleUnits[i].UnitId);
         }
     }
 

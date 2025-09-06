@@ -28,14 +28,15 @@ public enum SkillSelectorType
     PLAYER = 4,
 }
 
-// 0所有敌人，1目标，2随机敌人，3自身，4巫真。
+// 0所有敌人，1目标，2随机敌人，3自身，4巫真
 public enum COMMONTYPE
 {
-    ALL = 0,
-    ONE = 1,
-    RANDOM = 2,
-    SELF = 3,
-    HERO = 4
+    ALL = 0,    // 所有敌人
+    ONE = 1,    // 目标
+    RANDOM = 2, // 随机敌人
+    SELF = 3,   // 自身
+    HERO = 4,   // 巫真
+    NONE = 5,   // 不需要
 }
 
 public static class SkillHelper
