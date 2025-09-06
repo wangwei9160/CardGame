@@ -52,8 +52,8 @@ public class BattleSimulate : EditorWindow
             return;
         }
         isSimulating = true;
-        leftTeam = new BattleTeam(0,new List<BattleUnit> { new BattleUnit(0, 0) });
-        rightTeam = new BattleTeam(1, new List<BattleUnit> { new BattleUnit(0, 1) });
+        leftTeam = new BattleTeam(0,new List<BattleUnit> { new BattleUnit(0, (int)UnitTeamType.OWNER) });
+        rightTeam = new BattleTeam(1, new List<BattleUnit> { new BattleUnit(300002, (int)UnitTeamType.ENEMY) });
         BattleProxy.EntryBattle(leftTeam, rightTeam, BattleType.Normal);
     }
 }
