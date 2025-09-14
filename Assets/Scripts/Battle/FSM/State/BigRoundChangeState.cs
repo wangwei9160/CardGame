@@ -9,7 +9,7 @@ public class BigRoundChangeState : IBaseState
     {
         // 大回合开始，回合切换的检测，检测完发送切换到玩家回合
         Debug.Log("BigRoundChangeState Enter");
-        BattleEventCenter.Broadcast(BattleEventDefine.BigRoundStart);
+        BattleManager.Instance.BaseBattlePlayer.EventCenter.Broadcast(BattleEventDefine.BigRoundStart);
         UIManager.Instance.Show("PlayerTurnTip");   // 新的回合
         Parent.ChangeState(BattleEvent.BigRoundCheckFinish);
     }

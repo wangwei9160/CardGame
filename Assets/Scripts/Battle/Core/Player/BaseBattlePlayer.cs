@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class BaseBattlePlayer
 {
+    public BattleEventCenter EventCenter { get; private set; }
+
     public List<BattleTeam> battleTeams;
 
     public LogicModule logicModule;
@@ -13,6 +15,7 @@ public class BaseBattlePlayer
 
     public BaseBattlePlayer()
     {
+        EventCenter = new();
         battleTeams = new List<BattleTeam>(2);
         logicModule = new LogicModule();
         performModule = new PerformModule();

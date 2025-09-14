@@ -3,11 +3,12 @@ using UnityEngine;
 
 public abstract class BaseBuff
 {
-    public bool isRemove;
+    public BattleLogicUnit owner;           // Buff持有者
+    public bool isRemove;                   // 移除检测，防止移除中且又触发了
     public BattleEventDefine battleEvent;   // 触发器类型
     public List<int> parameter;              // 被动技能参数 技能ID,参数1,参数2,.....
-    
-    public BaseBuff(List<int> parameter)
+
+    public BaseBuff(BattleLogicUnit owner,List<int> parameter)
     {
         Debug.Log("BaseBuff()");
         isRemove = true;
@@ -15,6 +16,7 @@ public abstract class BaseBuff
         if (cfg != null)
         {
             this.parameter = parameter;
+            this.owner = owner;
             AddTrigger((BattleEventDefine)cfg.passive_trigger);
         }
     }
@@ -23,7 +25,7 @@ public abstract class BaseBuff
     {
         this.battleEvent = battleEvent;
         isRemove = false;
-        BattleEventCenter.AddListener(battleEvent, OnTrigger);
+        BattleManager.Instance.BaseBattlePlayer.EventCenter.AddListener(battleEvent, OnTrigger);
     }
 
     ~BaseBuff()
@@ -31,7 +33,7 @@ public abstract class BaseBuff
         Debug.LogError("~BaseBuff()");
         if (!isRemove)
         {
-            BattleEventCenter.RemoveListener(battleEvent,OnTrigger);
+            BattleManager.Instance.BaseBattlePlayer.EventCenter.RemoveListener(battleEvent,OnTrigger);
             isRemove = true;
         }
         if (!isRemove)

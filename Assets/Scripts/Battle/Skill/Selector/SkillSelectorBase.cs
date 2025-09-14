@@ -8,14 +8,14 @@ public abstract class SkillSelectorBase
         return true;
     }
 
-    private bool FilterTroopType(BaseCharacter u)
+    private bool FilterTroopType(BattlePerformUnit u)
     {
         return u.Type == CharacterType.Player;
     }
-    public abstract void UpdateSelector(BaseCharacter u);
+    public abstract void UpdateSelector(BattlePerformUnit u);
 
     public abstract void CreateSelector(bool isForce = false);
     public abstract void CloseSelector();
-    public abstract BaseCharacter GetUnit();
-    public abstract List<BaseCharacter> GetUnits();
+    public abstract BattlePerformUnit GetUnit();
+    public abstract List<BattlePerformUnit> GetUnits();
 }

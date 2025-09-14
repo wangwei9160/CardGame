@@ -2,7 +2,7 @@
 {
     public BaseBattlePlayer Parent { get; set; }
 
-    public BattleUnit CurrentActionUnit { get; set; }
+    public BattleLogicUnit CurrentActionUnit { get; set; }
 
     public void GetMessage()
     {

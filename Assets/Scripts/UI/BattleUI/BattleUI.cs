@@ -92,7 +92,6 @@ public class BattleUI : UIViewBase
     public override void Show()
     {
         base.Show();
-        isLock = true;
         OnMagicPowerChange(GameManager.Instance.Data.MagicPower , GameManager.Instance.Data.MaxMagicPower);// 法力值信息的更新
     }
 

@@ -1,3 +1,4 @@
+using DG.Tweening.Plugins.Core.PathCore;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditorInternal;
@@ -34,31 +35,77 @@ public class ContainerManager : Singleton<ContainerManager>
         EventCenter.RemoveListener(EventDefine.ON_FOLLOWER_SET , OnFollowerSet);
     }
 
-    public BaseCharacter AddPlayer()
+    public BattlePerformUnit AddPlayer(BattleLogicUnit _unit)
     {
         GameObject enemy = ResourceUtil.GetEnemy("Player");
         var go = Instantiate(enemy, Players);
-        BaseCharacter obj = go.GetComponent<BaseCharacter>();
+        BattlePerformUnit obj = go.GetComponent<BattlePerformUnit>();
+        obj.SetBattleUnit(_unit);
         AdjustPlayerPostion();
         return obj;
     }
 
-    public void AddPlayerInPosition(int pos)
+    public void AddPlayerInPosition(int pos , BattleLogicUnit _unit = null)
     {
-        GameObject enemy = ResourceUtil.GetEnemy("Enemy");
+        string path = "Enemy";
+        if (_unit != null && _unit.Cfg.path != "")
+        {
+            path = _unit.Cfg.path;
+        }
+        GameObject enemy = ResourceUtil.GetEnemy(path);
         var go = Instantiate(enemy, Players);
-        go.GetComponent<BaseCharacter>().ResetCharacterType(CharacterType.Card);
+        BattlePerformUnit obj = go.GetComponent<BattlePerformUnit>();
+        go.GetComponent<BattlePerformUnit>().ResetCharacterType(CharacterType.Card);
+        obj.SetBattleUnit(_unit);
         go.transform.SetSiblingIndex(pos);
     }
 
-    public BaseEnemy AddEnemy()
+    public BaseEnemy AddEnemy(BattleLogicUnit _unit)
     {
-        GameObject enemy = ResourceUtil.GetEnemy("Enemy");
-        var go = Instantiate(enemy, Enemies);
-        BaseEnemy obj = go.GetComponent<BaseEnemy>();
-        obj.Index = Enemies.childCount;
-        AdjustEnemyPostion();
-        return obj;
+        string path = "Enemy";
+        if(_unit != null && _unit.Cfg.path != "")
+        {
+            path = _unit.Cfg.path;
+        }
+        GameObject enemy = ResourceUtil.GetEnemy(path);
+        Transform go = Instantiate(enemy).transform;
+        if (_unit.UnitTeam == (int)UnitTeamType.ENEMY)
+        {
+            go.SetParent(Enemies);
+            BaseEnemy obj = go.GetComponent<BaseEnemy>();
+            obj.SetBattleUnit(_unit);
+            obj.Index = Enemies.childCount;
+            AdjustEnemyPostion();
+            return obj;
+        }
+        else
+        {
+            go.SetParent(Players);
+        }
+        return null;
+    }
+
+    public void AddUnit(BattleLogicUnit _unit)
+    {
+        string path = "Enemy";
+        if (_unit != null && _unit.Cfg.path != "")
+        {
+            path = _unit.Cfg.path;
+        }
+        GameObject enemy = ResourceUtil.GetEnemy(path);
+        Transform go = Instantiate(enemy).transform;
+        if (_unit.UnitTeam == (int)UnitTeamType.ENEMY)
+        {
+            go.SetParent(Enemies);
+            BaseEnemy obj = go.GetComponent<BaseEnemy>();
+            obj.SetBattleUnit(_unit);
+            obj.Index = Enemies.childCount;
+            AdjustEnemyPostion();
+        }
+        else
+        {
+            go.SetParent(Players);
+        }
     }
 
     public void AdjustPlayerPostion()
@@ -70,7 +117,7 @@ public class ContainerManager : Singleton<ContainerManager>
             float xPos = (i - middleOffset) * spacing;
             Vector2 position = new Vector2(xPos, 0);
             Players.GetChild(i).localPosition = position;
-            Players.GetChild(i).GetComponent<BaseCharacter>().ReSetPosition();
+            Players.GetChild(i).GetComponent<BattlePerformUnit>().ReSetPosition();
         }
     }
 
@@ -83,7 +130,7 @@ public class ContainerManager : Singleton<ContainerManager>
             float xPos = (i - middleOffset) * spacing;
             Vector2 position = new Vector2(xPos, 0);
             Enemies.GetChild(i).localPosition = position;
-            Enemies.GetChild(i).GetComponent<BaseCharacter>().ReSetPosition();
+            Enemies.GetChild(i).GetComponent<BattlePerformUnit>().ReSetPosition();
         }
     }
 
@@ -164,7 +211,7 @@ public class ContainerManager : Singleton<ContainerManager>
             float xPos = (i - middleOffset) * spacing;
             Vector2 position = new Vector2(xPos, 0);
             Players.GetChild(curPos).localPosition = position;
-            Players.GetChild(curPos).GetComponent<BaseCharacter>().ReSetPosition();
+            Players.GetChild(curPos).GetComponent<BattlePerformUnit>().ReSetPosition();
         }
     }
 

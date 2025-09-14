@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 
 // 事件中心
-public static class BattleEventCenter
+public class BattleEventCenter
 {
-    private static Dictionary<BattleEventDefine, Delegate> m_Event = new Dictionary<BattleEventDefine, Delegate>();
+    private Dictionary<BattleEventDefine, Delegate> m_Event = new Dictionary<BattleEventDefine, Delegate>();
 
-    public static void Clear()
+    public void Clear()
     {
         m_Event.Clear();
     }
 
-    private static void OnListenerAdding(BattleEventDefine eventType, Delegate del)
+    private void OnListenerAdding(BattleEventDefine eventType, Delegate del)
     {
         if (!m_Event.ContainsKey(eventType))
         {
@@ -24,7 +24,7 @@ public static class BattleEventCenter
         }
     }
 
-    private static void OnListenerRemoving(BattleEventDefine eventType, Delegate del)
+    private void OnListenerRemoving(BattleEventDefine eventType, Delegate del)
     {
         if (m_Event.ContainsKey(eventType))
         {
@@ -44,7 +44,7 @@ public static class BattleEventCenter
         }
     }
 
-    private static void OnEventRemove(BattleEventDefine eventType)
+    private  void OnEventRemove(BattleEventDefine eventType)
     {
         if (m_Event[eventType] == null)
         {
@@ -53,57 +53,57 @@ public static class BattleEventCenter
     }
 
 
-    public static void AddListener(BattleEventDefine eventType, BattleCallBack callback)
+    public void AddListener(BattleEventDefine eventType, BattleCallBack callback)
     {
         OnListenerAdding(eventType, callback);
         m_Event[eventType] = (BattleCallBack)m_Event[eventType] + callback;
     }
 
-    public static void AddListener<T>(BattleEventDefine eventType, BattleCallBack<T> callback)
+    public void AddListener<T>(BattleEventDefine eventType, BattleCallBack<T> callback)
     {
         OnListenerAdding(eventType, callback);
         m_Event[eventType] = (BattleCallBack<T>)m_Event[eventType] + callback;
     }
 
-    public static void AddListener<T, U>(BattleEventDefine eventType, BattleCallBack<T, U> callback)
+    public void AddListener<T, U>(BattleEventDefine eventType, BattleCallBack<T, U> callback)
     {
         OnListenerAdding(eventType, callback);
         m_Event[eventType] = (BattleCallBack<T, U>)m_Event[eventType] + callback;
     }
-    public static void AddListener<T, U, V>(BattleEventDefine eventType, BattleCallBack<T, U, V> callback)
+    public void AddListener<T, U, V>(BattleEventDefine eventType, BattleCallBack<T, U, V> callback)
     {
         OnListenerAdding(eventType, callback);
         m_Event[eventType] = (BattleCallBack<T, U, V>)m_Event[eventType] + callback;
     }
 
-    public static void RemoveListener(BattleEventDefine eventType, BattleCallBack callback)
+    public void RemoveListener(BattleEventDefine eventType, BattleCallBack callback)
     {
         OnListenerRemoving(eventType, callback);
         m_Event[eventType] = (BattleCallBack)m_Event[eventType] - callback;
         OnEventRemove(eventType);
     }
 
-    public static void RemoveListener<T>(BattleEventDefine eventType, BattleCallBack<T> callback)
+    public void RemoveListener<T>(BattleEventDefine eventType, BattleCallBack<T> callback)
     {
         OnListenerRemoving(eventType, callback);
         m_Event[eventType] = (BattleCallBack<T>)m_Event[eventType] - callback;
         OnEventRemove(eventType);
     }
 
-    public static void RemoveListener<T, U>(BattleEventDefine eventType, BattleCallBack<T, U> callback)
+    public void RemoveListener<T, U>(BattleEventDefine eventType, BattleCallBack<T, U> callback)
     {
         OnListenerRemoving(eventType, callback);
         m_Event[eventType] = (BattleCallBack<T, U>)m_Event[eventType] - callback;
         OnEventRemove(eventType);
     }
-    public static void RemoveListener<T, U, V>(BattleEventDefine eventType, BattleCallBack<T, U,V> callback)
+    public void RemoveListener<T, U, V>(BattleEventDefine eventType, BattleCallBack<T, U,V> callback)
     {
         OnListenerRemoving(eventType, callback);
         m_Event[eventType] = (BattleCallBack<T, U, V>)m_Event[eventType] - callback;
         OnEventRemove(eventType);
     }
 
-    public static void Broadcast(BattleEventDefine eventType)
+    public void Broadcast(BattleEventDefine eventType)
     {
         Delegate d;
         if (m_Event.TryGetValue(eventType, out d))
@@ -120,7 +120,7 @@ public static class BattleEventCenter
         }
     }
 
-    public static void Broadcast<T>(BattleEventDefine eventType, T arg)
+    public void Broadcast<T>(BattleEventDefine eventType, T arg)
     {
         Delegate d;
         if (m_Event.TryGetValue(eventType, out d))
@@ -137,7 +137,7 @@ public static class BattleEventCenter
         }
     }
 
-    public static void Broadcast<T, U>(BattleEventDefine eventType, T arg1, U arg2)
+    public void Broadcast<T, U>(BattleEventDefine eventType, T arg1, U arg2)
     {
         Delegate d;
         if (m_Event.TryGetValue(eventType, out d))
@@ -154,7 +154,7 @@ public static class BattleEventCenter
         }
     }
 
-    public static void Broadcast<T, U , V>(BattleEventDefine eventType, T arg1, U arg2 , V arg3)
+    public void Broadcast<T, U , V>(BattleEventDefine eventType, T arg1, U arg2 , V arg3)
     {
         Delegate d;
         if (m_Event.TryGetValue(eventType, out d))

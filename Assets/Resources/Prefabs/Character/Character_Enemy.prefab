@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  ID: 0
   HpUIIndex: -1
   maxHp: 100
   hp: 100

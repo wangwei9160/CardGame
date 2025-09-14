@@ -1,19 +1,16 @@
-﻿using System.Xml.Serialization;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class BaseEnemy : BaseCharacter
+public class BaseEnemy : BattlePerformUnit
 {
     public int Index { get; set; }
 
     private void Awake()
     {
-        EventCenter.AddListener(EventDefine.OnFinishPlayerTurn, OnEnemyTurn);
         ResetCharacterType(CharacterType.Enemy);
     }
 
     private void OnDestroy()
     {
-        EventCenter.RemoveListener(EventDefine.OnFinishPlayerTurn, OnEnemyTurn);
         if(HpUIIndex != -1)
         {
             EventCenter.Broadcast(EventDefine.OnEnemyDeath , Index , Type);
@@ -24,15 +21,6 @@ public class BaseEnemy : BaseCharacter
     {
         UIManager.Instance.Show("CardHpUI", gameObject, ref HpUIIndex);
         EventCenter.Broadcast<int,int>(EventDefine.OnHpChangeByName, hp , HpUIIndex );
-    }
-
-    private void OnEnemyTurn()
-    {
-        // 临时用来扣血的
-        var rd = Random.Range(10, 30);
-        hp -= rd;
-        OnDeadCheck();
-        EventCenter.Broadcast<int, int>(EventDefine.OnHpChangeByName, hp, HpUIIndex);
     }
 
     public override void OnHurt(int damage)

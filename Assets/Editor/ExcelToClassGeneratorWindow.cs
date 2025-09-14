@@ -110,5 +110,6 @@ public class ExcelToClassGeneratorWindow : EditorWindow
         // 这里可以调用之前的 GenerateClassFromExcel 方法
         Debug.Log($"生成 C# 类: {path}");
         // 你可以将之前的 GenerateClassFromExcel 方法逻辑放到这里
+        ExcelToClassGenerator.ReadExcelFile(path);
     }
 }

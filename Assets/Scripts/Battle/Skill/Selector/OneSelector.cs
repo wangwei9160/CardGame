@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OneSelector : SkillSelectorBase
 {
-    public BaseCharacter _unit;
+    public BattlePerformUnit _unit;
 
     public bool isUse;
 
@@ -24,22 +24,22 @@ public class OneSelector : SkillSelectorBase
         isUse = false;
     }
 
-    public override void UpdateSelector(BaseCharacter u)
+    public override void UpdateSelector(BattlePerformUnit u)
     {
         if (_unit == u) return;
         _unit = u;
     }
 
-    public override BaseCharacter GetUnit()
+    public override BattlePerformUnit GetUnit()
     {
         return _unit;
     }
 
-    public override List<BaseCharacter> GetUnits()
+    public override List<BattlePerformUnit> GetUnits()
     {
-        BaseCharacter unit = GetUnit();
-        if(unit == null) return new List<BaseCharacter>();
-        List<BaseCharacter> _list = new List<BaseCharacter>{_unit};
+        BattlePerformUnit unit = GetUnit();
+        if(unit == null) return new List<BattlePerformUnit>();
+        List<BattlePerformUnit> _list = new List<BattlePerformUnit>{_unit};
         return _list;
     }
 

@@ -15,8 +15,8 @@ public class HealSkillHandler : SkillHandlerBase
     {
         SkillSelectorType stp =  SkillManager.Instance.OpenSelector(resource);
         SkillSelectorBase _selector = SkillManager.Instance.GetSkillSelectorBase(stp);
-        List<BaseCharacter> _list = _selector.GetUnits();
-        foreach(BaseCharacter obj in  _list)
+        List<BattlePerformUnit> _list = _selector.GetUnits();
+        foreach(BattlePerformUnit obj in  _list)
         {
             // Count
             for(int i = 0 ; i < resource[2] ; i++)

@@ -23,6 +23,11 @@ public class ResourceUtil
         return Resources.Load<GameObject>("Arts/Card/UI/Card");
     }
 
+    public static GameObject GetUnitByPath(string path)
+    {
+        return Resources.Load<GameObject>(path);
+    }
+
     public static GameObject GetEnemy(string name)
     {
         return Resources.Load<GameObject>("Prefabs/Character/Character_" + name);

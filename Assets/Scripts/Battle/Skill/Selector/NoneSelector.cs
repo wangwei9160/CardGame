@@ -8,11 +8,11 @@ public class NoneSelector : SkillSelectorBase
 
     public override void CloseSelector(){}
 
-    public override void UpdateSelector(BaseCharacter u){}
+    public override void UpdateSelector(BattlePerformUnit u){}
 
-    public override BaseCharacter GetUnit(){return null;}
+    public override BattlePerformUnit GetUnit(){return null;}
 
-    public override List<BaseCharacter> GetUnits() 
+    public override List<BattlePerformUnit> GetUnits() 
     {
         return BattleManager.Instance.getAllEnemy();
     }

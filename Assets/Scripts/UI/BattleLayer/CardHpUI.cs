@@ -39,7 +39,7 @@ public class CardHpUI : UIViewBase
         if (Owner != null)
         {
             pos.transform.position = Camera.main.WorldToScreenPoint(Owner.transform.Find("HP").transform.position);
-            BaseCharacter character = Owner.GetComponent<BaseCharacter>();
+            BattlePerformUnit character = Owner.GetComponent<BattlePerformUnit>();
             HpValue.text = character.hp.ToString();
             MaxHp = character.maxHp;
         }

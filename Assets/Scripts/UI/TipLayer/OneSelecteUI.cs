@@ -59,7 +59,7 @@ public class OneSelecteUI : UIViewBase
         RaycastHit2D hit2D = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
         if (hit2D.collider != null)
         {
-            BaseCharacter character = hit2D.collider.GetComponent<BaseCharacter>();
+            BattlePerformUnit character = hit2D.collider.GetComponent<BattlePerformUnit>();
             curParent.UpdateSelector(character);
             isSelect = true;
             Vector3 pos = camera.WorldToScreenPoint(hit2D.transform.position);

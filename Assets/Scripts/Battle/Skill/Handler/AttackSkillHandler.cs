@@ -17,7 +17,7 @@ public class AttackSkillHandler : SkillHandlerBase
     }
     public override void Execute(SkillSelectorBase selector)
     {
-        List<BaseCharacter> select = selector.GetUnits();
+        List<BattlePerformUnit> select = selector.GetUnits();
         for(int i = 0 ; i < select.Count ; i++)
         {
             select[i].OnHurt(10);
@@ -28,8 +28,8 @@ public class AttackSkillHandler : SkillHandlerBase
     {
         SkillSelectorType stp =  SkillManager.Instance.OpenSelector(resource);
         SkillSelectorBase _selector = SkillManager.Instance.GetSkillSelectorBase(stp);
-        List<BaseCharacter> enemies = _selector.GetUnits();
-        foreach(BaseCharacter enemy in  enemies)
+        List<BattlePerformUnit> enemies = _selector.GetUnits();
+        foreach(BattlePerformUnit enemy in  enemies)
         {
             // Attack Count
             for(int i = 0 ; i < resource[2] ; i++)
@@ -41,7 +41,7 @@ public class AttackSkillHandler : SkillHandlerBase
 
     public override void Execute(SkillSelectorBase selector , List<int> resource)
     {
-        List<BaseCharacter> enemies = BattleManager.Instance.getAllEnemy();
+        List<BattlePerformUnit> enemies = BattleManager.Instance.getAllEnemy();
         foreach(BaseEnemy enemy in  enemies)
         {
             enemy.OnHurt(10);

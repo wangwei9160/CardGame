@@ -7,7 +7,7 @@ public class UnitSkillCostCheck : BTConditional
     public override BTNodeState OnUpdate()
     {
         Debug.Log("UnitSkillCostCheck OnUpdate=========");
-        BattleUnit currentUnit = null;
+        BattleLogicUnit currentUnit = null;
         currentUnit = GetParameter("Unit", currentUnit);
         if(currentUnit != null)
         {

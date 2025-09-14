@@ -8,7 +8,7 @@ using System;
 using System.Globalization;
 using Unity.VisualScripting;
 
-public class ExcelToClassGenerator
+public static class ExcelToClassGenerator
 {
     [MenuItem("Tools/Excel/生成策划表")]
     public static void GenerateClassFromExcel()
@@ -23,8 +23,8 @@ public class ExcelToClassGenerator
         ReadExcelFile(excelPath);
     }
 
-    private string className ;
-    private string managerName ;
+    private static string className ;
+    private static string managerName ;
 
     public static void ReadExcelFile(string excelPath)
     {

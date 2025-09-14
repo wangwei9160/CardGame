@@ -10,7 +10,7 @@ public class BattlePlayerHelper
 {
     public static BaseBattlePlayer SetBattlePlayer(BattleType battleType)
     {
-        if(battleType == BattleType.Normal)
+        if (battleType == BattleType.Normal)
         {
             return new NormalBattlePlayer();
         }

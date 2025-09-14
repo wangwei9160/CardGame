@@ -95,7 +95,7 @@ public class NormalBattlePlayer : BaseBattlePlayer
             ChangeState(BattleEvent.FinishEnemyTurn);
             return;
         }
-        BattleUnit curActionEnemyUnit = battleTeams[1].BattleUnits[index];        
+        BattleLogicUnit curActionEnemyUnit = battleTeams[1].BattleUnits[index];        
         root.SetParameter("Unit", curActionEnemyUnit);
         enemyActionNum++;
         root.OnUpdate();

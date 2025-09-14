@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : BaseCharacter
+public class Player : BattlePerformUnit
 {
     public override CharacterType Type => CharacterType.Player;
     public float f = 0f;

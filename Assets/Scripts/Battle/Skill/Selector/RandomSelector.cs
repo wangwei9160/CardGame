@@ -4,29 +4,29 @@ using UnityEngine;
 
 public class RandomSelector : SkillSelectorBase
 {
-    public BaseCharacter _unit;
+    public BattlePerformUnit _unit;
 
     public override void CloseSelector(){}
 
     public override void CreateSelector(bool isForce = false){}
 
-    public override void UpdateSelector(BaseCharacter u)
+    public override void UpdateSelector(BattlePerformUnit u)
     {
-        List<BaseCharacter> _list = BattleManager.Instance.getAllEnemy();
+        List<BattlePerformUnit> _list = BattleManager.Instance.getAllEnemy();
         _unit = RandomUtil.GetRandomValueInList(_list);
     }
 
-    public override BaseCharacter GetUnit()
+    public override BattlePerformUnit GetUnit()
     {
         UpdateSelector(null);
         return _unit;
     }
 
-    public override List<BaseCharacter> GetUnits()
+    public override List<BattlePerformUnit> GetUnits()
     {
-        BaseCharacter unit = GetUnit();
-        if(unit == null) return new List<BaseCharacter>();
-        List<BaseCharacter> _list = new List<BaseCharacter>{_unit};
+        BattlePerformUnit unit = GetUnit();
+        if(unit == null) return new List<BattlePerformUnit>();
+        List<BattlePerformUnit> _list = new List<BattlePerformUnit>{_unit};
         return _list;
     }
 

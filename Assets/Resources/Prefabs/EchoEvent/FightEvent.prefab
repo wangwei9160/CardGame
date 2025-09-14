@@ -83,6 +83,7 @@ MonoBehaviour:
   Enemies: {fileID: 0}
   HandCard: {fileID: 0}
   ghostFollower: {fileID: 0}
+  spacing: 2
 --- !u!1 &3952835747061525254
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,7 +109,7 @@ Transform:
   m_GameObject: {fileID: 3952835747061525254}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5, y: 1, z: 0}
+  m_LocalPosition: {x: 5, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -223,7 +224,7 @@ Transform:
   m_GameObject: {fileID: 7047268131128543157}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4, y: 1, z: 0}
+  m_LocalPosition: {x: -4, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

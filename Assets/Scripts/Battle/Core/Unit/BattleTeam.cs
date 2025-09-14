@@ -3,9 +3,11 @@
 public class BattleTeam
 {
     public int Id { get; set; }
-    public List<BattleUnit> BattleUnits { get; set; }
+    public List<BattleLogicUnit> BattleUnits { get; set; }
 
-    public BattleTeam(int id, List<BattleUnit> battleUnits)
+    public List<BaseBuff> buffs = new List<BaseBuff>(); // 部分buff挂在 Team上，如特殊战斗Buff等
+
+    public BattleTeam(int id, List<BattleLogicUnit> battleUnits)
     {
         Id = id;
         BattleUnits = battleUnits;
@@ -19,5 +21,10 @@ public class BattleTeam
             ok &= (BattleUnits[i].IsAlive());
         }
         return ok;
+    }
+
+    public void AddUnitToTeam(BattleLogicUnit _unit)
+    {
+        BattleUnits.Add(_unit); 
     }
 }

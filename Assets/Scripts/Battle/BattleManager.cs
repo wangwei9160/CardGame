@@ -12,9 +12,9 @@ public class BattleData
 
     public int maxEnemyNum;
     public int maxPlayerTeamNum;
-    public List<BaseCharacter> enemies;     // 敌方
-    public List<BaseCharacter> playerTeam;  // 我方
-    public BaseCharacter player;            // 巫真
+    public List<BattlePerformUnit> enemies;     // 敌方
+    public List<BattlePerformUnit> playerTeam;  // 我方
+    public BattlePerformUnit player;            // 巫真
     public int maxCardCount;                // 手牌上限
     public List<int> handCards;             // 手牌
     public List<int> deckCards;             // 牌堆
@@ -27,8 +27,8 @@ public class BattleData
         maxEnemyNum = 3;
         maxPlayerTeamNum = 5;
         maxCardCount = 8;
-        enemies = new List<BaseCharacter>();
-        playerTeam = new List<BaseCharacter>();
+        enemies = new List<BattlePerformUnit>();
+        playerTeam = new List<BattlePerformUnit>();
         handCards = new List<int>();
         deckCards = new List<int>();
         discardPile = new List<int>();
@@ -103,9 +103,9 @@ public class BattleManager : ManagerBase<BattleManager>
 
     private void AddPlayer(BattleTeam left)
     {
-        for (int i = 0; i < left.BattleUnits.Count; i++)
+        foreach(var _unit in left.BattleUnits)
         {
-            var go = ContainerManager.Instance.AddPlayer();
+            var go = ContainerManager.Instance.AddPlayer(_unit);
             battleData.playerTeam.Add(go);
             battleData.player = go;
         }
@@ -113,18 +113,30 @@ public class BattleManager : ManagerBase<BattleManager>
     
     private void AddEnemy(BattleTeam right)
     {
-        for (int i = 0; i < right.BattleUnits.Count; i++)
+        foreach (var _unit in right.BattleUnits)
         {
-            AddEnemyById(right.BattleUnits[i].UnitId);
+            AddEnemyById(_unit.UnitId , _unit);
         }
     }
 
-    private void AddEnemyById(int id)
+
+    private void AddEnemyById(int id , BattleLogicUnit _unit = null)
     {
         if(id == 0) return ;
+        _unit ??= new BattleLogicUnit(id , (int)UnitTeamType.ENEMY);
         //enemyNum++;
-        var obj = ContainerManager.Instance.AddEnemy();
+        var obj = ContainerManager.Instance.AddEnemy(_unit);
         battleData.enemies.Add(obj);
+    }
+
+    public BattleLogicUnit AddUnitByIdAndTeam(int id,int teamId,BattleLogicUnit _unit = null)
+    {
+        if(id == 0) return null;
+        Debug.Log(string.Format("创建一个新角色ID={0},阵营ID={1}", id, teamId));
+        _unit ??= new BattleLogicUnit(id, teamId);
+        BaseBattlePlayer.battleTeams[teamId].AddUnitToTeam(_unit);
+        ContainerManager.Instance.AddUnit(_unit);
+        return _unit;
     }
 
     public void GetHandCard()
@@ -236,30 +248,30 @@ public class BattleManager : ManagerBase<BattleManager>
     #region 外部接口,提供数据
 
     // 获取所有敌方目标
-    public List<BaseCharacter> getAllEnemy()
+    public List<BattlePerformUnit> getAllEnemy()
     {
         return battleData.enemies;
     }
 
-    public BaseCharacter getEnemyByIndex(int pos)
+    public BattlePerformUnit getEnemyByIndex(int pos)
     {
         if(pos < 0 || pos >= battleData.enemies.Count) return null;
         return battleData.enemies[pos];
     }
 
     // 获取所有我方目标
-    public List<BaseCharacter> getAllPlayerTeam()
+    public List<BattlePerformUnit> getAllPlayerTeam()
     {
         return battleData.playerTeam;
     }
 
     // 获取巫真
-    public BaseCharacter getPlayer()
+    public BattlePerformUnit getPlayer()
     {
         return battleData.player;
     }
 
-    public BaseCharacter getPlayerTeamByIndex(int pos)
+    public BattlePerformUnit getPlayerTeamByIndex(int pos)
     {
         if(pos < 0 || pos >= battleData.playerTeam.Count) return null;
         return battleData.playerTeam[pos];

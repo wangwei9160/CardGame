@@ -39,7 +39,7 @@ public class HpUI : UIViewBase
         if (Owner != null)
         {
             slider.transform.position = Camera.main.WorldToScreenPoint(Owner.transform.Find("HP").transform.position);
-            BaseCharacter character = Owner.GetComponent<BaseCharacter>();
+            BattlePerformUnit character = Owner.GetComponent<BattlePerformUnit>();
             slider.value = 1.0f * character.hp / character.maxHp;
         }
     }

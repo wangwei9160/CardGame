@@ -24,6 +24,7 @@ public class CardPassiveConfig
             {5, new CardPassiveClass() { passive_id = 5, passive_content = "场上的其他森林狼与幼狼攻击相同目标一次。", passive_trigger = 5 } },
             {6, new CardPassiveClass() { passive_id = 6, passive_content = "自身获得3活力治疗。", passive_trigger = 2 } },
             {7, new CardPassiveClass() { passive_id = 7, passive_content = "自身获得{0}/{1}。", passive_trigger = 2 } },
+            {8, new CardPassiveClass() { passive_id = 8, passive_content = "召唤{0}", passive_trigger = 2 } },
         };
     }
     public static CardPassiveClass GetCardPassiveClassByKey(int key)
