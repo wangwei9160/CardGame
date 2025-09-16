@@ -119,7 +119,6 @@ public class BattleManager : ManagerBase<BattleManager>
         }
     }
 
-
     private void AddEnemyById(int id , BattleLogicUnit _unit = null)
     {
         if(id == 0) return ;
@@ -132,6 +131,11 @@ public class BattleManager : ManagerBase<BattleManager>
     public BattleLogicUnit AddUnitByIdAndTeam(int id,int teamId,BattleLogicUnit _unit = null)
     {
         if(id == 0) return null;
+        if (BaseBattlePlayer.battleTeams[teamId].CheckCanSummon() == false)
+        {
+            Debug.Log("队伍已达上限");
+            return null;
+        }
         Debug.Log(string.Format("创建一个新角色ID={0},阵营ID={1}", id, teamId));
         _unit ??= new BattleLogicUnit(id, teamId);
         BaseBattlePlayer.battleTeams[teamId].AddUnitToTeam(_unit);

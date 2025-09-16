@@ -8,6 +8,9 @@ public abstract class BaseBuff
     public BattleEventDefine battleEvent;   // 触发器类型
     public List<int> parameter;              // 被动技能参数 技能ID,参数1,参数2,.....
 
+    // 一些Buff可能需要的参数
+    public int fireTimes = 0;
+
     public BaseBuff(BattleLogicUnit owner,List<int> parameter)
     {
         Debug.Log("BaseBuff()");

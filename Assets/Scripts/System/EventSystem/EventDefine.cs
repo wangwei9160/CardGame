@@ -63,5 +63,10 @@
     ON_TREASURE_UPDATE_SHOW,    // 刷新遗物显示
     TREASURE_TIP_SHOW ,         // 灵物提示信息显示
     TREASURE_TIP_HIDE,          // 灵物提示信息隐藏
+
+
+
+    // 动画事件
+    OnAnimationEnd,     // 动画播放完毕
 }
 

@@ -431,7 +431,6 @@ GameObject:
   - component: {fileID: 4847051092407899695}
   - component: {fileID: 6190210654947545058}
   - component: {fileID: 5089298836338008454}
-  - component: {fileID: 6530111611361594055}
   - component: {fileID: 8104944415619191680}
   m_Layer: 7
   m_Name: Character_Yellow3
@@ -502,21 +501,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6530111611361594055
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8638232264317731823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f265b5b2c48010744a1abca4bb093cb4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackEffect: {fileID: 231083463916557582}
-  animator: {fileID: 5089298836338008454}
-  text: {fileID: 0}
 --- !u!114 &8104944415619191680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -869,11 +853,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6561d52ab26a95948b073824332a696a, type: 3}
---- !u!1 &231083463916557582 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6022685150455788585, guid: 6561d52ab26a95948b073824332a696a, type: 3}
-  m_PrefabInstance: {fileID: 5809671091904930087}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4229809407157182930 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7643545546773020917, guid: 6561d52ab26a95948b073824332a696a, type: 3}

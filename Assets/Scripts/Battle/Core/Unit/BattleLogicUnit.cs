@@ -8,8 +8,12 @@ public class BattleLogicUnit
     public int[] Attributes = new int[(int)UnitAttribute.COUNT];
     public List<BaseBuff> buffs = new List<BaseBuff>();
 
+    public BattlePerformUnit PerformUnit { get; set; }
+
     public CardClass Cfg { get; set; }
 
+    public int leftAttributeType;   // 左属性
+    public int rightAttributeType;  // 右属性
     public BattleLogicUnit()
     {
         for (int i = 0; i < (int)UnitAttribute.COUNT; i++)
@@ -25,6 +29,8 @@ public class BattleLogicUnit
         Cfg = CardConfig.GetCardClassByKey(id);
         if (Cfg != null)
         {
+            leftAttributeType = Cfg.leftAttribute;
+            rightAttributeType = Cfg.rightAttribute;
             for (int i = 0; i < Cfg.passive_id.Count; i++)
             {
                 // 被动技能 挂Buff到身上
@@ -101,4 +107,17 @@ public class BattleLogicUnit
         return null;
     }
 
+    public void Attack()
+    {
+        if(PerformUnit != null)
+        {
+            BattleManager.Instance.BaseBattlePlayer.PerformModule.AddPerformAction(new PerformAction
+            {
+                actionType = PerformActionType.UnitAction,
+                onwer = this,
+                name = "isRunning",
+                OnAnimationEnd = () => { Debug.Log("动画播放完毕"); }
+            });
+        }
+    }
 }

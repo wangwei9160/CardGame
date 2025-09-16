@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 276999848666412787}
   - component: {fileID: 3950275637119679554}
   - component: {fileID: 8084485775491093153}
-  - component: {fileID: 1169575476732117786}
   - component: {fileID: -183653587707589082}
   m_Layer: 7
   m_Name: Character_Yellow1
@@ -82,21 +81,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1169575476732117786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 470589418120639009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f265b5b2c48010744a1abca4bb093cb4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackEffect: {fileID: 8071622970930529834}
-  animator: {fileID: 8084485775491093153}
-  text: {fileID: 0}
 --- !u!114 &-183653587707589082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -832,10 +816,5 @@ PrefabInstance:
 --- !u!4 &5297251596482228982 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7643545546773020917, guid: 6561d52ab26a95948b073824332a696a, type: 3}
-  m_PrefabInstance: {fileID: 2562770769249399299}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8071622970930529834 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6022685150455788585, guid: 6561d52ab26a95948b073824332a696a, type: 3}
   m_PrefabInstance: {fileID: 2562770769249399299}
   m_PrefabAsset: {fileID: 0}

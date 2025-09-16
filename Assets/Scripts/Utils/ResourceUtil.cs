@@ -43,12 +43,7 @@ public class ResourceUtil
     {
         return Resources.Load<Sprite>("Arts/Treasures/" + name);
     }
-    public static Sprite GetCardByID(int id)
-    {
-        Card card = CardFactory.GetCard(id);
-        Test0Class cls = card.cardCfg;
-        return Resources.Load<Sprite>("Arts/Card/icon/" + cls.Icon);
-    }  
+
     public static Sprite GetCardByName(string name)
     {
         return Resources.Load<Sprite>("Arts/Card/icon/" + name);

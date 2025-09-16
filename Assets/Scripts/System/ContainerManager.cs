@@ -105,6 +105,9 @@ public class ContainerManager : Singleton<ContainerManager>
         else
         {
             go.SetParent(Players);
+            BattlePerformUnit obj = go.GetComponent<BattlePerformUnit>();
+            obj.SetBattleUnit(_unit);
+            AdjustEnemyPostion();
         }
     }
 

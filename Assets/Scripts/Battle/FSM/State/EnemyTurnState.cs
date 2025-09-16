@@ -17,7 +17,7 @@ public class EnemyTurnState : IBaseState
 
     public override void OnExit()
     {
-        BattleManager.Instance.BaseBattlePlayer.EventCenter.Broadcast(BattleEventDefine.BigRoundEnd);
+        Parent.OnEnemyTurnEndCheck();
     }
 
 }

@@ -7,6 +7,7 @@ public class AttackBuff : BaseBuff
 
     public override void OnTrigger()
     {
+        owner.Attack();
         Debug.Log("AttackBuff OnTrigger");
     }
 }

@@ -52,9 +52,9 @@ public class BitmapFontExporter : ScriptableWizard
             CharacterInfo charInfo = new CharacterInfo();
 
             charInfo.index = ToInt(node, "id");
-            charInfo.width = ToInt(node, "xadvance");
-            charInfo.uv = GetUV(node);
-            charInfo.vert = GetVert(node);
+            charInfo.advance = ToInt(node, "xadvance");
+            //charInfo.uv = GetUV(node);
+            //charInfo.vert = GetVert(node);
 
             charInfos[cnt] = charInfo;
         }

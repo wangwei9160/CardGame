@@ -7,21 +7,21 @@ public class BaseBattlePlayer
 
     public List<BattleTeam> battleTeams;
 
-    public LogicModule logicModule;
-    public PerformModule performModule;
+    public LogicModule LogicModule { get; private set; }
+    public PerformModule PerformModule { get; private set; }
 
     public FiniteStateMachine fsm;
-    public BTRoot root;
+    
 
     public BaseBattlePlayer()
     {
         EventCenter = new();
         battleTeams = new List<BattleTeam>(2);
-        logicModule = new LogicModule();
-        performModule = new PerformModule();
+        LogicModule = new LogicModule(this);
+        PerformModule = new PerformModule(this);
         fsm = new FiniteStateMachine();
         InitFsm();
-        InitBTree();
+        LogicModule.InitBTree();
     }
 
     public virtual void ChangeState(BattleEvent battleEvent) { }
@@ -40,10 +40,8 @@ public class BaseBattlePlayer
     }
 
     public virtual void OnEnter() { }
-
     public virtual void InitFsm() { }
     public virtual void InitBTree() { }
-
-    public int enemyActionNum = 0;
     public virtual void OnEnemyTurnStart() { }
+    public virtual void OnEnemyTurnEndCheck() { }
 }

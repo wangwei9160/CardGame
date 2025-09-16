@@ -19,6 +19,7 @@ public class BaseEnemy : BattlePerformUnit
 
     protected override void Start()
     {
+        base.Start();
         UIManager.Instance.Show("CardHpUI", gameObject, ref HpUIIndex);
         EventCenter.Broadcast<int,int>(EventDefine.OnHpChangeByName, hp , HpUIIndex );
     }
