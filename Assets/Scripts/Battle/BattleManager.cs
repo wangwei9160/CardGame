@@ -218,7 +218,7 @@ public class BattleManager : ManagerBase<BattleManager>
         //Debug.Log($"{battleData.current_turn} --- {battleData.Cfg.enemy_id.Count}");
         if(battleData.current_turn <= battleData.Cfg.enemy_id.Count)
         {
-            AddEnemyById(battleData.Cfg.enemy_id[battleData.current_turn - 1][0]);
+            //AddEnemyById(battleData.Cfg.enemy_id[battleData.current_turn - 1][0]);
         }
     }
 

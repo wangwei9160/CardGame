@@ -37,7 +37,7 @@ public class ContainerManager : Singleton<ContainerManager>
 
     public BattlePerformUnit AddPlayer(BattleLogicUnit _unit)
     {
-        GameObject enemy = ResourceUtil.GetEnemy("Player");
+        GameObject enemy = ResourceUtil.GetCharacterByName("Monk");
         var go = Instantiate(enemy, Players);
         BattlePerformUnit obj = go.GetComponent<BattlePerformUnit>();
         obj.SetBattleUnit(_unit);
@@ -52,7 +52,7 @@ public class ContainerManager : Singleton<ContainerManager>
         {
             path = _unit.Cfg.path;
         }
-        GameObject enemy = ResourceUtil.GetEnemy(path);
+        GameObject enemy = ResourceUtil.GetCharacterByName(path);
         var go = Instantiate(enemy, Players);
         BattlePerformUnit obj = go.GetComponent<BattlePerformUnit>();
         go.GetComponent<BattlePerformUnit>().ResetCharacterType(CharacterType.Card);
@@ -67,7 +67,7 @@ public class ContainerManager : Singleton<ContainerManager>
         {
             path = _unit.Cfg.path;
         }
-        GameObject enemy = ResourceUtil.GetEnemy(path);
+        GameObject enemy = ResourceUtil.GetCharacterByName(path);
         Transform go = Instantiate(enemy).transform;
         if (_unit.UnitTeam == (int)UnitTeamType.ENEMY)
         {
@@ -92,23 +92,35 @@ public class ContainerManager : Singleton<ContainerManager>
         {
             path = _unit.Cfg.path;
         }
-        GameObject enemy = ResourceUtil.GetEnemy(path);
-        Transform go = Instantiate(enemy).transform;
+        GameObject enemy = ResourceUtil.GetCharacterByName(path);
+        GameObject instance = Instantiate(enemy);
+        Transform go = instance.transform;
+        instance.SetActive(false);
+        BaseEnemy obj = go.GetComponent<BaseEnemy>();
         if (_unit.UnitTeam == (int)UnitTeamType.ENEMY)
         {
             go.SetParent(Enemies);
-            BaseEnemy obj = go.GetComponent<BaseEnemy>();
-            obj.SetBattleUnit(_unit);
-            obj.Index = Enemies.childCount;
-            AdjustEnemyPostion();
         }
         else
         {
             go.SetParent(Players);
-            BattlePerformUnit obj = go.GetComponent<BattlePerformUnit>();
-            obj.SetBattleUnit(_unit);
-            AdjustEnemyPostion();
         }
+        obj.Index = Enemies.childCount;
+        obj.SetBattleUnit(_unit);
+        BattleManager.Instance.BaseBattlePlayer.PerformModule.AddPerformAction(new PerformAction
+        {
+            onwer = _unit,
+            actionType = PerformActionType.Summon,
+            name = "Summon",
+            BeforeAnimationStart = () =>
+            {
+                AdjustEnemyPostion();
+            },
+            OnAnimationEnd = () =>
+            {
+                instance.SetActive(true);
+            }
+        });
     }
 
     public void AdjustPlayerPostion()

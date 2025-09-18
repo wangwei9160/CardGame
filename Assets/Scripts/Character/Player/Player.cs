@@ -10,6 +10,7 @@ public class Player : BattlePerformUnit
 
     protected override void Start()
     {
+        base.Start();
         UIManager.Instance.Show("HpUI", gameObject, ref HpUIIndex);
         hp = GameManager.Instance.Data.hp;
         maxHp = GameManager.Instance.Data.maxHp;

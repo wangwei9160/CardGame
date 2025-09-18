@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum PerformActionType
 {
     UnitAction = 0,
     UIAction = 1,
+    Summon = 2,
 }
 
 public class PerformAction
@@ -14,6 +16,8 @@ public class PerformAction
     public BattleLogicUnit target;  // 目标
     public int damage;              // 伤害
     public string name;             // 动画名称
+    public Vector3 postion;         // 位置
+    public System.Action BeforeAnimationStart;   // 动画播放前,
     public System.Action OnAnimationEnd;   // 动画播放结束,
 }
 
@@ -48,14 +52,19 @@ public class PerformModule
         if(isPlaying == false && PerformActionsQueue.Count > 0)
         {
             currentAction = PerformActionsQueue.Dequeue();
+            currentAction.BeforeAnimationStart?.Invoke();
 
             isPlaying = true;
             if(currentAction.actionType == PerformActionType.UnitAction)
             {
                 BattlePerformUnit _unit = currentAction.onwer.PerformUnit;
                 _unit.ChangeAnimation(currentAction.name);
-            }else
+            }else if(currentAction.actionType == PerformActionType.UIAction)
             {
+                OnAnimationEnd();
+            }else if(currentAction.actionType == PerformActionType.Summon)
+            {
+                AnimationController.Instance.ShowArtFunction(currentAction.name, currentAction.onwer.PerformUnit.transform.position);
                 OnAnimationEnd();
             }
         }
