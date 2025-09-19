@@ -31,6 +31,10 @@ public class BattleLogicUnit
         {
             leftAttributeType = Cfg.leftAttribute;
             rightAttributeType = Cfg.rightAttribute;
+            for(int i = 1; i < (int)UnitAttribute.COUNT; i++)
+            {
+                Attributes[i] = Cfg.attribute[i - 1];
+            }
             for (int i = 0; i < Cfg.passive_id.Count; i++)
             {
                 // 被动技能 挂Buff到身上

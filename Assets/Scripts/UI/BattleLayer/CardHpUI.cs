@@ -5,9 +5,12 @@ public class CardHpUI : UIViewBase
 {
     public override UIViewType Type => UIViewType.Multiple;
     public override UILAYER Layer => UILAYER.M_BATTLE_LAYER;
-    public GameObject pos;
-    public Image bg;
-    public Text HpValue;
+    public Transform left;
+    public Transform right;
+    public Image licon;
+    public Image ricon;
+    public Text lcost;
+    public Text rcost;
     public int MaxHp;
     public GameObject Owner;
 
@@ -36,12 +39,30 @@ public class CardHpUI : UIViewBase
     protected override void Start()
     {
         base.Start();
+        right = transform.Find("Canvas/right");
+        left = transform.Find("Canvas/left");
+        licon = left.Find("icon").GetComponent<Image>();
+        lcost = left.Find("value").GetComponent<Text>();
+        ricon = right.Find("icon").GetComponent<Image>();
+        rcost = right.Find("value").GetComponent<Text>();
         if (Owner != null)
         {
-            pos.transform.position = Camera.main.WorldToScreenPoint(Owner.transform.Find("HP").transform.position);
-            BattlePerformUnit character = Owner.GetComponent<BattlePerformUnit>();
-            HpValue.text = character.hp.ToString();
-            MaxHp = character.maxHp;
+            right.position = Camera.main.WorldToScreenPoint(Owner.transform.Find("Right").transform.position);
+            left.position = Camera.main.WorldToScreenPoint(Owner.transform.Find("Left").transform.position);
+            BattlePerformUnit unit = Owner.GetComponent<BattlePerformUnit>();
+            var leftAttr = unit.GetAttributeShow(0);
+            if(leftAttr.Count >= 2)
+            {
+                licon.sprite = ResourceUtil.GetCardAttributeTypeImage(leftAttr[0]);
+                lcost.text = leftAttr[1].ToString();
+            }
+            var rightAttr = unit.GetAttributeShow(1);
+            if (rightAttr.Count >= 2)
+            {
+                ricon.sprite = ResourceUtil.GetCardAttributeTypeImage(rightAttr[0]);
+                rcost.text = rightAttr[1].ToString();
+            }
+            MaxHp = unit.maxHp;
         }
     }
 
@@ -49,7 +70,7 @@ public class CardHpUI : UIViewBase
     {
         if (id == Index)
         {
-            HpValue.text = val.ToString();
+            //HpValue.text = val.ToString();
             if(val <= 0)
             {
                 UIManager.Instance.Close(Name , Index);
@@ -59,8 +80,8 @@ public class CardHpUI : UIViewBase
 
     public override void AdjustPosition()
     {
-        pos.transform.position = Camera.main.WorldToScreenPoint(Owner.transform.Find("HP").transform.position);
-        Debug.Log(pos.transform.position);
+        right.position = Camera.main.WorldToScreenPoint(Owner.transform.Find("Right").transform.position);
+        left.position = Camera.main.WorldToScreenPoint(Owner.transform.Find("Left").transform.position);
     }
 
     public void ReSetPostion(int id)

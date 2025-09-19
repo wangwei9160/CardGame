@@ -44,6 +44,27 @@ public class BattlePerformUnit : MonoBehaviour
         BattleUnit = battleUnit;
         BattleUnit.PerformUnit = this;
     }
+
+    public List<int> GetAttributeShow(int type)
+    {
+        List<int> ret = new List<int>();
+        if(BattleUnit != null)
+        {
+            if(type == 0)
+            {
+                Debug.Log(LeftAttribute + " " +  BattleUnit.Attributes[LeftAttribute]);
+                ret.Add(LeftAttribute);
+                ret.Add(BattleUnit.Attributes[LeftAttribute]);
+            }else
+            {
+                Debug.Log(RightAttribute + " " + BattleUnit.Attributes[RightAttribute]);
+                ret.Add(RightAttribute);
+                ret.Add(BattleUnit.Attributes[RightAttribute]);
+            }
+        }
+        return ret;
+    }
+
     public CharacterType type = CharacterType.Unknown;
     public virtual CharacterType Type => type;
     public void ResetCharacterType(CharacterType tp) {type = tp;}
@@ -55,8 +76,8 @@ public class BattlePerformUnit : MonoBehaviour
     public int maxHp = 100;
     public int hp = 50;
 
-    public int leftAttribute = 0;
-    public int rightAttribute = 0;
+    public int LeftAttribute => (int)(BattleUnit?.leftAttributeType);
+    public int RightAttribute => (int)(BattleUnit?.rightAttributeType);
 
     protected virtual void Start()
     {

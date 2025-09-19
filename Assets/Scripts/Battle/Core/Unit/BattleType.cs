@@ -8,10 +8,11 @@ public enum BattleType
 
 public enum UnitAttribute
 {
-    ATTACK = 1,
-    DEFEND = 2,
-    HP = 3,
-    SPEED = 4,
+    BLADE = 1,
+    MAGIC = 2,
+    DEFENCE = 3,
+    GLASS = 4,
+    VATALITY = 5,
     COUNT, // 在这个上面加类型
 }
 
